@@ -5,6 +5,7 @@ import { StyleSheet, View } from 'react-native';
 
 // Components
 import Header from './src/components/Header';
+import Footer from './src/components/Footer';
 
 export default function App() {
   /* const [fontsLoaded] = useFonts({ Comfortaa_400Regular }); 
@@ -19,6 +20,7 @@ export default function App() {
   return (
     <View style={Estilo.container}>
         <Header/>
+        <Footer/>
     </View>
   );
 }
