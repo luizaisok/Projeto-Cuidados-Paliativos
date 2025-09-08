@@ -76,6 +76,6 @@ const Estilo = StyleSheet.create({
         color: "#fff",
         fontSize: 20,
         textAlign: "center",
-        fontFamily: "Comfortaa_400Regular"
-    }
+        fontFamily: "Comfortaa_400Regular",
+    },
 })

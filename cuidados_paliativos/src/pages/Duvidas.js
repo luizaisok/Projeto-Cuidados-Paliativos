@@ -1,4 +1,4 @@
-import { StyleSheet, View, Text, TouchableOpacity } from "react-native";
+import { StyleSheet, View, Text, TouchableOpacity, FlatList } from "react-native";
 
 import { useFonts, Comfortaa_400Regular } from "@expo-google-fonts/comfortaa";
 
@@ -6,8 +6,24 @@ import Header from "../components/Header/index";
 import Footer from "../components/Footer/index";
 
 const handleProntuario = () => {
-    console.log("Precisa implementar navegação para prontuário")
-}
+    console.log("Precisa implementar navegação para prontuário");
+};
+
+const handleDuvidas = () => {
+    console.log("Precisa implementar navegação para prontuário");
+};
+
+const handleHospital = () => {
+    console.log("Precisa implementar navegação para prontuário");
+};
+
+const handleFamilia = () => {
+    console.log("Precisa implementar navegação para prontuário");
+};
+
+const handleSAC = () => {
+    console.log("Precisa implementar navegação para prontuário");
+};
 
 export default ({user = "Usuário"}) => {
     let [fontsLoaded] = useFonts({
@@ -16,11 +32,11 @@ export default ({user = "Usuário"}) => {
     
     return(
         <View style={Estilo.container}>
-            <Header />
+            <Header style={Estilo.header}/>
 
-            <View style={Estilo.bodyContainer}>
+            <View style={Estilo.bodySection}>
                 {/* Mensagem de boas vindas com placeholder padrão como "Usuário" */}
-                <Text style={Estilo.welcomeText}>Bem vindo {user}!</Text>
+                <Text style={Estilo.BodyTitle}>Bem vindo {user}!</Text>
 
                 {/* Botão para prontuário */}
                 <TouchableOpacity 
@@ -29,14 +45,54 @@ export default ({user = "Usuário"}) => {
                     activeOpacity={0.8}
                 >
                     <Text style={Estilo.prontuarioButtonText}>Prontuário Eletrônico</Text>
-                    <Text style={Estilo.prontuarioButtonText}>→</Text>
+                    {/* <Text style={Estilo.prontuarioButtonText}>→</Text> */}
                 </TouchableOpacity>
-            </View>
 
-            <Footer />
+                {/* Botão para info/dúvidas */}
+                <TouchableOpacity 
+                    style={Estilo.duvidasButton}
+                    onPress={handleDuvidas} // dispara função de nevegação interna
+                    activeOpacity={0.8}
+                >
+                    <Text style={Estilo.duvidasButtonText}>Dúvidas</Text>
+                </TouchableOpacity>
+
+                {/* Seção (sub-view) dos contatos */}
+                <View style={Estilo.contatosSection}>
+                    <Text style={Estilo.contatosTitle}>Contatos:</Text>
+                    
+                    {/* Botões de contato organizados horizontalmente */}
+                    <View style={Estilo.contatosButtons}>
+                        <TouchableOpacity 
+                            style={Estilo.contatoButton}
+                            onPress={handleHospital}
+                            activeOpacity={0.8}
+                        >
+                            <Text style={Estilo.contatoButtonText}>Hospital</Text>
+                        </TouchableOpacity>
+
+                        <TouchableOpacity 
+                            style={Estilo.contatoButton}
+                            onPress={handleFamilia}
+                            activeOpacity={0.8}
+                        >
+                            <Text style={Estilo.contatoButtonText}>Família</Text>
+                        </TouchableOpacity>
+
+                        <TouchableOpacity 
+                            style={Estilo.contatoButton}
+                            onPress={handleSAC}
+                            activeOpacity={0.8}
+                        >
+                            <Text style={Estilo.contatoButtonText}>SAC</Text>
+                        </TouchableOpacity>
+                    </View>
+                </View>
+            </View>
+            <Footer style={Estilo.footer}/>
         </View>
-    )
-}
+    );
+};
 
 const Estilo = StyleSheet.create({
     container: {
@@ -44,11 +100,23 @@ const Estilo = StyleSheet.create({
         backgroundColor: "#FFF3E5",
     },
 
-    welcomeText: {
+    header: {
+        flex: 1,
+    },
+
+    bodySection: {
+        flex: 3,
+    },
+
+    footer: {
+        flex: 1,
+    },
+
+    BodyTitle: {
         fontFamily: "Comfortaa_400Regular",
-        fontSize: 24,
-        fontWeight: 600,
-        margin: 25, marginLeft: 39,
+        fontSize: 28,
+        fontWeight: "bold",
+        marginTop: 25, marginLeft: 39,
         textAlign: "left",
         color: "#183102",
     },
@@ -68,4 +136,58 @@ const Estilo = StyleSheet.create({
         fontSize: 20,
         fontWeight: 700,
     },
-})
+
+    duvidasButton: {
+        height: 300, width: 300,
+        backgroundColor: 'white',
+        borderWidth: 2, borderColor: '#767714',
+        borderRadius: "50%",
+        margin: "auto",
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+
+    duvidasButtonText: {
+        fontFamily: "Comfortaa_400Regular",
+        fontSize: 32,
+        fontWeight: 700,
+        color: '#183102',
+    },
+
+    contatosSection: {
+        marginBlock: 35,
+    },
+
+    contatosTitle: {
+        fontFamily: "Comfortaa_400Regular",
+        fontSize: 24,
+        fontWeight: 700,
+        textAlign: "left", marginLeft: 40,
+        color: '#183102',
+    },
+
+    contatosButtons: {
+        flexDirection: 'row',
+        justifyContent: 'space-around',
+        width: '100%',
+    },
+
+    contatoButton: {
+        backgroundColor: "#fff",
+        height: "auto", width: 125,
+        margin: 16,
+        paddingTop: 8, paddingBottom: 8,
+        paddingLeft: 16, paddingRight: 16,
+        borderWidth: 2, borderColor: '#fff',
+        borderRadius: 10,
+        boxShadow: "1px 1px 5px rgba(0, 0, 0, 0.1)",
+        alignItems: 'center',
+    },
+
+    contatoButtonText: {
+        fontFamily: "Comfortaa_400Regular",
+        fontSize: 20,
+        fontWeight: 700,
+        color: '#000',
+    },
+});
