@@ -2,16 +2,6 @@
 
 Este aplicativo foi desenvolvido com finalidade acadêmica e tem como objetivo auxiliar pacientes em cuidados paliativos e seus cuidadores, oferecendo informações, orientações e recursos que possam contribuir para a melhoria da qualidade de vida nesse processo.
 
-### Funcionalides Principais
-- Organização de informações de saúde.
-- Interface simples e acessível.
-
-### Público-alvo
-- Pacientes em cuidados paliativos.
-- Familiares e cuidadores.
-
----
-
 # Acolvita
 
 O projeto consiste em um aplicativo mobile voltado ao monitoramento do bem-estar de pacientes em cuidados paliativos, oferecendo recursos que promovem qualidade de vida, segurança e comunicação entre pacientes, familiares e médicos.
