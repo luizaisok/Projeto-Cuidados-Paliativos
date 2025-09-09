@@ -1,10 +1,8 @@
 ## Projeto Acadêmico sobre Cuidados Paliativos
 
-Este aplicativo foi desenvolvido com finalidade acadêmica e tem como objetivo auxiliar pacientes em cuidados paliativos e seus cuidadores, oferecendo informações, orientações e recursos que possam contribuir para a melhoria da qualidade de vida nesse processo.
-
 # Acolvita
 
-O projeto consiste em um aplicativo mobile voltado ao monitoramento do bem-estar de pacientes em cuidados paliativos, oferecendo recursos que promovem qualidade de vida, segurança e comunicação entre pacientes, familiares e médicos.
+O projeto consiste em um aplicativo mobile desenvolvido com finalidade acadêmica, voltado ao monitoramento do bem-estar de pacientes em cuidados paliativos. A proposta é auxiliar tanto os pacientes quanto seus cuidadores, oferecendo informações, orientações e recursos que promovam qualidade de vida, segurança e melhor comunicação entre pacientes, familiares e médicos.
 
 * Público-alvo: pacientes em cuidado paliativos, familiares e médicos. 
 
