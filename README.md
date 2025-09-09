@@ -56,9 +56,7 @@ Com base na prototipação de autofidelização do cliente, desenvolvemos nossa 
   <img src="./img/atencao-verde.png" alt="Protótipo Atenção Cor Verde Figma" height="500px">
   <img src="./img/atencao-amarelo.png" alt="Protótipo Atenção Cor Amarelo Figma" height="500px">
   <img src="./img/atencao-vermelho.png" alt="Protótipo Atenção Cor Vermelho Figma" height="500px">
-</div><br>
-
-Para melhor visualização, acesse: [www.figma.com/design/TV10wmTPGYcn2YrZ2m6sq5/Cuidados-Paliativos?node-id=0-1&p=f&t=jpLFSH9he5UH76jH-0](https://www.figma.com/design/TV10wmTPGYcn2YrZ2m6sq5/Cuidados-Paliativos?node-id=0-1&p=f&t=jpLFSH9he5UH76jH-0).
+</div>
 
 ## Modelagem UML
 
@@ -129,7 +127,7 @@ cuidados_paliativos/
 │  └─ pages/
 │     ├─ Duvidas.js
 │     ├─ MenuSintomas.js
-│     └─ PerfilProntuario.js  # isso faz aquilo e bla bla bla...
+│     └─ PerfilProntuario.js
 
 ├─ .gitattributes
 ├─ .gitignore
