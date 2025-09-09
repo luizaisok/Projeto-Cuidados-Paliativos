@@ -39,8 +39,6 @@ O projeto consiste em um aplicativo mobile voltado ao monitoramento do bem-estar
 | Prontuário             | ✅ Implementado (front-end) | Histórico de saúde disponível para paciente, familiar e médico         |
 | Cálculo de Score       | 🚧 Em desenvolvimento       | O sistema calculará um score e exibirá uma cor indicativa              |
 
-Para visualizar ou baixar a ATA, clique [aqui](https://drive.google.com/file/d/1JC6Judmnn5hLDE83iDCCX8FW-K4gy_4-/view?usp=sharing).
-
 ## Prototipação (Front-end)
 
 Com base na prototipação de autofidelização do cliente, desenvolvemos nossa versão no Figma, que foi aprovada (pelo cliente) e atende aos requisitos de usabilidade e experiência do usuário.
@@ -104,43 +102,36 @@ Com base na prototipação de autofidelização do cliente, desenvolvemos nossa 
   ## Arquitetura do Projeto
 
   <pre><code>
-cuidados_paliativos/
-├─ .cursor/
-├─ .expo/
-├─ android/
-├─ ios/
-├─ node_modules/
-├─ src/
-│  ├─ assets/
-│  │  └─ TextoPadrao.js
-│  ├─ components/
-│  │  ├─ Footer/
-│  │  │  └─ index.js
-│  │  ├─ Header/
-│  │  │  └─ index.js
-│  │  └─ ListaSintomas/
-│  │     └─ index.js
-│  ├─ data/
-│  │  ├─ paciente.js
-│  │  └─ sintomas.js
-│  ├─ img/
-│  └─ pages/
-│     ├─ Duvidas.js
-│     ├─ MenuSintomas.js
-│     └─ PerfilProntuario.js
-
-├─ .gitattributes
-├─ .gitignore
-├─ App.js 
-├─ app.json
-├─ index.js
-├─ metro.config.js
-├─ package-lock.json
-├─ package.json
-├─ img/
-├─ package-lock.json
-└─ README.md
+Projetos-Cuidados-Paliativos/
+├─ cuidados_paliativos/
+│  ├─ src/
+│  │  ├─ assets/
+│  │  │  └─ TextoPadrao.js
+│  │  ├─ components/
+│  │  │  ├─ Footer/
+│  │  │  │  └─ index.js
+│  │  │  ├─ Header/
+│  │  │  │  └─ index.js
+│  │  │  └─ ListaSintomas/
+│  │  │     └─ index.js
+│  │  ├─ data/
+│  │  │  ├─ paciente.js
+│  │  │  └─ sintomas.js
+│  │  ├─ img/
+│  │  └─ pages/
+│  │     ├─ Duvidas.js
+│  │     ├─ MenuSintomas.js
+│  │     └─ PerfilProntuario.js
+│  ├─ App.js 
+│  ├─ app.json
+│  ├─ index.js
+│  ├─ metro.config.js
+│  ├─ package-lock.json
+│  ├─ package.json
+└─ package-lock.json
 </code></pre><br>
+
+Alguns arquivos e pastas foram omitidos por não serem essenciais para o entendimento do projeto.
 
 <!-- Meninas, tem que por o que cada coisa faz, mas hoje estou cansado... -->
 
