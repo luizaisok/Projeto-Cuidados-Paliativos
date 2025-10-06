@@ -3,7 +3,7 @@ import { View, StyleSheet, Text } from 'react-native';
 export default function Header() {
   return (
     <View style={Estilo.container}>
-      <Text style={Estilo.logo}>Acolvita</Text>
+      <Text style={Estilo.logo}>PaliVida</Text>
     </View>
   );
 }
@@ -12,7 +12,7 @@ const Estilo = StyleSheet.create({
   container: {
     width: '100%',
     height: '10%',
-    backgroundColor: '#767714',
+    backgroundColor: '#112A6C',
     justifyContent: 'center'
   },
   logo: {

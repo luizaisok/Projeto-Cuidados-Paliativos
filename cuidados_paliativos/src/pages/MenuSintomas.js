@@ -28,6 +28,6 @@ const Estilo = StyleSheet.create({
         marginTop: 25,                                                                                                             
         marginBottom: 25,
         textAlign: "center",
-        color: "#183102"
+        color: "#112A6C"
     }
 })

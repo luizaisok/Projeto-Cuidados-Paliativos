@@ -23,7 +23,7 @@ export default function ListaSintomas(){
             />
             <View>
                 <TouchableOpacity style={Estilo.button}>
-                <Text style={Estilo.textButton}>Não tive nenhum desses sintomas.</Text>
+                <Text style={Estilo.textButton}>Não tive nenhum desses sintomas</Text>
                 </TouchableOpacity>
             </View>
         </View>
@@ -52,7 +52,7 @@ const Estilo = StyleSheet.create({
         fontFamily: "Comfortaa_400Regular"
     },
     button: {
-        backgroundColor: "#E8994B",
+        backgroundColor: "#5A90BF",
         borderRadius: 10,
         paddingVertical: 12,
         width: 252,
