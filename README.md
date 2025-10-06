@@ -1,4 +1,4 @@
-# Acolvita ─  Projeto Acadêmico sobre Cuidados Paliativos
+# PaliVida ─  Projeto Acadêmico sobre Cuidados Paliativos
 
 O projeto consiste em um aplicativo mobile desenvolvido com finalidade acadêmica, voltado ao monitoramento do bem-estar de pacientes em cuidados paliativos. A proposta é auxiliar tanto os pacientes quanto seus cuidadores, oferecendo informações, orientações e recursos que promovam qualidade de vida, segurança e melhor comunicação entre pacientes, familiares e médicos.
 
