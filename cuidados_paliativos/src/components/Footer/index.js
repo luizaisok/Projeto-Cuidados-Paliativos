@@ -1,9 +1,9 @@
 import { View, TouchableOpacity, FlatList, Image, StyleSheet } from "react-native";
 
 const icons = [
-  { id: '1', source: require('../../img/Home.png') },
-  { id: '2', source: require('../../img/Question.png') },
-  { id: '3', source: require('../../img/User.png') },
+  { id: '1', source: require('../../assets/img/Home.png') },
+  { id: '2', source: require('../../assets/img/Question.png') },
+  { id: '3', source: require('../../assets/img/User.png') },
 ];
 
 export default function Footer() {
