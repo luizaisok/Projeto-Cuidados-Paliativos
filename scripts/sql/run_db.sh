@@ -4,7 +4,7 @@ MYSQL_PASS="1234" # editar se necessário
 MYSQL_HOST="localhost"
 
 # Caminho para os scripts SQL
-SQL_DIR="C:/Users/mathe/Documentos/Development/personal-workspace/Projeto-Cuidados-Paliativos/scripts/sql"
+SQL_DIR="."
 
 # Execução sequêncial dos scripts .sql
 echo 'Criando o banco de dados "cuidados_paliativos_db"...'
