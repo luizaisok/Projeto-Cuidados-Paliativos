@@ -84,7 +84,7 @@ Com base na prototipação de autofidelização do cliente, desenvolvemos nossa 
 
 ### Casos de Uso
 
-<img src="./img/caso-de-uso.jpeg" alt="Diagrama de Caso de Uso" height="700px"><br>
+<img src="./img/caso-de-uso.png" alt="Diagrama de Caso de Uso" height="700px"><br>
 
 <details>
     <summary><strong>Entenda o Paciente</strong></summary>
