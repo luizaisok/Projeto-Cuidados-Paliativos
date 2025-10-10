@@ -300,7 +300,7 @@ E escolha a opção de abrir no emulador.
 
 ---
 
-## Entenda sobre o banco de dados da aplicação
+## Entenda sobre o Banco de Dados
 
 Os dados foram **gerados artificialmente por IA (ChatGPT)**, que simulou um ambiente realista de pacientes em cuidados paliativos e seus cuidadores. Em seguida, foi desenvolvida uma automação em **Bash (.sh)** e **SQL (.sql)** para:
 
@@ -308,7 +308,7 @@ Os dados foram **gerados artificialmente por IA (ChatGPT)**, que simulou um ambi
 - Gerar as tabelas com suas relações e *constraints*;
 - Popular o banco automaticamente com os dados.
 
-### Estrutura dos arquivos: 
+### Estrutura dos arquivos/scripts
 
 <pre>
 PROJETO-CUIDADOS-PALIATIVOS(root)/
@@ -325,7 +325,7 @@ PROJETO-CUIDADOS-PALIATIVOS(root)/
         └── paciente_cuidador.csv    # Dados relacionais entre pacientes e cuidadores
 </pre>
 
-### Schema do banco de dados
+### Schema do banco
 
 | **Tabela**              | **Colunas Principais**                                                                        | **Chaves**                                                                                   |
 |-------------------------|-----------------------------------------------------------------------------------------------|----------------------------------------------------------------------------------------------|
@@ -334,13 +334,140 @@ PROJETO-CUIDADOS-PALIATIVOS(root)/
 | **pacientes**           | `id_paciente`, `nome`, `cpf`, `data_nascimento`, `diagnostico`, `cuidador_responsavel_id`     | **PK:** `id_paciente`                                                                        |
 | **paciente_cuidador**   | `id_relacao`, `id_paciente`, `id_cuidador`                                                    | **PK:** `id_relacao`<br>**FK:** `id_paciente`, `id_cuidador`                                 |
 
-### Diagrama de relacionamento do banco de dados
+### Diagrama de relacionamento do banco
 
 ![Diagrama de relacionamento do banco de dados](./img/diagrama_relacionamento-bd.png)
 
-### Como criar o banco de dados em diferentes ambientes:
+<h2>Como criar o banco de dados local</h2>
 
-...
+<ol>
+  <li><h3>Pré-requisitos</h3></li>
+    <ul>
+     <li>
+       <strong><code>MySQL Server</code> instalado</strong><br>
+       Caso você ainda não tenha o MySQL instalado, clique abaixo para baixar:<br>
+       <a href="https://dev.mysql.com/downloads/mysql/" target="_blank">Baixar MySQL Server</a><br>
+       Durante a instalação:
+       <ul>
+        <li>Defina um <strong>usuário root</strong> e uma <strong>senha</strong>.</li>
+        <li>Lembre-se dessa senha, pois ela será usada no script de criação.</li>
+       </ul>
+     </li>
+     <li>
+       <strong>Instale também o <code>MySQL Workbench</code></strong><br>
+       <a href="https://dev.mysql.com/downloads/workbench/" target="_blank">Baixar MySQL Workbench</a><br>
+       O Workbench será usado para visualizar o schema e o diagrama do banco de dados.
+     </li>
+     <li>
+       <strong>Instale o <code>Git Bash</code> (Windows) ou use o terminal (Linux/macOS)</strong><br>
+       <a href="https://git-scm.com/downloads" target="_blank">Baixar Git</a><br>
+       O Git Bash será usado para executar o script de automação.
+     </li>
+    </ul>  
+  </li>
+ 
+  <br>
+
+  <li>
+    <strong>Clone o repositório do projeto</strong><br>
+    <pre><code>git clone https://github.com/luizaisok/Projeto-Cuidados-Paliativos.git
+cd Projetos-Cuidados-Paliativos/scripts/sql/</code></pre>
+  </li>
+  
+  <br>
+
+  <li>
+    <strong>Configure a senha do MySQL no script</strong><br>
+    Abra o arquivo <code>run_db.sh</code> e edite a linha abaixo:
+    <pre><code>MYSQL_PASS="SUA_SENHA_DO_ROOT"</code></pre>
+  </li>
+  
+  <br>
+
+  <li>
+    <strong>No SO Windows: Adicione o MySQL ao PATH (se necessário)</strong><br>
+    Se o comando <code>mysql</code> não for reconhecido no Git Bash:
+    Adicione o caminho: <code>C:\Program Files\MySQL\MySQL Server 8.0\bin</code> às variáveis de ambiente do sistema.</li>
+  </li>
+  
+  <br>
+
+  <li>
+    <strong>Habilite o carregamento de arquivos locais</strong><br>
+    No arquivo de configuração do MySQL (<code>my.ini</code>), adicione:
+    <pre><code>[mysqld]
+local_infile=1</code></pre>
+    Depois, reinicie o serviço MySQL (ou a máquina):
+    <pre><code>net stop MySQL80
+net start MySQL80</code></pre>
+  </li>
+  
+  <br>
+
+  <li>
+    <strong>Execute o script de criação do banco de dados</strong><br>
+    <pre><code>chmod +x run_db.sh
+./run_db.sh</code></pre>
+    Esse comando:
+    <ul>
+      <li>Cria o schema <code>cuidados_paliativos_db</code></li>
+      <li>Cria todas as tabelas</li>
+      <li>Popula o banco com os dados simulados dos arquivos CSVs</li>
+    </ul>
+  </li>
+  <br>
+
+  <li>
+    <strong>Verifique o banco no MySQL Workbench</strong><br>
+    <ul>
+      <li>Abra o MySQL Workbench e conecte-se com o usuário <code>root</code>.</li>
+      <li>No painel esquerdo, clique com o botão direito em <strong>Schemas</strong> → <strong>Refresh All</strong>.</li>
+      <li>
+       Abra uma nova aba SQL e execute as queries abaixo para testar:
+       <pre><code>USE cuidados_paliativos_db;
+SHOW TABLES;
+SELECT * FROM pacientes LIMIT 5;</code></pre>
+        Se o banco foi criado corretamente, você verá a lista de tabelas e algumas linhas da tabela <code>pacientes</code>.
+      </li>
+    </ul>
+  </li>
+</ol>
+
+<h3>⚠️ Possíveis Erros e Soluções</h3>
+
+<table>
+  <tr>
+    <th>Erro</th>
+    <th>Causa</th>
+    <th>Solução</th>
+  </tr>
+  <tr>
+    <td><code>ERROR 3948: Loading local data is disabled</code></td>
+    <td>O parâmetro <code>local_infile</code> está desativado</td>
+    <td>Ative no arquivo <code>my.ini</code> e reinicie o MySQL</td>
+  </tr>
+  <tr>
+    <td><code>mysql: command not found</code></td>
+    <td>O MySQL não está no PATH</td>
+    <td>Adicione o diretório <code>bin</code> do MySQL nas variáveis de ambiente</td>
+  </tr>
+  <tr>
+    <td><code>ERROR 1045 (28000): Access denied</code></td>
+    <td>Senha incorreta do usuário root</td>
+    <td>Corrija a senha no arquivo <code>run_db.sh</code></td>
+  </tr>
+  <tr>
+    <td><code>ERROR 1064 (42000): Syntax error</code></td>
+    <td>Sintaxe incorreta no SQL ou caminho inválido</td>
+    <td>Verifique se os caminhos para os CSVs estão corretos e entre aspas simples</td>
+  </tr>
+  <tr>
+    <td><code>Port 3306 already in use</code></td>
+    <td>Outra instância do MySQL está em execução</td>
+    <td>Finalize a instância anterior ou altere a porta no arquivo <code>my.ini</code></td>
+  </tr>
+</table>
+
 
 ---
 
