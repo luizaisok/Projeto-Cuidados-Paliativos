@@ -103,7 +103,7 @@ Com base na prototipação de autofidelização do cliente, desenvolvemos nossa 
   </details>
 
   <details>
-    <summary><strong>entenda o Parente</strong></summary>
+    <summary><strong>Entenda o Acompanhante</strong></summary>
     <ul>
       <li>Realizar cadastro</li>
       <li>Acessar o status de sintoma</li>
