@@ -300,6 +300,51 @@ E escolha a opção de abrir no emulador.
 
 ---
 
+## Entenda sobre o banco de dados da aplicação
+
+Os dados foram **gerados artificialmente por IA (ChatGPT)**, que simulou um ambiente realista de pacientes em cuidados paliativos e seus cuidadores. Em seguida, foi desenvolvida uma automação em **Bash (.sh)** e **SQL (.sql)** para:
+
+- Criar o *schema* do banco;
+- Gerar as tabelas com suas relações e *constraints*;
+- Popular o banco automaticamente com os dados.
+
+### Estrutura dos arquivos: 
+
+<pre>
+PROJETO-CUIDADOS-PALIATIVOS(root)/
+├── scripts/
+    ├── run_db.sh                    # Script shell para automatizar a criação e população do banco de dados
+    ├── sql/
+    │   ├── create_schema.sql        # Criação do dataset
+    │   ├── create_tables.sql        # Criação das tabelas e definição do schema
+    │   └── load_data.sql            # Inserção dos dados a partir dos CSVs
+    └── csv/
+        ├── usuarios.csv             # Dados de usuários (cadastro) 
+        ├── cuidadores.csv           # Dados de cuidadores
+        ├── pacientes.csv            # Dados de pacientes
+        └── paciente_cuidador.csv    # Dados relacionais entre pacientes e cuidadores
+</pre>
+
+### Schema do banco de dados
+
+| **Tabela**              | **Colunas Principais**                                                                        | **Chaves**                                                                                   |
+|-------------------------|-----------------------------------------------------------------------------------------------|----------------------------------------------------------------------------------------------|
+| **usuarios**            | `id_usuario`, `nome`, `email`, `senha`, `tipo_usuario`                                        | **PK:** `id_usuario`                                                                         |
+| **cuidadores**          | `id_cuidador`, `nome`, `cpf`, `telefone`, `turno`                                             | **PK:** `id_cuidador`                                                                        |
+| **pacientes**           | `id_paciente`, `nome`, `cpf`, `data_nascimento`, `diagnostico`, `cuidador_responsavel_id`     | **PK:** `id_paciente`                                                                        |
+| **paciente_cuidador**   | `id_relacao`, `id_paciente`, `id_cuidador`                                                    | **PK:** `id_relacao`<br>**FK:** `id_paciente`, `id_cuidador`                                 |
+
+### Diagrama de relacionamento do banco de dados
+
+![Diagrama de relacionamento do banco de dados](./img/diagrama_relacionamento-bd.png)
+
+### Como criar o banco de dados em diferentes ambientes:
+
+...
+
+---
+
+
 <h2>Contribuições</h2>
 <p align="justify">Este projeto está aberto para contribuições via <i>issues</i>. Se você encontrou um <i>bug</i>, deseja sugerir uma melhoria ou tem dúvidas sobre o funcionamento, siga as instruções abaixo:</p>
 <ol>
