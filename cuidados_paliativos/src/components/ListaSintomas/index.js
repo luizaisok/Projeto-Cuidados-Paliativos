@@ -56,12 +56,12 @@ const Estilo = StyleSheet.create({
         borderRadius: 10,
         paddingVertical: 12,
         width: 252,
-        height: 65,
+        height: 60,
         alignItems: "center",
         justifyContent: "center",
         alignSelf: "center", 
         marginTop: 12,
-        marginBottom: 35,
+        marginBottom: 20,
 
         //Sombra pro IOS
         shadowColor: "#000",
