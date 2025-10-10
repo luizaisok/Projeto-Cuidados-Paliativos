@@ -260,7 +260,7 @@ Entre na pasta do projeto:
 cd cuidados_paliativos
 ```
 
-# 3. Instalar dependências
+### 3. Instalar dependências
 
 Dentro da pasta do projeto, rode:
 
@@ -312,8 +312,8 @@ Os dados foram **gerados artificialmente por IA (ChatGPT)**, que simulou um ambi
 
 <pre>
 PROJETO-CUIDADOS-PALIATIVOS(root)/
-├── scripts/
-    ├── run_db.sh                    # Script shell para automatizar a criação e população do banco de dados
+└── scripts/
+    ├── run_db.sh                    # Script shell para automatizar a criação e população do banco
     ├── sql/
     │   ├── create_schema.sql        # Criação do dataset
     │   ├── create_tables.sql        # Criação das tabelas e definição do schema
