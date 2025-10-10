@@ -1,13 +1,13 @@
 // React Native
 import { StyleSheet, View } from 'react-native';
+import Login from './src/pages/Login';
 
 // Components
-import AvisoVerde from './src/pages/AvisoVerde';
 
 export default function App() {
   return (
     <View style={Estilo.container}>
-        <AvisoVerde/>
+        <Login/>
     </View>
   );
 }
