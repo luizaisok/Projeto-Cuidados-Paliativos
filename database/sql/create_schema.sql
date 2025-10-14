@@ -1,5 +1,3 @@
-
-
 DROP DATABASE IF EXISTS cuidados_paliativos_db;
 
 CREATE DATABASE cuidados_paliativos_db;
