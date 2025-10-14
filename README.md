@@ -86,6 +86,10 @@ Com base na prototipação de autofidelização do cliente, desenvolvemos nossa 
 
 <img src="./img/caso-de-uso.png" alt="Diagrama de Caso de Uso" height="700px"><br>
 
+### Diagrama de Classes
+
+<img src="./img/diagrama-de-classes.png" alt="Diagrama de Classes" height="700px"><br>
+
 <details>
     <summary><strong>Entenda o Paciente</strong></summary>
     <ul>
