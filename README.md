@@ -88,7 +88,7 @@ Com base na prototipação de autofidelização do cliente, desenvolvemos nossa 
 
 ### Diagrama de Classes
 
-<img src="./img/diagrama-de-classes.png" alt="Diagrama de Classes" height="700px"><br>
+<img src="./img/diagrama-de-classes.png" alt="Diagrama de Classes" height="850px"><br>
 
 <details>
     <summary><strong>Entenda o Paciente</strong></summary>
