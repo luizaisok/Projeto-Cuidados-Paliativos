@@ -1,4 +1,8 @@
-require('dotenv').config({ path: 'C:\\Users\\mathe\\Documentos\\Development\\personal-workspace\\Projeto-Cuidados-Paliativos\\database\\env\\.env' }); // precisa arrumar para caminho relativo // carrega as variáveis de ambiente definidas em um .env
+const path = require('path');
+require('dotenv').config({ 
+    path: path.join(__dirname, '../../database/env/.env') 
+});
+
 const mysql = require('mysql2/promise');
 
 console.log('User:', process.env.MYSQL_USER);

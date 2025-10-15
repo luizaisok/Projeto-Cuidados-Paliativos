@@ -19,7 +19,7 @@ CREATE TABLE pacientes (
     peso_kg DECIMAL(5,2) NOT NULL,
     altura_cm DECIMAL(5,2) NOT NULL,
     diagnostico_principal VARCHAR(255) NOT NULL,
-    estagio_doenca ENUM('Inicial','Intermediário','Avançado','Terminal') NOT NULL,
+    estagio_doenca ENUM('Inicial','Intermediario','Avancado','Terminal') NOT NULL,
     nivel_dor TINYINT NOT NULL CHECK (nivel_dor BETWEEN 0 AND 10),
     nivel_conforto TINYINT NOT NULL CHECK (nivel_conforto BETWEEN 0 AND 10),
     uso_morfina BOOLEAN NOT NULL,

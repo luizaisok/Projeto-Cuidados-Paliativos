@@ -7,7 +7,7 @@ async function createUsuario(email, senha_hash, tipo_usuario) { // id_usuario e 
 }
 
 async function readUsuarios(id_usuario = null) {
-    if (id_relacao) {
+    if (id_usuario) { // testando alteração de id_relacao => id_usuario
         const sql = `SELECT * FROM usuarios WHERE id_usuario = ?`
         const [rows] = await pool.execute(sql, [id_usuario]);
         return rows;

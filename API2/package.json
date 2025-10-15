@@ -4,7 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test:crud": "node test/run_crud.js",
+    "test:delete": "node test/run_delete.js", 
+    "test:all": "node test/run_crud.js && node test/run_delete.js"
   },
   "keywords": [],
   "author": "",

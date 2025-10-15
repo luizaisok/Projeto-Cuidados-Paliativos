@@ -18,7 +18,7 @@ async function createPaciente(
 }
 
 async function readPacientes(id_paciente = null) {
-    if (id_relacao) {
+   if (id_paciente) { // testando alteração de id_relacao => id_paciente
         const sql = `SELECT * FROM pacientes WHERE id_paciente = ?`;
         const [rows] = await pool.execute(sql, [id_paciente]); 
         return rows;
