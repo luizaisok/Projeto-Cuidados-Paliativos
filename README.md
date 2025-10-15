@@ -84,7 +84,11 @@ Com base na prototipação de autofidelização do cliente, desenvolvemos nossa 
 
 ### Casos de Uso
 
-<img src="./img/caso-de-uso.jpeg" alt="Diagrama de Caso de Uso" height="700px"><br>
+<img src="./img/caso-de-uso.png" alt="Diagrama de Caso de Uso" height="700px"><br>
+
+### Diagrama de Classes
+
+<img src="./img/diagrama-de-classes.png" alt="Diagrama de Classes" height="850px"><br>
 
 <details>
     <summary><strong>Entenda o Paciente</strong></summary>
@@ -103,7 +107,7 @@ Com base na prototipação de autofidelização do cliente, desenvolvemos nossa 
   </details>
 
   <details>
-    <summary><strong>entenda o Parente</strong></summary>
+    <summary><strong>Entenda o Acompanhante</strong></summary>
     <ul>
       <li>Realizar cadastro</li>
       <li>Acessar o status de sintoma</li>

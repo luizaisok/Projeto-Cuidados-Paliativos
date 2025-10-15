@@ -1,5 +1,4 @@
 import { Image, StyleSheet, Text, View } from "react-native";
-
 import { useFonts, Comfortaa_400Regular } from "@expo-google-fonts/comfortaa";
 
 export default function Loading(){
@@ -15,13 +14,13 @@ export default function Loading(){
                     style={Estilo.imgLogo}
                 />
             </View>
-            <Text style={Estilo.txtLogo}>PaliVida</Text>
+            <Text style={[Estilo.txt, {fontSize: '48px'}]}>PaliVida</Text>
             <View style={Estilo.containerDots}>
                 <View style={Estilo.dot1} />
                 <View style={Estilo.dot2} />
                 <View style={Estilo.dot3} />
             </View>
-            <Text style={Estilo.txtBemVindo}>Bem vindo(a)!</Text>
+            <Text style={[Estilo.txt, {fontSize: '36px', marginTop: 110}]}>Bem vindo(a)!</Text>
         </View>
     )
 }
@@ -37,10 +36,9 @@ const Estilo = StyleSheet.create({
         width: 195,
         height: 247
     },
-    txtLogo: {
+    txt: {
         fontFamily: "Comfortaa_400Regular",
-        color: '#FDEDD3',
-        fontSize: '48px'
+        color: '#FDEDD3'
     },
     containerDots: {
         flexDirection: 'row',
@@ -66,11 +64,5 @@ const Estilo = StyleSheet.create({
         width: 60,
         height: 60,
         borderRadius: 30
-    },
-    txtBemVindo: {
-        marginTop: 110,
-        fontFamily: "Comfortaa_400Regular",
-        color: '#FDEDD3',
-        fontSize: '36px'
     }
 })

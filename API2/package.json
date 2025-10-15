@@ -1,0 +1,18 @@
+{
+  "name": "api2",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test:crud": "node test/run_crud.js",
+    "test:delete": "node test/run_delete.js", 
+    "test:all": "node test/run_crud.js && node test/run_delete.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "dotenv": "^17.2.3",
+    "mysql2": "^3.15.2"
+  }
+}
