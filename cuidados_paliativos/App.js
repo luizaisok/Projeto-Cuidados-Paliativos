@@ -1,13 +1,11 @@
 // React Native
 import { StyleSheet, View } from 'react-native';
-import Login from './src/pages/Login';
-
-// Components
+import Busca from './src/pages/Busca';
 
 export default function App() {
   return (
     <View style={Estilo.container}>
-        <Login/>
+        <Busca/>
     </View>
   );
 }
