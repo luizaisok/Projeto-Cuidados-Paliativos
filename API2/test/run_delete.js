@@ -1,9 +1,8 @@
 /*
 * Como executar esse arquivo: certifiquem-se que estão no diretório ~/API2/ e executem o comando `node test/run_delete.js`
 * Não esqueçam de baixar a pasta node_modules/ antes => `npm i`  
-* ATENÇÃO: Execute este script DEPOIS do `run_crud.js`
+* ATENÇÃO: Execute este script DEPOIS de executar o script `run_crud.js`
 */
-
 
 const pool = require('../config/db');
 
