@@ -1,31 +1,34 @@
-import { StyleSheet, View, Text, TouchableOpacity, FlatList } from "react-native";
-
+import { StyleSheet, View, Text, TouchableOpacity } from "react-native";
 import { useFonts, Comfortaa_400Regular } from "@expo-google-fonts/comfortaa";
 
+import { useNavigation } from "@react-navigation/native";
+
 import Header from "../components/Header/index";
-import Footer from "../components/Footer/index";
 
-const handleProntuario = () => {
-    console.log("Precisa implementar navegação para prontuário");
-};
-
-const handleDuvidas = () => {
-    console.log("Precisa implementar navegação para prontuário");
-};
-
-const handleHospital = () => {
-    console.log("Precisa implementar navegação para prontuário");
-};
-
-const handleFamilia = () => {
-    console.log("Precisa implementar navegação para prontuário");
-};
-
-const handleSAC = () => {
-    console.log("Precisa implementar navegação para prontuário");
-};
 
 export default ({user = "Usuário"}) => {
+    const navigation = useNavigation();
+
+    const handleProntuario = () => {
+        console.log("Precisa implementar navegação para prontuário");
+    };
+
+    const handleDuvidas = () => {
+        console.log("Precisa implementar navegação para prontuário");
+    };
+
+    const handleHospital = () => {
+        console.log("Precisa implementar navegação para prontuário");
+    };
+
+    const handleFamilia = () => {
+        console.log("Precisa implementar navegação para prontuário");
+    };
+
+    const handleSAC = () => {
+        console.log("Precisa implementar navegação para prontuário");
+    };
+
     let [fontsLoaded] = useFonts({
         Comfortaa_400Regular
     });
@@ -41,17 +44,16 @@ export default ({user = "Usuário"}) => {
                 {/* Botão para prontuário */}
                 <TouchableOpacity 
                     style={Estilo.prontuarioButton}
-                    onPress={handleProntuario} // dispara função de nevegação interna
                     activeOpacity={0.8}
+                    onPress={() => navigation.navigate("Perfil")}
                 >
                     <Text style={Estilo.prontuarioButtonText}>Prontuário Eletrônico</Text>
-                    {/* <Text style={Estilo.prontuarioButtonText}>→</Text> */}
                 </TouchableOpacity>
 
                 {/* Botão para info/dúvidas */}
                 <TouchableOpacity 
                     style={Estilo.duvidasButton}
-                    onPress={handleDuvidas} // dispara função de nevegação interna
+                    onPress={() => navigation.navigate("Busca")}
                     activeOpacity={0.8}
                 >
                     <Text style={Estilo.duvidasButtonText}>Dúvidas</Text>
@@ -89,7 +91,6 @@ export default ({user = "Usuário"}) => {
                     </View>
                 </View>
             </View>
-            <Footer style={Estilo.footer}/>
         </View>
     );
 };

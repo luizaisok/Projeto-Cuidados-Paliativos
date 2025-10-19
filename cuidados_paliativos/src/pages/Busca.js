@@ -1,6 +1,5 @@
 import { FlatList, Image, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
 import Header from "../components/Header";
-import Footer from "../components/Footer"; 
 
 import { conteudos } from "../data/conteudo";
 
@@ -44,7 +43,6 @@ export default function Busca() {
                 ListEmptyComponent={<Text>Não foram postados conteúdos.</Text>}
             />
         </View>
-        <Footer/>
     </>
   )
 }

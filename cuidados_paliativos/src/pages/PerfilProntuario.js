@@ -3,7 +3,6 @@ import { View, Text, StyleSheet, FlatList, TouchableOpacity, ScrollView } from '
 
 // Components
 import Header from '../components/Header';
-import Footer from '../components/Footer';
 
 // Fonts
 import { useFonts, Comfortaa_400Regular } from '@expo-google-fonts/comfortaa';
@@ -28,8 +27,9 @@ export default function PerfilProntuario() {
     const dataNascimentoFormatada = new Date(PACIENTE.dataNascimento).toLocaleDateString('pt-BR');
 
     return (
-        <ScrollView style={Estilo.container}>
+        <>
         <Header/>
+        <ScrollView style={Estilo.container}>
             <ScrollView contentContainerStyle={Estilo.dados} nestedScrollEnabled={true}>
                 <Text style={Estilo.nome}>{PACIENTE.nome}</Text>
                 <Campo label="Email" valor={PACIENTE.email} />
@@ -73,8 +73,8 @@ export default function PerfilProntuario() {
                     <Text style={Estilo.buttonText}>Adicionar medicamento</Text>
                 </TouchableOpacity>
             </ScrollView>
-            <Footer/>
         </ScrollView>
+        </>
     );
 }
 
