@@ -1,0 +1,3 @@
+# Bash para automatizar criação e população do MySQL!
+# Como rodar o script/arquivo bash:
+# 1. ...
