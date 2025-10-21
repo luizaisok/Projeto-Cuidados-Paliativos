@@ -4,10 +4,12 @@ async function createConnection() {
   const connection = await mysql.createConnection({
     host: 'localhost',
     user: 'root',
-    password: '',
-    database: 'projeto_cuidados_paliativos'
+    password: '', // inserir senha aqui!
+    database: 'cuidados_paliativos_db'
   });
+
   console.log('Conectado ao MySQL! :)');
+  
   return connection;
 }
 
