@@ -72,7 +72,7 @@ const Estilo = StyleSheet.create({
         height: 24
     },
     containerCard: {
-        width: '60%',
+        width: '90%',
         margin: 'auto',
         marginBottom: 40,
         backgroundColor: '#FFF',

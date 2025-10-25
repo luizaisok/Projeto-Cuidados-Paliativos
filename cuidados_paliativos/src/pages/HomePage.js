@@ -156,7 +156,7 @@ const Estilo = StyleSheet.create({
     },
 
     contatosSection: {
-        marginBlock: 35,
+        marginVertical: 35,
     },
 
     contatosTitle: {
@@ -176,7 +176,6 @@ const Estilo = StyleSheet.create({
     contatoButton: {
         backgroundColor: "#fff",
         height: "auto", width: 125,
-        margin: 16,
         paddingTop: 8, paddingBottom: 8,
         paddingLeft: 16, paddingRight: 16,
         borderWidth: 2, borderColor: '#fff',

@@ -11,7 +11,7 @@ export default function Header() {
 const Estilo = StyleSheet.create({
   container: {
     width: '100%',
-    height: '10%',
+    height: '12%',
     backgroundColor: '#112A6C',
     justifyContent: 'center'
   },
@@ -19,6 +19,6 @@ const Estilo = StyleSheet.create({
     color: '#FFF',
     marginLeft: '10%',
     fontSize: 24,
-    fontWeight: 'bold'
+    fontWeight: 'bold',
   }
 });
