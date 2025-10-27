@@ -33,10 +33,10 @@ CREATE TABLE IF NOT EXISTS paciente (
     id_usuario INT NOT NULL,
     data_nascimento DATE NULL,
     tipo_sanguineo ENUM('A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-') NOT NULL,
-    condicoes_medicas JSON NOT NULL,
-    medicacoes JSON NOT NULL,
-    contatos_emergencia JSON NOT NULL,
-    unidades_saude JSON NOT NULL,
+    condicoes_medicas TEXT NOT NULL,
+    medicacoes TEXT NOT NULL,
+    contatos_emergencia TEXT NOT NULL,
+    unidades_saude TEXT NOT NULL,
     CONSTRAINT fk_paciente_usuario
         FOREIGN KEY (id_usuario) REFERENCES usuario(id_usuario)
         ON DELETE CASCADE
@@ -84,7 +84,7 @@ CREATE TABLE IF NOT EXISTS conteudo (
 
 CREATE TABLE IF NOT EXISTS sintoma (
     id_sintoma INT AUTO_INCREMENT PRIMARY KEY,
-    sintomas JSON NOT NULL,
+    sintomas TEXT NOT NULL,
     tipo_alerta ENUM('VERDE', 'AMARELO', 'VERMELHO') NOT NULL
 );
 

@@ -1,6 +1,6 @@
 # Como criar o banco completo:
-# chmod +x ./database/run_db.sh => Dá permissão (só a primeira vez)
-# ./database/run_db.sh => Executa o script
+# chmod +x ./database/run_db.sh
+# ./database/run_db.sh
 
 #!/bin/bash
 
@@ -8,7 +8,7 @@
 DB_HOST="localhost"
 DB_PORT="3306"
 DB_USER="root"
-DB_PASS="1234" # editar senha, se necessário
+DB_PASS="1234" # editar senha
 DB_NAME="cuidados_paliativos_db"
 
 # Executar scripts SQL

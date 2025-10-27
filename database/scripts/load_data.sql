@@ -6,63 +6,67 @@ USE `cuidados_paliativos_db`;
 SET GLOBAL local_infile = 1;
 SET SESSION sql_mode = '';
 
-LOAD DATA LOCAL INFILE './data/usuario.csv'
+-- SET SESSION character_set_database = utf8mb4;
+-- SET SESSION character_set_connection = utf8mb4;
+-- SET SESSION character_set_results = utf8mb4;
+
+LOAD DATA LOCAL INFILE 'C:/Users/mathe/Documentos/Development/personal-workspace/Projeto-Cuidados-Paliativos/database/data/usuario.csv'
 INTO TABLE usuario
 FIELDS TERMINATED BY ',' ENCLOSED BY '"'
 LINES TERMINATED BY '\n'
 IGNORE 1 ROWS
 (tipo_usuario, nome_completo, email, senha_hash, telefone, sexo, estado);
 
-LOAD DATA LOCAL INFILE './data/administrador.csv'
+LOAD DATA LOCAL INFILE 'C:/Users/mathe/Documentos/Development/personal-workspace/Projeto-Cuidados-Paliativos/database/data/administrador.csv'
 INTO TABLE administrador
 FIELDS TERMINATED BY ',' ENCLOSED BY '"'
 LINES TERMINATED BY '\n'
 IGNORE 1 ROWS
 (id_usuario, nivel_acesso, area_conhecimento);
 
-LOAD DATA LOCAL INFILE './data/paciente.csv'
+LOAD DATA LOCAL INFILE 'C:/Users/mathe/Documentos/Development/personal-workspace/Projeto-Cuidados-Paliativos/database/data/paciente.csv'
 INTO TABLE paciente
 FIELDS TERMINATED BY ',' ENCLOSED BY '"'
 LINES TERMINATED BY '\n'
 IGNORE 1 ROWS
 (id_usuario, data_nascimento, tipo_sanguineo, condicoes_medicas, medicacoes, contatos_emergencia, unidades_saude);
 
-LOAD DATA LOCAL INFILE './data/acompanhante.csv'
+LOAD DATA LOCAL INFILE 'C:/Users/mathe/Documentos/Development/personal-workspace/Projeto-Cuidados-Paliativos/database/data/acompanhante.csv'
 INTO TABLE acompanhante
 FIELDS TERMINATED BY ',' ENCLOSED BY '"'
 LINES TERMINATED BY '\n'
 IGNORE 1 ROWS
 (id_usuario, parentesco);
 
-LOAD DATA LOCAL INFILE './data/vinculo_paciente_acompanhante.csv'
+LOAD DATA LOCAL INFILE 'C:/Users/mathe/Documentos/Development/personal-workspace/Projeto-Cuidados-Paliativos/database/data/vinculo_paciente_acompanhante.csv'
 INTO TABLE vinculo_paciente_acompanhante
 FIELDS TERMINATED BY ',' ENCLOSED BY '"'
 LINES TERMINATED BY '\n'
 IGNORE 1 ROWS
 (id_paciente, id_acompanhante);
 
-LOAD DATA LOCAL INFILE './data/conteudo.csv'
+LOAD DATA LOCAL INFILE 'C:/Users/mathe/Documentos/Development/personal-workspace/Projeto-Cuidados-Paliativos/database/data/conteudo.csv'
 INTO TABLE conteudo
 FIELDS TERMINATED BY ',' ENCLOSED BY '"'
 LINES TERMINATED BY '\n'
 IGNORE 1 ROWS
 (id_administrador, titulo, descricao);
 
-LOAD DATA LOCAL INFILE './data/sintoma.csv'
+LOAD DATA LOCAL INFILE 'C:/Users/mathe/Documentos/Development/personal-workspace/Projeto-Cuidados-Paliativos/database/data/acompanhante.csv'
 INTO TABLE sintoma
 FIELDS TERMINATED BY ',' ENCLOSED BY '"'
 LINES TERMINATED BY '\n'
 IGNORE 1 ROWS
 (sintomas, tipo_alerta);
 
-LOAD DATA LOCAL INFILE './data/registro_sintoma.csv'
+LOAD DATA LOCAL INFILE 'C:/Users/mathe/Documentos/Development/personal-workspace/Projeto-Cuidados-Paliativos/database/data/registro_sintoma.csv'
 INTO TABLE registro_sintoma
 FIELDS TERMINATED BY ',' ENCLOSED BY '"'
 LINES TERMINATED BY '\n'
 IGNORE 1 ROWS
 (id_paciente, id_usuario, data_registro, intensidade_dor, observacao);
 
-LOAD DATA LOCAL INFILE './data/vinculo_registro_sintoma_sintoma.csv'
+LOAD DATA LOCAL INFILE 'C:/Users/mathe/Documentos/Development/personal-workspace/Projeto-Cuidados-Paliativos/database/data/vinculo_registro_sintoma_sintoma.csv'
 INTO TABLE vinculo_registro_sintoma_sintoma
 FIELDS TERMINATED BY ',' ENCLOSED BY '"'
 LINES TERMINATED BY '\n'
