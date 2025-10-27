@@ -44,14 +44,14 @@ app.get("/novoAdministrador", (req, res) => {
 });
 
 app.post("/administrador", async (req, res) => {
-    const {id, nome, nome_social, email, senha, confirmacao_senha, data_nascimento, genero, conselho_profissional, formacao, registro_profissional, especialidade} = req.body;
+    const {id, nome, nome_social, email, senha, confirmacao_senha, data_nascimento, genero, telefone, conselho_profissional, formacao, registro_profissional, especialidade} = req.body;
 
     if(id){
-        const result = await editAdministrador(id, nome, nome_social, email, senha, confirmacao_senha, data_nascimento, genero, conselho_profissional, formacao, registro_profissional, especialidade);
+        const result = await editAdministrador(id, nome, nome_social, email, senha, confirmacao_senha, data_nascimento, genero, telefone, conselho_profissional, formacao, registro_profissional, especialidade);
         if(result) return res.redirect("/administradores");
         return res.status(404).send("Não foi possível editar o administrador!");
     }else{
-        const result = await insertAdministrador(nome, nome_social, email, senha, confirmacao_senha, data_nascimento, genero, conselho_profissional, formacao, registro_profissional, especialidade);
+        const result = await insertAdministrador(nome, nome_social, email, senha, confirmacao_senha, data_nascimento, genero, telefone, conselho_profissional, formacao, registro_profissional, especialidade);
         if(result) return res.redirect("/administradores");
         return res.status(404).send("Não foi possível inserir o administrador!");
     }
@@ -70,8 +70,8 @@ app.post("/administrador", async (req, res) => {
 
 //Inserindo administrador via API
 app.post("/api/administrador", async (req, res) => {
-    const {nome, nome_social, email, senha, data_nascimento, genero, conselho_profissional, formacao, registro_profissional, ultimo_login, especialidade} = req.body;
-    const result = await insertAdministrador(nome, nome_social, email, senha, data_nascimento, genero, conselho_profissional, formacao, registro_profissional, ultimo_login, especialidade);
+    const {nome, nome_social, email, senha, data_nascimento, genero, telefone, conselho_profissional, formacao, registro_profissional, ultimo_login, especialidade} = req.body;
+    const result = await insertAdministrador(nome, nome_social, email, senha, data_nascimento, genero, telefone, conselho_profissional, formacao, registro_profissional, ultimo_login, especialidade);
     if(result){
         return res.status(202).json({success: true});
     }
@@ -94,8 +94,8 @@ app.get("/editaradministrador/:idadministrador", async (req, res) => {
 
 app.put("/administrador", async (req, res) => {
     console.log("REQ.BODY:", req.body);
-    const {id, nome, nome_social, email, senha, data_nascimento, genero, conselho_profissional, formacao, registro_profissional, especialidade} = req.body;
-    const result = await editAdministrador(id, nome, nome_social, email, senha, data_nascimento, genero, conselho_profissional, formacao, registro_profissional, especialidade);
+    const {id, nome, nome_social, email, senha, data_nascimento, genero, telefone, conselho_profissional, formacao, registro_profissional, especialidade} = req.body;
+    const result = await editAdministrador(id, nome, nome_social, email, senha, data_nascimento, genero, telefone, conselho_profissional, formacao, registro_profissional, especialidade);
 
     if(result){
         return res.status(200).send("Administrador editado com sucesso!")
@@ -105,8 +105,8 @@ app.put("/administrador", async (req, res) => {
 
 // API para editar um administrador
 app.put("/api/administrador", async (req, res) => {
-    const {id, nome, nome_social, email, senha, data_nascimento, genero, conselho_profissional, formacao, registro_profissional, especialidade} = req.body;
-    const result = await editAdministrador(id, nome, nome_social, email, senha, data_nascimento, genero, conselho_profissional, formacao, registro_profissional, especialidade);
+    const {id, nome, nome_social, email, senha, data_nascimento, genero, telefone, conselho_profissional, formacao, registro_profissional, especialidade} = req.body;
+    const result = await editAdministrador(id, nome, nome_social, email, senha, data_nascimento, genero, telefone, conselho_profissional, formacao, registro_profissional, especialidade);
 
     if(result){
         return res.status(200).json({success: true});
