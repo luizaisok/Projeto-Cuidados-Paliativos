@@ -7,14 +7,14 @@ async function getAdministradores(){
     return rows;
 };
 
-async function insertAdministrador(nome, nome_social, email, senha, data_nascimento, genero, conselho_profissional, formacao, registro_profissional, ultimo_login, especialidade){
+async function insertAdministrador(nome, nome_social, email, senha, data_nascimento, genero, telefone, conselho_profissional, formacao, registro_profissional, ultimo_login, especialidade){
     const connection = await createConnection();
-    if(nome, nome_social, email, senha, data_nascimento, genero, conselho_profissional, formacao, registro_profissional, ultimo_login, especialidade){
+    if(nome, nome_social, email, senha, data_nascimento, genero, telefone, conselho_profissional, formacao, registro_profissional, ultimo_login, especialidade){
         const [result] = await connection.query(`
             INSERT INTO administrador(nome, nome_social, email, senha, data_nascimento, 
-            genero, conselho_profissional, formacao, registro_profissional, ultimo_login, especialidade) 
+            genero, telefone, conselho_profissional, formacao, registro_profissional, ultimo_login, especialidade) 
             VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, Now(), ?)`, 
-            [nome, nome_social, email, senha, data_nascimento, genero, 
+            [nome, nome_social, email, senha, data_nascimento, genero, telefone,
             conselho_profissional, formacao, registro_profissional, ultimo_login, especialidade]
         );
 
@@ -28,10 +28,10 @@ async function insertAdministrador(nome, nome_social, email, senha, data_nascime
     return false;
 };
 
-async function editAdministrador(id, nome, nome_social, email, senha, confirmacao_senha, data_nascimento, genero, conselho_profissional, formacao, registro_profissional, especialidade){
+async function editAdministrador(id, nome, nome_social, email, senha, confirmacao_senha, data_nascimento, genero, telefone, conselho_profissional, formacao, registro_profissional, especialidade){
 
     const connection = await createConnection();
-    if(!id || !nome || !nome_social || !email || !senha || !confirmacao_senha || !data_nascimento || !genero || !conselho_profissional || !formacao || !registro_profissional || !especialidade){
+    if(!id || !nome || !nome_social || !email || !senha || !confirmacao_senha || !data_nascimento || !genero || !telefone || !conselho_profissional || !formacao || !registro_profissional || !especialidade){
         console.error("Falha ao editar administrador, faltou algum dado.");
         return false;
     }
@@ -49,12 +49,13 @@ async function editAdministrador(id, nome, nome_social, email, senha, confirmaca
             senha = ?,
             data_nascimento = ?,
             genero = ?,
+            telefone = ?,
             conselho_profissional = ?,
             formacao = ?,
             registro_profissional = ?,
             ultimo_login = NOW(),
             especialidade = ?
-        WHERE id = ?`, [nome, nome_social, email, senha, data_nascimento, genero, conselho_profissional, formacao, registro_profissional, especialidade, id]
+        WHERE id = ?`, [nome, nome_social, email, senha, data_nascimento, genero, telefone, conselho_profissional, formacao, registro_profissional, especialidade, id]
     );
 
     if(result.affectedRows === 0) return false;
