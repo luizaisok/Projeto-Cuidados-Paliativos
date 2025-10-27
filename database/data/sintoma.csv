@@ -1,0 +1,11 @@
+sintomas,tipo_alerta
+Dor crônica intensa,VERMELHO
+Náusea e vômito,AMARELO
+Dispneia (falta de ar),VERMELHO
+Fadiga extrema,AMARELO
+Insônia,VERDE
+Ansiedade,AMARELO
+Constipação,VERDE
+Perda de apetite (anorexia),AMARELO
+Confusão mental,VERMELHO
+Depressão,AMARELO

@@ -1,0 +1,501 @@
+id_usuario,data_nascimento,tipo_sanguineo,condicoes_medicas,medicacoes,contatos_emergencia,unidades_saude
+1,1960-11-02,O+,Insuficiência cardíaca congestiva em estágio terminal,Antidepressivo; Ansiolítico,+55 (041) 3942 9045,Clínica de Oncologia
+2,1999-01-15,AB-,Doença pulmonar obstrutiva crônica avançada,Antiemético,41 6792-5298,Hospital Geral
+3,1972-08-05,AB+,Doença neurológica degenerativa avançada,Fentanil,41 5672-8727,Unidade de Cuidados Paliativos
+4,1981-07-09,A+,Doença neurológica degenerativa avançada,Morfina; Metadona,+55 (021) 1534 3324,Posto de Saúde
+5,1946-02-04,AB+,Insuficiência cardíaca congestiva em estágio terminal,Antidepressivo; Ansiolítico,+55 (081) 5779-0833,Clínica de Oncologia
+6,1979-04-20,A-,Doença neurológica degenerativa avançada,Fentanil,+55 (051) 6158 1488,Clínica de Oncologia
+7,2003-01-02,B-,Insuficiência cardíaca congestiva em estágio terminal,Oxicodona,+55 21 0798 3342,Posto de Saúde
+8,1963-03-06,B+,Demência avançada (Alzheimer),Analgésico não-opioide,+55 31 7209-4841,Clínica de Oncologia
+9,1955-09-06,O+,Doença neurológica degenerativa avançada,Antiemético,+55 (084) 2840 3339,Posto de Saúde
+10,1994-10-11,B-,Insuficiência cardíaca congestiva em estágio terminal,Analgésico não-opioide,(061) 1805-1371,Hospital Geral
+11,1989-12-17,O-,Doença renal terminal em diálise,Analgésico não-opioide,+55 21 7318 9397,Clínica de Oncologia
+12,1970-08-24,A-,Doença renal terminal em diálise,Morfina; Metadona,0300 096 1739,Hospital Geral
+13,1991-12-01,B-,Doença renal terminal em diálise,Antiemético,+55 (011) 4694 7258,Unidade de Cuidados Paliativos
+14,1995-08-05,B+,Doença pulmonar obstrutiva crônica avançada,Antiemético,31 4448-3548,Posto de Saúde
+15,1998-04-15,A-,Doença neurológica degenerativa avançada,Oxicodona,(041) 7127 0587,Posto de Saúde
+16,1997-04-18,A-,Doença renal terminal em diálise,Antidepressivo; Ansiolítico,+55 (031) 2164-1758,Hospital Geral
+17,1954-09-05,O-,Insuficiência cardíaca congestiva em estágio terminal,Antiemético,+55 (071) 1334-8458,Posto de Saúde
+18,1994-01-16,O-,Doença renal terminal em diálise,Morfina; Metadona,+55 51 4939 2523,Posto de Saúde
+19,1983-10-01,AB+,Doença neurológica degenerativa avançada,Morfina; Metadona,+55 (041) 2925-8796,Posto de Saúde
+20,1966-06-26,AB+,Câncer metastático avançado,Analgésico não-opioide,+55 31 4745-2455,Unidade de Cuidados Paliativos
+21,1972-09-26,A-,Câncer metastático avançado,Antidepressivo; Ansiolítico,(041) 4696-6060,Clínica de Oncologia
+22,1985-06-15,A-,Doença renal terminal em diálise,Morfina; Metadona,11 2740 3344,Hospital Geral
+23,1980-08-25,O-,Câncer metastático avançado,Fentanil,+55 (041) 5665 8833,Posto de Saúde
+24,1998-04-09,B+,Insuficiência cardíaca congestiva em estágio terminal,Analgésico não-opioide,(031) 4113-2579,Posto de Saúde
+25,1993-10-08,AB-,Demência avançada (Alzheimer),Antidepressivo; Ansiolítico,+55 (061) 6734 9960,Posto de Saúde
+26,1943-08-17,O+,Câncer metastático avançado,Analgésico não-opioide,+55 (081) 5485 7417,Unidade de Cuidados Paliativos
+27,1948-02-05,AB-,Câncer metastático avançado,Oxicodona,+55 11 5622 9493,Posto de Saúde
+28,2006-04-15,B+,Doença neurológica degenerativa avançada,Oxicodona,+55 31 7359 8488,Hospital Geral
+29,1969-06-25,A+,Doença pulmonar obstrutiva crônica avançada,Antidepressivo; Ansiolítico,+55 (031) 2155 7325,Posto de Saúde
+30,1993-07-23,O+,Insuficiência cardíaca congestiva em estágio terminal,Oxicodona,+55 31 7553-4490,Posto de Saúde
+31,1948-11-28,AB-,Insuficiência cardíaca congestiva em estágio terminal,Fentanil,+55 71 6667 0808,Unidade de Cuidados Paliativos
+32,1980-08-25,A-,Câncer metastático avançado,Analgésico não-opioide,+55 (031) 9608 5874,Posto de Saúde
+33,1975-03-30,A+,Insuficiência cardíaca congestiva em estágio terminal,Oxicodona,+55 (084) 1918 1828,Hospital Geral
+34,1941-10-05,A-,Doença renal terminal em diálise,Morfina; Metadona,0500 793 1647,Posto de Saúde
+35,1991-03-29,A+,Insuficiência cardíaca congestiva em estágio terminal,Analgésico não-opioide,+55 (021) 5129-5786,Hospital Geral
+36,1932-09-28,O+,Demência avançada (Alzheimer),Oxicodona,71 9409 6003,Unidade de Cuidados Paliativos
+37,1973-09-11,A+,Insuficiência cardíaca congestiva em estágio terminal,Antiemético,(011) 2439-5873,Clínica de Oncologia
+38,1978-02-01,B-,Doença neurológica degenerativa avançada,Antiemético,0500 232 3421,Clínica de Oncologia
+39,1933-05-22,AB-,Insuficiência cardíaca congestiva em estágio terminal,Fentanil,61 9028-5155,Unidade de Cuidados Paliativos
+40,1961-02-19,B-,Demência avançada (Alzheimer),Fentanil,+55 (084) 3426-4335,Clínica de Oncologia
+41,1933-07-14,A+,Doença renal terminal em diálise,Antiemético,+55 84 7160 7360,Unidade de Cuidados Paliativos
+42,1990-08-19,O+,Doença renal terminal em diálise,Antidepressivo; Ansiolítico,(031) 6336-9112,Hospital Geral
+43,1998-10-13,AB-,Doença neurológica degenerativa avançada,Analgésico não-opioide,0800 812 3179,Posto de Saúde
+44,1978-08-06,AB-,Doença neurológica degenerativa avançada,Antidepressivo; Ansiolítico,(051) 6331 8574,Posto de Saúde
+45,1999-01-22,B+,Doença pulmonar obstrutiva crônica avançada,Antidepressivo; Ansiolítico,+55 61 7006 6615,Unidade de Cuidados Paliativos
+46,1978-11-14,O-,Insuficiência cardíaca congestiva em estágio terminal,Oxicodona,(041) 1643 1670,Clínica de Oncologia
+47,1967-03-18,B+,Demência avançada (Alzheimer),Morfina; Metadona,(061) 0232 9028,Posto de Saúde
+48,1951-01-07,O+,Doença renal terminal em diálise,Antiemético,+55 84 7009 3459,Unidade de Cuidados Paliativos
+49,1986-04-14,O+,Insuficiência cardíaca congestiva em estágio terminal,Fentanil,+55 (031) 6228-2251,Unidade de Cuidados Paliativos
+50,1951-12-02,AB-,Doença neurológica degenerativa avançada,Morfina; Metadona,+55 (041) 7346 5495,Posto de Saúde
+51,1933-09-11,AB-,Câncer metastático avançado,Antiemético,+55 (041) 5070 2608,Unidade de Cuidados Paliativos
+52,1981-02-18,A+,Doença pulmonar obstrutiva crônica avançada,Antidepressivo; Ansiolítico,0300-822-1053,Hospital Geral
+53,1942-05-11,A-,Insuficiência cardíaca congestiva em estágio terminal,Antiemético,84 1177 6872,Unidade de Cuidados Paliativos
+54,1929-12-01,O-,Insuficiência cardíaca congestiva em estágio terminal,Fentanil,(041) 7742 5859,Clínica de Oncologia
+55,1942-12-09,A+,Insuficiência cardíaca congestiva em estágio terminal,Oxicodona,(081) 7932-3822,Hospital Geral
+56,1960-07-08,O-,Insuficiência cardíaca congestiva em estágio terminal,Analgésico não-opioide,+55 21 1649 1334,Unidade de Cuidados Paliativos
+57,1954-12-12,O+,Insuficiência cardíaca congestiva em estágio terminal,Antiemético,(031) 5798 8942,Clínica de Oncologia
+58,1974-06-15,AB+,Demência avançada (Alzheimer),Antidepressivo; Ansiolítico,(011) 5290-6032,Clínica de Oncologia
+59,1931-10-08,AB+,Doença pulmonar obstrutiva crônica avançada,Fentanil,+55 (011) 0326-5097,Posto de Saúde
+60,1995-09-03,O-,Câncer metastático avançado,Analgésico não-opioide,(084) 3967 3794,Posto de Saúde
+61,2004-02-11,AB-,Insuficiência cardíaca congestiva em estágio terminal,Fentanil,(031) 1485-5245,Clínica de Oncologia
+62,1996-02-24,O+,Câncer metastático avançado,Antiemético,81 7158-4156,Unidade de Cuidados Paliativos
+63,1933-04-12,B+,Câncer metastático avançado,Fentanil,71 2137-1184,Posto de Saúde
+64,1947-01-04,AB+,Insuficiência cardíaca congestiva em estágio terminal,Oxicodona,(084) 4768 1826,Clínica de Oncologia
+65,1999-05-10,B-,Demência avançada (Alzheimer),Antiemético,+55 (071) 2303-5892,Unidade de Cuidados Paliativos
+66,2006-06-06,O-,Doença renal terminal em diálise,Analgésico não-opioide,51 8085 8382,Clínica de Oncologia
+67,1980-10-14,AB+,Demência avançada (Alzheimer),Analgésico não-opioide,+55 (031) 1293-2896,Posto de Saúde
+68,1957-05-04,O-,Insuficiência cardíaca congestiva em estágio terminal,Analgésico não-opioide,+55 84 0646-8677,Clínica de Oncologia
+69,1973-08-19,B+,Insuficiência cardíaca congestiva em estágio terminal,Analgésico não-opioide,+55 84 4014 8439,Posto de Saúde
+70,1938-11-30,B+,Doença renal terminal em diálise,Analgésico não-opioide,+55 (081) 6227 2362,Hospital Geral
+71,1986-11-06,A+,Câncer metastático avançado,Analgésico não-opioide,61 9335 1342,Hospital Geral
+72,1984-06-15,A+,Demência avançada (Alzheimer),Oxicodona,+55 71 9237 2450,Unidade de Cuidados Paliativos
+73,1945-10-13,A-,Doença neurológica degenerativa avançada,Oxicodona,41 4819-7374,Hospital Geral
+74,1946-10-25,B-,Doença renal terminal em diálise,Antidepressivo; Ansiolítico,71 9721-5406,Clínica de Oncologia
+75,1964-08-02,A+,Doença renal terminal em diálise,Analgésico não-opioide,+55 61 7692 7438,Posto de Saúde
+76,1943-11-05,O-,Câncer metastático avançado,Morfina; Metadona,+55 31 9953 7660,Posto de Saúde
+77,1944-02-20,A+,Câncer metastático avançado,Antiemético,+55 84 4485-6451,Clínica de Oncologia
+78,1931-07-31,AB+,Câncer metastático avançado,Antiemético,+55 41 7397 3964,Posto de Saúde
+79,1943-12-21,B+,Câncer metastático avançado,Morfina; Metadona,(084) 8996-9860,Unidade de Cuidados Paliativos
+80,1944-06-28,B-,Insuficiência cardíaca congestiva em estágio terminal,Antiemético,0900 191 1359,Clínica de Oncologia
+81,1987-03-26,AB-,Doença pulmonar obstrutiva crônica avançada,Antidepressivo; Ansiolítico,61 0577 9806,Hospital Geral
+82,1988-08-02,AB-,Demência avançada (Alzheimer),Antidepressivo; Ansiolítico,+55 (041) 3920 5146,Unidade de Cuidados Paliativos
+83,1933-09-06,B-,Doença pulmonar obstrutiva crônica avançada,Analgésico não-opioide,(051) 4555-3470,Hospital Geral
+84,1973-12-26,A+,Câncer metastático avançado,Antidepressivo; Ansiolítico,(051) 4238-8565,Posto de Saúde
+85,1953-03-28,O+,Doença renal terminal em diálise,Antidepressivo; Ansiolítico,11 1559-8354,Hospital Geral
+86,1943-08-10,A+,Doença neurológica degenerativa avançada,Oxicodona,+55 31 6597 2634,Hospital Geral
+87,1995-11-21,O-,Demência avançada (Alzheimer),Analgésico não-opioide,(084) 5752 2501,Clínica de Oncologia
+88,1955-08-26,A-,Doença renal terminal em diálise,Morfina; Metadona,0800 488 4882,Unidade de Cuidados Paliativos
+89,1983-12-26,B-,Doença neurológica degenerativa avançada,Antiemético,0900-131-1964,Posto de Saúde
+90,1949-08-29,AB+,Câncer metastático avançado,Morfina; Metadona,(081) 8562 6149,Clínica de Oncologia
+91,2007-05-31,A+,Insuficiência cardíaca congestiva em estágio terminal,Fentanil,+55 21 5370 3824,Hospital Geral
+92,1933-05-29,B-,Doença renal terminal em diálise,Oxicodona,11 3333-7320,Posto de Saúde
+93,1970-03-19,A-,Doença pulmonar obstrutiva crônica avançada,Oxicodona,+55 51 0977 6889,Unidade de Cuidados Paliativos
+94,1955-12-26,O+,Doença neurológica degenerativa avançada,Antiemético,81 2896 9645,Clínica de Oncologia
+95,1965-09-09,O+,Doença neurológica degenerativa avançada,Oxicodona,(021) 5535-8512,Hospital Geral
+96,1973-08-06,AB-,Câncer metastático avançado,Morfina; Metadona,+55 51 8921 8785,Posto de Saúde
+97,1944-02-01,B-,Câncer metastático avançado,Fentanil,0500-358-3749,Posto de Saúde
+98,1937-01-22,AB-,Câncer metastático avançado,Analgésico não-opioide,(051) 9779-6120,Clínica de Oncologia
+99,2006-01-11,O-,Demência avançada (Alzheimer),Oxicodona,(041) 8057-2151,Clínica de Oncologia
+100,1967-05-25,O+,Demência avançada (Alzheimer),Oxicodona,0300 409 7626,Posto de Saúde
+101,1959-02-09,A-,Doença renal terminal em diálise,Fentanil,(041) 4845-3986,Unidade de Cuidados Paliativos
+102,1949-06-13,A-,Câncer metastático avançado,Fentanil,71 9509-0591,Unidade de Cuidados Paliativos
+103,1939-06-27,O+,Doença neurológica degenerativa avançada,Analgésico não-opioide,0800-186-2339,Unidade de Cuidados Paliativos
+104,1954-03-25,O+,Doença pulmonar obstrutiva crônica avançada,Fentanil,+55 (061) 0715-1169,Hospital Geral
+105,1982-07-21,A-,Câncer metastático avançado,Fentanil,81 6725 2145,Posto de Saúde
+106,1953-12-19,AB-,Doença pulmonar obstrutiva crônica avançada,Morfina; Metadona,(021) 4712-4633,Unidade de Cuidados Paliativos
+107,1977-08-14,A-,Insuficiência cardíaca congestiva em estágio terminal,Antidepressivo; Ansiolítico,+55 21 5718 4090,Posto de Saúde
+108,2005-08-24,O+,Câncer metastático avançado,Morfina; Metadona,+55 (081) 5120 8005,Hospital Geral
+109,1982-03-09,AB-,Doença renal terminal em diálise,Morfina; Metadona,(041) 0995 1239,Clínica de Oncologia
+110,1997-08-16,O+,Câncer metastático avançado,Fentanil,+55 (061) 8351-2959,Posto de Saúde
+111,1953-11-25,O+,Câncer metastático avançado,Analgésico não-opioide,(031) 2827-0908,Unidade de Cuidados Paliativos
+112,1946-03-11,B+,Doença neurológica degenerativa avançada,Antidepressivo; Ansiolítico,(041) 4152 9821,Unidade de Cuidados Paliativos
+113,1997-07-20,B+,Doença pulmonar obstrutiva crônica avançada,Fentanil,+55 (071) 9295-7867,Clínica de Oncologia
+114,1945-08-29,O-,Insuficiência cardíaca congestiva em estágio terminal,Morfina; Metadona,81 1535-2373,Unidade de Cuidados Paliativos
+115,1984-11-04,O+,Doença pulmonar obstrutiva crônica avançada,Antidepressivo; Ansiolítico,+55 (061) 5079 1815,Clínica de Oncologia
+116,2001-08-04,O-,Câncer metastático avançado,Fentanil,0300 988 6834,Clínica de Oncologia
+117,1973-06-01,B-,Doença neurológica degenerativa avançada,Analgésico não-opioide,+55 84 7346 6661,Posto de Saúde
+118,1996-07-28,B-,Demência avançada (Alzheimer),Morfina; Metadona,+55 (041) 7158 7964,Unidade de Cuidados Paliativos
+119,1997-07-18,AB+,Câncer metastático avançado,Antidepressivo; Ansiolítico,(011) 0803 1499,Clínica de Oncologia
+120,2003-09-11,O+,Doença pulmonar obstrutiva crônica avançada,Antidepressivo; Ansiolítico,+55 (051) 5080-0463,Clínica de Oncologia
+121,1977-09-11,O+,Doença neurológica degenerativa avançada,Antiemético,61 0688-2850,Unidade de Cuidados Paliativos
+122,1959-01-05,AB+,Doença pulmonar obstrutiva crônica avançada,Antiemético,+55 41 7235 1373,Unidade de Cuidados Paliativos
+123,2007-07-21,O-,Doença pulmonar obstrutiva crônica avançada,Oxicodona,0800-006-3140,Posto de Saúde
+124,1962-07-15,AB-,Doença pulmonar obstrutiva crônica avançada,Analgésico não-opioide,(071) 2635 6022,Posto de Saúde
+125,1963-04-29,B-,Doença pulmonar obstrutiva crônica avançada,Antidepressivo; Ansiolítico,0900-469-4346,Clínica de Oncologia
+126,1931-03-19,O+,Doença pulmonar obstrutiva crônica avançada,Morfina; Metadona,84 6643 7490,Unidade de Cuidados Paliativos
+127,1983-08-23,B+,Doença neurológica degenerativa avançada,Antiemético,+55 (061) 7231 1127,Hospital Geral
+128,1938-11-14,O-,Doença neurológica degenerativa avançada,Oxicodona,+55 (061) 8524-6484,Posto de Saúde
+129,1968-07-26,AB+,Doença neurológica degenerativa avançada,Morfina; Metadona,0300 411 6318,Posto de Saúde
+130,1997-08-05,O-,Insuficiência cardíaca congestiva em estágio terminal,Analgésico não-opioide,+55 (081) 2807-7113,Clínica de Oncologia
+131,1934-12-30,B-,Doença pulmonar obstrutiva crônica avançada,Analgésico não-opioide,51 2113 6957,Unidade de Cuidados Paliativos
+132,1949-04-01,O+,Demência avançada (Alzheimer),Morfina; Metadona,(031) 9083-3509,Posto de Saúde
+133,1931-10-03,O-,Doença renal terminal em diálise,Antidepressivo; Ansiolítico,+55 (021) 5425-7306,Posto de Saúde
+134,1981-07-17,A+,Doença pulmonar obstrutiva crônica avançada,Analgésico não-opioide,+55 (021) 4813-2357,Hospital Geral
+135,1933-04-07,A-,Insuficiência cardíaca congestiva em estágio terminal,Analgésico não-opioide,(031) 1398-4822,Clínica de Oncologia
+136,2004-04-13,B+,Doença neurológica degenerativa avançada,Antiemético,(051) 0116 8809,Hospital Geral
+137,1952-12-11,O+,Doença pulmonar obstrutiva crônica avançada,Antidepressivo; Ansiolítico,(061) 5021 3060,Hospital Geral
+138,2006-05-28,A+,Câncer metastático avançado,Fentanil,+55 (081) 6913 0981,Unidade de Cuidados Paliativos
+139,1932-07-06,B-,Demência avançada (Alzheimer),Fentanil,(071) 9649-6737,Posto de Saúde
+140,1963-11-07,O-,Doença neurológica degenerativa avançada,Antiemético,(084) 7727 8532,Unidade de Cuidados Paliativos
+141,1968-11-11,AB-,Câncer metastático avançado,Antidepressivo; Ansiolítico,+55 (051) 6425-0642,Hospital Geral
+142,1935-08-12,AB+,Demência avançada (Alzheimer),Morfina; Metadona,(051) 6836-2536,Hospital Geral
+143,1987-02-20,B+,Doença pulmonar obstrutiva crônica avançada,Fentanil,84 7776 7555,Clínica de Oncologia
+144,1984-02-09,O-,Insuficiência cardíaca congestiva em estágio terminal,Antiemético,+55 84 8333 3939,Posto de Saúde
+145,1979-04-13,AB-,Demência avançada (Alzheimer),Morfina; Metadona,(061) 8654-3627,Posto de Saúde
+146,1944-08-10,O-,Doença pulmonar obstrutiva crônica avançada,Morfina; Metadona,71 7496-0335,Clínica de Oncologia
+147,2004-11-26,A+,Doença neurológica degenerativa avançada,Morfina; Metadona,+55 (031) 6862-7036,Hospital Geral
+148,2007-01-16,AB-,Doença neurológica degenerativa avançada,Morfina; Metadona,+55 (051) 4926-9326,Unidade de Cuidados Paliativos
+149,1972-11-22,B-,Doença renal terminal em diálise,Oxicodona,(061) 3275-9980,Unidade de Cuidados Paliativos
+150,1943-01-12,AB-,Doença renal terminal em diálise,Antidepressivo; Ansiolítico,+55 (084) 1000 5155,Posto de Saúde
+151,1957-06-13,B-,Demência avançada (Alzheimer),Analgésico não-opioide,+55 (021) 3415-9597,Unidade de Cuidados Paliativos
+152,1994-06-24,B+,Doença neurológica degenerativa avançada,Analgésico não-opioide,(081) 2441 8222,Posto de Saúde
+153,1986-04-30,O+,Câncer metastático avançado,Analgésico não-opioide,+55 71 8962 8874,Unidade de Cuidados Paliativos
+154,1963-10-06,O-,Doença renal terminal em diálise,Antidepressivo; Ansiolítico,+55 61 2710 2676,Posto de Saúde
+155,1994-09-21,A+,Doença neurológica degenerativa avançada,Oxicodona,+55 (041) 0957-9927,Unidade de Cuidados Paliativos
+156,1932-07-10,AB+,Doença neurológica degenerativa avançada,Morfina; Metadona,(084) 9551-5122,Hospital Geral
+157,1970-08-31,B+,Doença pulmonar obstrutiva crônica avançada,Fentanil,61 2135 4159,Unidade de Cuidados Paliativos
+158,1997-02-26,O-,Câncer metastático avançado,Fentanil,+55 (031) 9962 5438,Posto de Saúde
+159,1967-12-18,AB-,Doença renal terminal em diálise,Antidepressivo; Ansiolítico,41 0752-0344,Posto de Saúde
+160,1990-12-02,A-,Doença pulmonar obstrutiva crônica avançada,Fentanil,(021) 5047-1580,Posto de Saúde
+161,1947-08-08,B+,Doença neurológica degenerativa avançada,Analgésico não-opioide,0900-090-4637,Clínica de Oncologia
+162,1981-07-16,A-,Doença neurológica degenerativa avançada,Oxicodona,51 0465 5866,Clínica de Oncologia
+163,1976-05-20,A-,Insuficiência cardíaca congestiva em estágio terminal,Fentanil,+55 81 5483 7441,Hospital Geral
+164,1991-01-18,B+,Doença pulmonar obstrutiva crônica avançada,Analgésico não-opioide,+55 21 5810 2131,Unidade de Cuidados Paliativos
+165,1953-12-04,O+,Demência avançada (Alzheimer),Antiemético,31 1293 1100,Unidade de Cuidados Paliativos
+166,1976-03-31,O+,Demência avançada (Alzheimer),Oxicodona,0900-129-7519,Posto de Saúde
+167,1946-06-03,B+,Doença renal terminal em diálise,Oxicodona,+55 (081) 2312 1106,Posto de Saúde
+168,1961-07-17,AB+,Insuficiência cardíaca congestiva em estágio terminal,Oxicodona,+55 (084) 0165-8373,Clínica de Oncologia
+169,1997-03-25,O-,Doença renal terminal em diálise,Morfina; Metadona,0500-274-9072,Clínica de Oncologia
+170,1998-11-26,A+,Demência avançada (Alzheimer),Oxicodona,+55 (011) 1234 2893,Unidade de Cuidados Paliativos
+171,1946-09-12,O+,Doença renal terminal em diálise,Antiemético,+55 11 3253 2694,Posto de Saúde
+172,1985-12-06,O+,Doença neurológica degenerativa avançada,Antidepressivo; Ansiolítico,21 4364-5380,Posto de Saúde
+173,1964-01-27,O-,Demência avançada (Alzheimer),Oxicodona,(011) 2101 7509,Hospital Geral
+174,1988-05-10,A+,Insuficiência cardíaca congestiva em estágio terminal,Fentanil,+55 21 7015 9591,Hospital Geral
+175,2007-04-16,AB+,Insuficiência cardíaca congestiva em estágio terminal,Antiemético,+55 71 5757-5747,Clínica de Oncologia
+176,1972-06-25,B+,Demência avançada (Alzheimer),Antiemético,71 3392-0567,Posto de Saúde
+177,1992-08-25,A-,Doença renal terminal em diálise,Morfina; Metadona,(061) 6777 2266,Clínica de Oncologia
+178,1933-02-24,AB-,Doença renal terminal em diálise,Morfina; Metadona,+55 84 5626 5062,Posto de Saúde
+179,1950-05-18,B-,Demência avançada (Alzheimer),Morfina; Metadona,0900 231 0672,Unidade de Cuidados Paliativos
+180,1966-09-09,AB+,Câncer metastático avançado,Antidepressivo; Ansiolítico,(081) 3076 2484,Clínica de Oncologia
+181,1960-10-24,AB-,Câncer metastático avançado,Antidepressivo; Ansiolítico,+55 (071) 7976-6270,Hospital Geral
+182,1977-11-30,B-,Insuficiência cardíaca congestiva em estágio terminal,Analgésico não-opioide,+55 51 1579 4238,Clínica de Oncologia
+183,1997-01-31,O+,Insuficiência cardíaca congestiva em estágio terminal,Antiemético,+55 11 6704-2549,Unidade de Cuidados Paliativos
+184,1988-03-16,B-,Insuficiência cardíaca congestiva em estágio terminal,Morfina; Metadona,0800-192-8455,Clínica de Oncologia
+185,1947-04-05,AB+,Doença renal terminal em diálise,Antiemético,31 9710 7563,Unidade de Cuidados Paliativos
+186,1958-04-30,AB-,Doença neurológica degenerativa avançada,Fentanil,(061) 3574 8595,Clínica de Oncologia
+187,1956-04-10,AB+,Doença renal terminal em diálise,Analgésico não-opioide,+55 81 5939 9337,Hospital Geral
+188,2006-06-26,B+,Demência avançada (Alzheimer),Morfina; Metadona,(071) 0581-6295,Clínica de Oncologia
+189,1940-11-19,B+,Doença neurológica degenerativa avançada,Oxicodona,51 7794 1763,Unidade de Cuidados Paliativos
+190,1967-05-31,B+,Doença neurológica degenerativa avançada,Fentanil,+55 (011) 5073-3055,Unidade de Cuidados Paliativos
+191,1995-06-30,O+,Demência avançada (Alzheimer),Oxicodona,84 2457-5983,Clínica de Oncologia
+192,1955-06-08,O+,Demência avançada (Alzheimer),Antidepressivo; Ansiolítico,0300-914-0388,Hospital Geral
+193,1968-04-05,A-,Demência avançada (Alzheimer),Antiemético,+55 51 6604 4324,Clínica de Oncologia
+194,1933-04-05,AB-,Demência avançada (Alzheimer),Antidepressivo; Ansiolítico,+55 (041) 6157 2768,Clínica de Oncologia
+195,1951-03-09,A+,Doença neurológica degenerativa avançada,Morfina; Metadona,0300-751-4743,Posto de Saúde
+196,1991-07-09,AB-,Câncer metastático avançado,Antiemético,(011) 2925 0105,Posto de Saúde
+197,2005-01-09,B-,Demência avançada (Alzheimer),Oxicodona,(081) 5256-8065,Posto de Saúde
+198,1983-08-27,AB+,Doença pulmonar obstrutiva crônica avançada,Fentanil,+55 (051) 5904-5990,Clínica de Oncologia
+199,1999-06-19,B+,Doença renal terminal em diálise,Antidepressivo; Ansiolítico,+55 (081) 2711 2218,Clínica de Oncologia
+200,1952-01-21,A+,Câncer metastático avançado,Morfina; Metadona,+55 41 1555-1651,Posto de Saúde
+201,1996-11-04,A+,Câncer metastático avançado,Oxicodona,71 8086 6281,Posto de Saúde
+202,1958-01-10,O-,Câncer metastático avançado,Antidepressivo; Ansiolítico,(041) 2143-3080,Unidade de Cuidados Paliativos
+203,1936-12-17,B+,Doença neurológica degenerativa avançada,Fentanil,+55 21 7003-3228,Unidade de Cuidados Paliativos
+204,1973-04-19,AB+,Câncer metastático avançado,Analgésico não-opioide,(061) 6608 4706,Clínica de Oncologia
+205,2004-09-05,AB+,Câncer metastático avançado,Fentanil,+55 (084) 0390 3397,Unidade de Cuidados Paliativos
+206,1930-10-17,A+,Demência avançada (Alzheimer),Analgésico não-opioide,(084) 1958 2632,Clínica de Oncologia
+207,2002-10-20,B-,Demência avançada (Alzheimer),Analgésico não-opioide,+55 (011) 9448 5862,Hospital Geral
+208,1957-04-03,A-,Câncer metastático avançado,Oxicodona,0500-453-5461,Posto de Saúde
+209,1968-08-29,A-,Insuficiência cardíaca congestiva em estágio terminal,Antiemético,(041) 0798-6321,Unidade de Cuidados Paliativos
+210,1935-06-28,O-,Câncer metastático avançado,Morfina; Metadona,51 1339 4394,Clínica de Oncologia
+211,1978-12-11,A-,Demência avançada (Alzheimer),Analgésico não-opioide,(061) 0394-3804,Unidade de Cuidados Paliativos
+212,1931-07-03,O-,Câncer metastático avançado,Oxicodona,+55 11 2537-6576,Posto de Saúde
+213,1952-04-23,A-,Doença neurológica degenerativa avançada,Morfina; Metadona,(084) 7894-3191,Hospital Geral
+214,1929-11-09,AB-,Doença pulmonar obstrutiva crônica avançada,Fentanil,+55 (041) 9004 0476,Unidade de Cuidados Paliativos
+215,2007-02-20,O+,Insuficiência cardíaca congestiva em estágio terminal,Analgésico não-opioide,+55 (031) 1053-3651,Unidade de Cuidados Paliativos
+216,1967-12-04,A-,Doença renal terminal em diálise,Antiemético,84 0401 4247,Hospital Geral
+217,1957-09-04,B+,Demência avançada (Alzheimer),Fentanil,+55 71 0720 1137,Unidade de Cuidados Paliativos
+218,2005-09-08,B+,Demência avançada (Alzheimer),Antiemético,+55 81 4097-1231,Posto de Saúde
+219,1983-12-04,B-,Câncer metastático avançado,Morfina; Metadona,41 0076 7620,Unidade de Cuidados Paliativos
+220,1935-10-24,A-,Doença renal terminal em diálise,Analgésico não-opioide,+55 (084) 4473 4043,Posto de Saúde
+221,1961-10-11,AB-,Demência avançada (Alzheimer),Fentanil,(041) 0096-8730,Unidade de Cuidados Paliativos
+222,1968-10-24,B-,Doença pulmonar obstrutiva crônica avançada,Analgésico não-opioide,21 1957 7825,Hospital Geral
+223,1980-05-08,B-,Doença renal terminal em diálise,Antiemético,81 8255-6296,Clínica de Oncologia
+224,1980-06-18,A+,Doença neurológica degenerativa avançada,Fentanil,(061) 5427-8656,Unidade de Cuidados Paliativos
+225,1941-08-02,B-,Doença neurológica degenerativa avançada,Antidepressivo; Ansiolítico,0500-425-5778,Clínica de Oncologia
+226,1952-03-06,A+,Insuficiência cardíaca congestiva em estágio terminal,Antidepressivo; Ansiolítico,+55 (061) 5829 5829,Posto de Saúde
+227,1948-10-22,A-,Insuficiência cardíaca congestiva em estágio terminal,Antidepressivo; Ansiolítico,+55 (084) 6161-8808,Hospital Geral
+228,1943-12-13,A+,Doença pulmonar obstrutiva crônica avançada,Fentanil,0500 048 2357,Unidade de Cuidados Paliativos
+229,1945-09-25,O+,Doença renal terminal em diálise,Antidepressivo; Ansiolítico,(061) 5868 6395,Clínica de Oncologia
+230,1985-05-07,B+,Demência avançada (Alzheimer),Morfina; Metadona,+55 51 3723 0817,Hospital Geral
+231,1949-06-19,A-,Câncer metastático avançado,Fentanil,+55 11 4364 3813,Unidade de Cuidados Paliativos
+232,1933-01-07,A+,Câncer metastático avançado,Antidepressivo; Ansiolítico,+55 (031) 0413 2114,Clínica de Oncologia
+233,1991-06-02,O+,Demência avançada (Alzheimer),Analgésico não-opioide,+55 71 6560 9456,Posto de Saúde
+234,1980-11-05,A-,Doença neurológica degenerativa avançada,Antiemético,+55 (084) 4699-7990,Unidade de Cuidados Paliativos
+235,1996-09-09,AB+,Câncer metastático avançado,Fentanil,+55 (051) 7550 4768,Hospital Geral
+236,1943-02-27,B-,Insuficiência cardíaca congestiva em estágio terminal,Antiemético,(011) 9957-0607,Clínica de Oncologia
+237,1941-08-21,O+,Doença renal terminal em diálise,Analgésico não-opioide,(071) 4811-3176,Hospital Geral
+238,1975-09-27,AB+,Doença neurológica degenerativa avançada,Antidepressivo; Ansiolítico,+55 41 9705-4873,Unidade de Cuidados Paliativos
+239,1985-09-14,A+,Insuficiência cardíaca congestiva em estágio terminal,Morfina; Metadona,+55 41 0290 8718,Posto de Saúde
+240,1954-06-27,A-,Demência avançada (Alzheimer),Antiemético,(061) 4968-0491,Hospital Geral
+241,2000-02-24,AB+,Doença neurológica degenerativa avançada,Analgésico não-opioide,(084) 2742-0495,Unidade de Cuidados Paliativos
+242,1987-11-24,A-,Câncer metastático avançado,Analgésico não-opioide,+55 61 2137 7306,Unidade de Cuidados Paliativos
+243,1953-11-10,A+,Insuficiência cardíaca congestiva em estágio terminal,Antidepressivo; Ansiolítico,41 0423 5973,Clínica de Oncologia
+244,1990-05-04,AB+,Insuficiência cardíaca congestiva em estágio terminal,Fentanil,+55 61 1222 9907,Unidade de Cuidados Paliativos
+245,1997-05-06,AB+,Doença neurológica degenerativa avançada,Morfina; Metadona,21 6085 8167,Hospital Geral
+246,1934-05-21,AB-,Demência avançada (Alzheimer),Fentanil,+55 84 6861-1145,Hospital Geral
+247,1994-06-01,AB+,Doença neurológica degenerativa avançada,Antiemético,71 8321 0219,Hospital Geral
+248,1955-03-30,O-,Demência avançada (Alzheimer),Antiemético,+55 (081) 7858-4712,Clínica de Oncologia
+249,1986-01-24,A+,Demência avançada (Alzheimer),Antiemético,+55 61 8033 2426,Unidade de Cuidados Paliativos
+250,1931-05-06,AB-,Insuficiência cardíaca congestiva em estágio terminal,Fentanil,31 0801 8498,Hospital Geral
+251,1931-01-10,A-,Insuficiência cardíaca congestiva em estágio terminal,Analgésico não-opioide,(031) 2537 3377,Hospital Geral
+252,1994-12-23,A+,Câncer metastático avançado,Oxicodona,+55 11 1268-8122,Hospital Geral
+253,1999-03-19,O-,Doença pulmonar obstrutiva crônica avançada,Antidepressivo; Ansiolítico,+55 (011) 1781-9236,Unidade de Cuidados Paliativos
+254,1979-01-19,B+,Câncer metastático avançado,Antiemético,+55 21 4606-0560,Posto de Saúde
+255,1956-01-13,B-,Doença pulmonar obstrutiva crônica avançada,Oxicodona,31 6793 2798,Posto de Saúde
+256,1985-02-23,AB-,Doença pulmonar obstrutiva crônica avançada,Morfina; Metadona,+55 (031) 3984-7169,Clínica de Oncologia
+257,1934-01-10,A-,Doença renal terminal em diálise,Analgésico não-opioide,84 1812 0546,Hospital Geral
+258,1968-01-16,B+,Insuficiência cardíaca congestiva em estágio terminal,Antiemético,(061) 5489-5478,Hospital Geral
+259,1996-03-17,O+,Câncer metastático avançado,Antidepressivo; Ansiolítico,51 9899 9275,Clínica de Oncologia
+260,1942-03-16,AB+,Doença pulmonar obstrutiva crônica avançada,Morfina; Metadona,(084) 5889-1444,Posto de Saúde
+261,1969-02-22,A+,Doença pulmonar obstrutiva crônica avançada,Oxicodona,0300-835-5393,Clínica de Oncologia
+262,1977-04-02,AB+,Doença neurológica degenerativa avançada,Antiemético,(041) 3586 4496,Unidade de Cuidados Paliativos
+263,1955-06-16,O-,Doença pulmonar obstrutiva crônica avançada,Antiemético,0800-243-5885,Posto de Saúde
+264,1957-08-24,B-,Doença neurológica degenerativa avançada,Antiemético,(061) 9821-4339,Unidade de Cuidados Paliativos
+265,1975-09-26,B+,Câncer metastático avançado,Antidepressivo; Ansiolítico,+55 (061) 7536-7497,Hospital Geral
+266,2002-12-17,B-,Doença renal terminal em diálise,Fentanil,(081) 2491 4168,Hospital Geral
+267,1983-04-27,AB-,Câncer metastático avançado,Analgésico não-opioide,+55 (011) 1347 7894,Posto de Saúde
+268,1999-05-20,AB+,Câncer metastático avançado,Oxicodona,0300 634 0679,Unidade de Cuidados Paliativos
+269,1944-07-12,O+,Demência avançada (Alzheimer),Morfina; Metadona,(071) 6651-2215,Unidade de Cuidados Paliativos
+270,1937-03-28,AB+,Câncer metastático avançado,Morfina; Metadona,+55 (061) 1418 8421,Unidade de Cuidados Paliativos
+271,1987-06-05,O+,Doença neurológica degenerativa avançada,Fentanil,+55 (084) 0900-1594,Posto de Saúde
+272,1968-07-01,A-,Doença renal terminal em diálise,Morfina; Metadona,(021) 3339-9948,Unidade de Cuidados Paliativos
+273,1977-12-09,O+,Câncer metastático avançado,Antiemético,+55 41 2089-5326,Hospital Geral
+274,1957-06-20,O+,Doença neurológica degenerativa avançada,Oxicodona,71 9021-9947,Unidade de Cuidados Paliativos
+275,1946-10-10,AB+,Doença pulmonar obstrutiva crônica avançada,Fentanil,+55 41 3633 7922,Posto de Saúde
+276,1959-10-23,AB-,Doença pulmonar obstrutiva crônica avançada,Antidepressivo; Ansiolítico,+55 84 1034-6996,Clínica de Oncologia
+277,1990-07-17,B-,Câncer metastático avançado,Oxicodona,+55 11 3116-7726,Unidade de Cuidados Paliativos
+278,1981-07-23,A-,Insuficiência cardíaca congestiva em estágio terminal,Morfina; Metadona,+55 (031) 8437 6855,Unidade de Cuidados Paliativos
+279,1932-08-21,O-,Demência avançada (Alzheimer),Fentanil,11 8967-9352,Posto de Saúde
+280,1940-05-07,A-,Doença renal terminal em diálise,Fentanil,0300-626-3355,Unidade de Cuidados Paliativos
+281,1984-12-14,O-,Doença pulmonar obstrutiva crônica avançada,Antidepressivo; Ansiolítico,+55 84 3436-9709,Clínica de Oncologia
+282,1963-01-14,A-,Câncer metastático avançado,Oxicodona,+55 (084) 7069 5560,Clínica de Oncologia
+283,1996-08-21,A+,Insuficiência cardíaca congestiva em estágio terminal,Fentanil,(021) 7616-4534,Unidade de Cuidados Paliativos
+284,1979-09-18,A-,Doença neurológica degenerativa avançada,Oxicodona,+55 71 7223-9898,Clínica de Oncologia
+285,1956-06-15,O+,Doença renal terminal em diálise,Morfina; Metadona,+55 (051) 6503 1219,Clínica de Oncologia
+286,2005-01-22,AB+,Insuficiência cardíaca congestiva em estágio terminal,Morfina; Metadona,+55 (071) 4184 7242,Posto de Saúde
+287,1989-02-22,O-,Doença renal terminal em diálise,Analgésico não-opioide,+55 84 2364-2813,Unidade de Cuidados Paliativos
+288,1942-05-18,A-,Demência avançada (Alzheimer),Morfina; Metadona,0900-092-4876,Unidade de Cuidados Paliativos
+289,1952-09-03,A-,Câncer metastático avançado,Morfina; Metadona,+55 41 0391-1142,Unidade de Cuidados Paliativos
+290,2002-06-28,B+,Insuficiência cardíaca congestiva em estágio terminal,Antidepressivo; Ansiolítico,+55 71 7852 2823,Clínica de Oncologia
+291,1931-01-04,A-,Doença renal terminal em diálise,Antiemético,(061) 2480 8806,Clínica de Oncologia
+292,1948-03-09,A-,Câncer metastático avançado,Morfina; Metadona,+55 (041) 0722-3959,Unidade de Cuidados Paliativos
+293,1967-10-30,O-,Insuficiência cardíaca congestiva em estágio terminal,Morfina; Metadona,(061) 3721-3290,Clínica de Oncologia
+294,1938-12-13,A-,Câncer metastático avançado,Antidepressivo; Ansiolítico,41 2047 8768,Hospital Geral
+295,2003-07-07,B+,Doença renal terminal em diálise,Antidepressivo; Ansiolítico,71 8785 9964,Posto de Saúde
+296,2001-01-23,O-,Câncer metastático avançado,Antidepressivo; Ansiolítico,81 2872 0319,Posto de Saúde
+297,1979-11-02,B+,Doença pulmonar obstrutiva crônica avançada,Oxicodona,(031) 1966 6450,Unidade de Cuidados Paliativos
+298,1972-08-18,AB+,Doença pulmonar obstrutiva crônica avançada,Antidepressivo; Ansiolítico,(084) 3036-2792,Unidade de Cuidados Paliativos
+299,1970-12-02,A+,Doença renal terminal em diálise,Antiemético,61 3203 7476,Unidade de Cuidados Paliativos
+300,1993-04-16,AB+,Demência avançada (Alzheimer),Antidepressivo; Ansiolítico,(061) 5372-6032,Posto de Saúde
+301,1943-08-09,A+,Câncer metastático avançado,Fentanil,(021) 5057 6619,Posto de Saúde
+302,1969-10-29,B+,Demência avançada (Alzheimer),Oxicodona,11 8870 7155,Unidade de Cuidados Paliativos
+303,1956-02-25,A+,Demência avançada (Alzheimer),Analgésico não-opioide,(041) 8201 2840,Clínica de Oncologia
+304,1933-03-07,O-,Doença renal terminal em diálise,Antidepressivo; Ansiolítico,31 3850-7659,Clínica de Oncologia
+305,1992-06-19,AB-,Demência avançada (Alzheimer),Fentanil,(084) 9545 0891,Unidade de Cuidados Paliativos
+306,1989-06-26,A+,Doença pulmonar obstrutiva crônica avançada,Antiemético,(084) 6808-9812,Unidade de Cuidados Paliativos
+307,1981-04-03,A+,Doença pulmonar obstrutiva crônica avançada,Morfina; Metadona,(071) 7422 3196,Posto de Saúde
+308,1967-05-09,AB-,Doença renal terminal em diálise,Oxicodona,61 3004 0236,Unidade de Cuidados Paliativos
+309,2007-04-20,A-,Insuficiência cardíaca congestiva em estágio terminal,Analgésico não-opioide,+55 (071) 6268-9430,Unidade de Cuidados Paliativos
+310,1938-11-01,AB+,Doença renal terminal em diálise,Analgésico não-opioide,+55 (031) 0471-3727,Hospital Geral
+311,1945-05-14,B-,Doença renal terminal em diálise,Antidepressivo; Ansiolítico,+55 21 7595 7498,Clínica de Oncologia
+312,2004-05-23,B+,Insuficiência cardíaca congestiva em estágio terminal,Oxicodona,(071) 5829 8493,Clínica de Oncologia
+313,1960-08-09,AB-,Doença renal terminal em diálise,Morfina; Metadona,+55 (031) 6745 8476,Clínica de Oncologia
+314,1936-10-19,B+,Doença renal terminal em diálise,Oxicodona,0900 441 2833,Posto de Saúde
+315,1963-09-03,AB+,Insuficiência cardíaca congestiva em estágio terminal,Antidepressivo; Ansiolítico,(061) 2188-5666,Hospital Geral
+316,2006-12-06,A-,Câncer metastático avançado,Oxicodona,(071) 4132 9715,Unidade de Cuidados Paliativos
+317,1937-07-25,A+,Doença renal terminal em diálise,Antidepressivo; Ansiolítico,(021) 6626-7055,Hospital Geral
+318,1945-11-29,AB-,Doença renal terminal em diálise,Oxicodona,(041) 3776 9366,Unidade de Cuidados Paliativos
+319,1961-10-26,AB-,Doença neurológica degenerativa avançada,Oxicodona,(011) 3925 2959,Clínica de Oncologia
+320,1981-02-09,A+,Câncer metastático avançado,Oxicodona,+55 21 1110 2867,Unidade de Cuidados Paliativos
+321,1942-05-21,A-,Doença renal terminal em diálise,Fentanil,+55 (021) 0072-0245,Hospital Geral
+322,1978-06-11,AB-,Doença neurológica degenerativa avançada,Analgésico não-opioide,0500 102 4510,Posto de Saúde
+323,1941-01-10,A-,Doença pulmonar obstrutiva crônica avançada,Fentanil,+55 (061) 9032 6714,Clínica de Oncologia
+324,1969-06-25,B+,Insuficiência cardíaca congestiva em estágio terminal,Analgésico não-opioide,0800-819-4217,Posto de Saúde
+325,1965-03-15,O-,Doença neurológica degenerativa avançada,Fentanil,+55 (031) 8179-3406,Unidade de Cuidados Paliativos
+326,1975-11-29,AB-,Insuficiência cardíaca congestiva em estágio terminal,Analgésico não-opioide,+55 (031) 7758-4466,Unidade de Cuidados Paliativos
+327,1961-10-27,O+,Doença pulmonar obstrutiva crônica avançada,Analgésico não-opioide,(041) 5337 2201,Clínica de Oncologia
+328,1937-10-25,B+,Insuficiência cardíaca congestiva em estágio terminal,Analgésico não-opioide,0900 121 7221,Hospital Geral
+329,1968-04-06,O+,Doença renal terminal em diálise,Morfina; Metadona,(071) 5937 6618,Unidade de Cuidados Paliativos
+330,1970-12-30,AB-,Doença renal terminal em diálise,Oxicodona,+55 (084) 7052-6351,Hospital Geral
+331,1936-06-23,O-,Insuficiência cardíaca congestiva em estágio terminal,Fentanil,+55 (051) 4627 7657,Hospital Geral
+332,1947-11-28,B-,Doença pulmonar obstrutiva crônica avançada,Fentanil,(061) 6592 0246,Unidade de Cuidados Paliativos
+333,1942-07-04,A-,Doença neurológica degenerativa avançada,Analgésico não-opioide,(084) 5202-3897,Clínica de Oncologia
+334,1967-08-21,O-,Câncer metastático avançado,Fentanil,+55 (081) 2600-5595,Unidade de Cuidados Paliativos
+335,1975-09-17,B-,Doença neurológica degenerativa avançada,Morfina; Metadona,+55 (011) 1783 3258,Clínica de Oncologia
+336,1967-01-14,AB+,Câncer metastático avançado,Analgésico não-opioide,51 6899 9360,Hospital Geral
+337,1991-09-27,A+,Demência avançada (Alzheimer),Antidepressivo; Ansiolítico,0900 848 7045,Posto de Saúde
+338,1932-04-04,B+,Demência avançada (Alzheimer),Antidepressivo; Ansiolítico,81 9176 7993,Posto de Saúde
+339,1972-09-18,AB-,Doença renal terminal em diálise,Antidepressivo; Ansiolítico,0900 374 4039,Hospital Geral
+340,1964-05-29,O-,Doença renal terminal em diálise,Analgésico não-opioide,61 4083 0373,Unidade de Cuidados Paliativos
+341,1983-11-06,B+,Demência avançada (Alzheimer),Morfina; Metadona,+55 (011) 6014 8860,Hospital Geral
+342,1998-02-09,AB+,Câncer metastático avançado,Fentanil,(041) 9079 3884,Clínica de Oncologia
+343,1945-08-04,A-,Câncer metastático avançado,Fentanil,+55 41 6852-8306,Unidade de Cuidados Paliativos
+344,1940-08-30,O+,Insuficiência cardíaca congestiva em estágio terminal,Analgésico não-opioide,(071) 3701 2424,Hospital Geral
+345,1964-10-23,A-,Doença pulmonar obstrutiva crônica avançada,Antiemético,84 2632 5144,Posto de Saúde
+346,2003-08-18,A+,Demência avançada (Alzheimer),Analgésico não-opioide,81 1121-0314,Unidade de Cuidados Paliativos
+347,1954-03-06,O+,Insuficiência cardíaca congestiva em estágio terminal,Morfina; Metadona,+55 61 7518 8781,Hospital Geral
+348,1995-04-26,AB-,Insuficiência cardíaca congestiva em estágio terminal,Oxicodona,0800-415-1526,Posto de Saúde
+349,1955-08-02,AB+,Doença neurológica degenerativa avançada,Fentanil,71 4091-1225,Clínica de Oncologia
+350,1951-08-23,B-,Câncer metastático avançado,Morfina; Metadona,41 8375-0566,Posto de Saúde
+351,1943-12-01,O-,Insuficiência cardíaca congestiva em estágio terminal,Morfina; Metadona,31 6323-9791,Clínica de Oncologia
+352,1960-09-05,A+,Demência avançada (Alzheimer),Morfina; Metadona,11 8765-5300,Clínica de Oncologia
+353,1991-06-18,O-,Insuficiência cardíaca congestiva em estágio terminal,Morfina; Metadona,+55 (071) 0950-5560,Hospital Geral
+354,1972-09-18,B-,Insuficiência cardíaca congestiva em estágio terminal,Analgésico não-opioide,(061) 1219-8819,Clínica de Oncologia
+355,1948-04-19,A-,Demência avançada (Alzheimer),Morfina; Metadona,(071) 7885-1905,Clínica de Oncologia
+356,1963-04-22,O+,Demência avançada (Alzheimer),Antidepressivo; Ansiolítico,(041) 8640 1042,Clínica de Oncologia
+357,1964-12-21,A-,Doença neurológica degenerativa avançada,Antiemético,41 2456 1851,Posto de Saúde
+358,1997-08-20,B+,Doença pulmonar obstrutiva crônica avançada,Antidepressivo; Ansiolítico,(041) 4600 4521,Clínica de Oncologia
+359,1948-07-10,B+,Demência avançada (Alzheimer),Morfina; Metadona,51 9915 1145,Clínica de Oncologia
+360,1973-02-21,O-,Demência avançada (Alzheimer),Fentanil,+55 71 2939 1304,Unidade de Cuidados Paliativos
+361,1972-03-19,AB+,Doença renal terminal em diálise,Morfina; Metadona,81 8189-8484,Unidade de Cuidados Paliativos
+362,1943-06-28,A-,Câncer metastático avançado,Analgésico não-opioide,71 0461 5402,Clínica de Oncologia
+363,1939-03-06,O+,Doença renal terminal em diálise,Oxicodona,+55 41 9017 0756,Hospital Geral
+364,2003-08-01,O+,Doença renal terminal em diálise,Antidepressivo; Ansiolítico,+55 51 4298 3152,Posto de Saúde
+365,1955-01-06,B-,Demência avançada (Alzheimer),Fentanil,0300 107 3228,Hospital Geral
+366,1962-04-17,O+,Doença neurológica degenerativa avançada,Morfina; Metadona,81 0849 3783,Unidade de Cuidados Paliativos
+367,1937-11-25,A-,Demência avançada (Alzheimer),Oxicodona,(021) 3963-8452,Unidade de Cuidados Paliativos
+368,1984-11-15,B-,Insuficiência cardíaca congestiva em estágio terminal,Oxicodona,0900 694 4391,Hospital Geral
+369,1987-01-05,O+,Câncer metastático avançado,Analgésico não-opioide,+55 61 9701-6934,Posto de Saúde
+370,1947-04-08,B-,Doença neurológica degenerativa avançada,Oxicodona,0500 291 3203,Clínica de Oncologia
+371,1963-11-05,AB-,Doença neurológica degenerativa avançada,Morfina; Metadona,+55 (061) 1623 4190,Hospital Geral
+372,1958-06-06,O+,Doença renal terminal em diálise,Antidepressivo; Ansiolítico,+55 61 0615 3722,Clínica de Oncologia
+373,1946-08-05,AB+,Doença renal terminal em diálise,Antidepressivo; Ansiolítico,31 5668 4732,Hospital Geral
+374,1957-12-18,O+,Câncer metastático avançado,Antidepressivo; Ansiolítico,51 5337 7460,Unidade de Cuidados Paliativos
+375,1964-02-18,B+,Doença renal terminal em diálise,Antiemético,+55 (011) 6720 0784,Hospital Geral
+376,1957-07-24,A-,Doença renal terminal em diálise,Morfina; Metadona,81 1424 4260,Clínica de Oncologia
+377,1994-03-24,AB-,Demência avançada (Alzheimer),Fentanil,51 1975 4373,Posto de Saúde
+378,1967-05-01,O-,Doença renal terminal em diálise,Antiemético,(081) 6427-3720,Posto de Saúde
+379,1961-09-22,A+,Insuficiência cardíaca congestiva em estágio terminal,Fentanil,(084) 6388-2145,Posto de Saúde
+380,2000-11-13,B+,Doença renal terminal em diálise,Antiemético,+55 61 1484-6019,Posto de Saúde
+381,1944-05-25,A+,Demência avançada (Alzheimer),Fentanil,+55 41 4438-9982,Unidade de Cuidados Paliativos
+382,1997-06-19,A+,Doença neurológica degenerativa avançada,Antidepressivo; Ansiolítico,51 0205 8695,Clínica de Oncologia
+383,1930-01-07,AB-,Câncer metastático avançado,Fentanil,(081) 3214-6449,Clínica de Oncologia
+384,1956-12-19,AB+,Doença pulmonar obstrutiva crônica avançada,Antidepressivo; Ansiolítico,71 9995 1679,Hospital Geral
+385,1956-07-13,B-,Insuficiência cardíaca congestiva em estágio terminal,Fentanil,+55 51 5055 7385,Posto de Saúde
+386,1996-12-08,AB-,Doença pulmonar obstrutiva crônica avançada,Analgésico não-opioide,+55 31 6801-1923,Posto de Saúde
+387,1985-09-20,A-,Insuficiência cardíaca congestiva em estágio terminal,Antidepressivo; Ansiolítico,+55 (061) 3768 1187,Unidade de Cuidados Paliativos
+388,1948-04-16,O+,Doença neurológica degenerativa avançada,Antidepressivo; Ansiolítico,+55 21 3351-0409,Clínica de Oncologia
+389,1985-07-03,A+,Doença renal terminal em diálise,Oxicodona,+55 71 4973 1539,Hospital Geral
+390,1945-12-26,AB+,Doença neurológica degenerativa avançada,Antiemético,+55 31 4983 0748,Posto de Saúde
+391,1952-07-21,B+,Doença renal terminal em diálise,Antiemético,+55 (011) 7365 1189,Hospital Geral
+392,1961-01-12,B+,Insuficiência cardíaca congestiva em estágio terminal,Oxicodona,0500 406 5578,Hospital Geral
+393,1952-03-07,B-,Câncer metastático avançado,Antidepressivo; Ansiolítico,+55 (041) 1904 3223,Hospital Geral
+394,1935-12-22,AB-,Doença neurológica degenerativa avançada,Oxicodona,+55 (051) 3332-4707,Clínica de Oncologia
+395,1960-07-11,AB-,Demência avançada (Alzheimer),Antiemético,0900-201-3546,Posto de Saúde
+396,1950-10-08,A-,Doença neurológica degenerativa avançada,Morfina; Metadona,+55 (084) 2760 2508,Unidade de Cuidados Paliativos
+397,1953-08-26,AB-,Demência avançada (Alzheimer),Antiemético,84 1123 1261,Posto de Saúde
+398,1988-12-21,B+,Demência avançada (Alzheimer),Antiemético,+55 31 2488-8995,Clínica de Oncologia
+399,1991-06-25,AB-,Insuficiência cardíaca congestiva em estágio terminal,Fentanil,+55 (031) 9893-7629,Hospital Geral
+400,1990-05-24,AB+,Câncer metastático avançado,Antidepressivo; Ansiolítico,+55 84 5493-0364,Hospital Geral
+401,1980-12-05,B+,Doença renal terminal em diálise,Oxicodona,61 7191-2038,Unidade de Cuidados Paliativos
+402,1945-03-22,B-,Doença neurológica degenerativa avançada,Oxicodona,84 7692-0828,Clínica de Oncologia
+403,1961-05-14,O+,Doença renal terminal em diálise,Morfina; Metadona,+55 81 3089 8138,Hospital Geral
+404,2004-12-25,O-,Insuficiência cardíaca congestiva em estágio terminal,Analgésico não-opioide,+55 21 5881 4458,Unidade de Cuidados Paliativos
+405,1948-05-09,A+,Insuficiência cardíaca congestiva em estágio terminal,Fentanil,+55 (051) 0673-2318,Clínica de Oncologia
+406,1949-12-09,AB+,Demência avançada (Alzheimer),Antidepressivo; Ansiolítico,0900-716-8157,Clínica de Oncologia
+407,1952-03-24,O-,Doença pulmonar obstrutiva crônica avançada,Oxicodona,+55 84 5000-0001,Posto de Saúde
+408,1973-09-17,AB+,Doença neurológica degenerativa avançada,Antiemético,+55 (041) 9113-7178,Posto de Saúde
+409,1980-05-21,A-,Câncer metastático avançado,Antiemético,+55 (081) 9025 5618,Clínica de Oncologia
+410,1969-04-09,AB+,Doença pulmonar obstrutiva crônica avançada,Analgésico não-opioide,(021) 4218 2998,Hospital Geral
+411,1994-09-16,O-,Câncer metastático avançado,Fentanil,(011) 7812 2489,Clínica de Oncologia
+412,1935-08-07,AB-,Doença pulmonar obstrutiva crônica avançada,Fentanil,(051) 6708 6700,Clínica de Oncologia
+413,1936-06-20,B-,Insuficiência cardíaca congestiva em estágio terminal,Antiemético,+55 (011) 4365 5158,Unidade de Cuidados Paliativos
+414,1967-04-05,A+,Doença renal terminal em diálise,Antidepressivo; Ansiolítico,51 2669 1362,Clínica de Oncologia
+415,1966-06-27,B+,Doença neurológica degenerativa avançada,Morfina; Metadona,31 3550-5429,Posto de Saúde
+416,1980-11-25,AB+,Doença pulmonar obstrutiva crônica avançada,Antidepressivo; Ansiolítico,+55 (061) 8070 6336,Posto de Saúde
+417,2005-10-19,O+,Doença neurológica degenerativa avançada,Morfina; Metadona,(051) 9509-8221,Unidade de Cuidados Paliativos
+418,1938-01-30,AB-,Doença neurológica degenerativa avançada,Analgésico não-opioide,+55 81 0164-8188,Unidade de Cuidados Paliativos
+419,1930-07-01,O-,Doença neurológica degenerativa avançada,Fentanil,+55 71 4287-7383,Clínica de Oncologia
+420,1981-04-11,B+,Doença neurológica degenerativa avançada,Antiemético,+55 (071) 8164-3212,Unidade de Cuidados Paliativos
+421,1984-04-09,AB+,Câncer metastático avançado,Antidepressivo; Ansiolítico,0900-428-9464,Unidade de Cuidados Paliativos
+422,1951-05-28,AB+,Doença neurológica degenerativa avançada,Antiemético,+55 (031) 3625 8631,Unidade de Cuidados Paliativos
+423,1971-12-15,AB-,Doença neurológica degenerativa avançada,Morfina; Metadona,+55 61 1706-4625,Unidade de Cuidados Paliativos
+424,1980-09-03,AB-,Insuficiência cardíaca congestiva em estágio terminal,Analgésico não-opioide,(021) 0263 5582,Clínica de Oncologia
+425,1969-10-23,O+,Doença pulmonar obstrutiva crônica avançada,Fentanil,+55 (071) 0176-4644,Clínica de Oncologia
+426,1999-08-21,AB+,Demência avançada (Alzheimer),Morfina; Metadona,0500 880 3153,Posto de Saúde
+427,2005-07-03,A+,Doença neurológica degenerativa avançada,Antiemético,21 8245-2790,Hospital Geral
+428,1976-01-31,O-,Insuficiência cardíaca congestiva em estágio terminal,Antiemético,+55 (051) 4043 3335,Hospital Geral
+429,1956-04-08,O+,Doença renal terminal em diálise,Fentanil,51 4951 6321,Posto de Saúde
+430,1942-01-28,A+,Insuficiência cardíaca congestiva em estágio terminal,Oxicodona,+55 41 9787 1809,Unidade de Cuidados Paliativos
+431,1956-11-07,AB-,Demência avançada (Alzheimer),Antiemético,+55 41 9137-3265,Posto de Saúde
+432,1960-07-16,B+,Doença pulmonar obstrutiva crônica avançada,Analgésico não-opioide,+55 (061) 6011 9875,Unidade de Cuidados Paliativos
+433,1982-10-23,A-,Demência avançada (Alzheimer),Fentanil,+55 41 7868 8002,Unidade de Cuidados Paliativos
+434,1958-03-23,AB-,Doença neurológica degenerativa avançada,Morfina; Metadona,+55 (041) 0915 6182,Hospital Geral
+435,2001-02-12,O-,Doença pulmonar obstrutiva crônica avançada,Oxicodona,+55 (021) 3657 7449,Unidade de Cuidados Paliativos
+436,1946-02-10,B+,Demência avançada (Alzheimer),Morfina; Metadona,84 0936 5952,Unidade de Cuidados Paliativos
+437,1937-09-15,O+,Doença neurológica degenerativa avançada,Antidepressivo; Ansiolítico,+55 11 4911 8941,Posto de Saúde
+438,2003-03-18,O+,Demência avançada (Alzheimer),Antidepressivo; Ansiolítico,(021) 3368 7509,Hospital Geral
+439,1948-10-11,A+,Doença renal terminal em diálise,Oxicodona,81 3223 9982,Clínica de Oncologia
+440,1939-10-28,A+,Doença pulmonar obstrutiva crônica avançada,Antiemético,+55 41 7455-6114,Unidade de Cuidados Paliativos
+441,1934-10-14,A+,Doença neurológica degenerativa avançada,Morfina; Metadona,(021) 2886 0505,Unidade de Cuidados Paliativos
+442,1962-03-01,B-,Doença neurológica degenerativa avançada,Fentanil,11 6660-8112,Clínica de Oncologia
+443,1987-11-14,B+,Câncer metastático avançado,Antidepressivo; Ansiolítico,+55 (031) 0308 3566,Clínica de Oncologia
+444,1941-11-06,B+,Câncer metastático avançado,Morfina; Metadona,+55 (041) 6271 5312,Clínica de Oncologia
+445,1959-07-28,AB+,Demência avançada (Alzheimer),Analgésico não-opioide,+55 61 5506-8826,Clínica de Oncologia
+446,2007-09-04,O+,Doença neurológica degenerativa avançada,Oxicodona,+55 51 7768 2938,Clínica de Oncologia
+447,1965-09-20,O-,Doença pulmonar obstrutiva crônica avançada,Oxicodona,(021) 0134 8087,Unidade de Cuidados Paliativos
+448,1956-03-26,O+,Câncer metastático avançado,Oxicodona,(081) 4378 8260,Unidade de Cuidados Paliativos
+449,1958-09-01,B+,Insuficiência cardíaca congestiva em estágio terminal,Analgésico não-opioide,+55 31 5910-1570,Hospital Geral
+450,1936-04-13,B+,Câncer metastático avançado,Fentanil,21 5991-4492,Hospital Geral
+451,1931-12-20,O+,Doença neurológica degenerativa avançada,Fentanil,(041) 4926-9996,Hospital Geral
+452,2007-10-07,A+,Doença neurológica degenerativa avançada,Morfina; Metadona,41 4899 7184,Hospital Geral
+453,1949-07-30,A+,Doença neurológica degenerativa avançada,Morfina; Metadona,61 5969-3259,Posto de Saúde
+454,1943-10-31,O-,Demência avançada (Alzheimer),Morfina; Metadona,(021) 0849 9323,Clínica de Oncologia
+455,1944-07-26,O-,Doença neurológica degenerativa avançada,Oxicodona,+55 (061) 3426-6980,Unidade de Cuidados Paliativos
+456,1985-04-28,A+,Doença pulmonar obstrutiva crônica avançada,Antidepressivo; Ansiolítico,0900-087-2617,Hospital Geral
+457,1986-09-02,AB+,Doença renal terminal em diálise,Antiemético,+55 (041) 7234 8389,Unidade de Cuidados Paliativos
+458,1959-10-26,O+,Câncer metastático avançado,Antiemético,(061) 9538 2804,Hospital Geral
+459,1930-03-28,AB+,Câncer metastático avançado,Morfina; Metadona,(084) 6129 9650,Posto de Saúde
+460,2004-07-28,B-,Doença renal terminal em diálise,Oxicodona,+55 (011) 6958-2641,Clínica de Oncologia
+461,2004-10-04,B-,Doença pulmonar obstrutiva crônica avançada,Analgésico não-opioide,41 9656 1308,Posto de Saúde
+462,1995-05-30,AB+,Insuficiência cardíaca congestiva em estágio terminal,Morfina; Metadona,(011) 1238-5951,Posto de Saúde
+463,1964-02-09,B-,Doença neurológica degenerativa avançada,Antidepressivo; Ansiolítico,+55 (071) 4682-3948,Clínica de Oncologia
+464,1966-10-29,B-,Câncer metastático avançado,Morfina; Metadona,+55 (061) 0273 0086,Hospital Geral
+465,1982-12-28,A-,Doença renal terminal em diálise,Analgésico não-opioide,51 1016 8311,Posto de Saúde
+466,1956-02-18,B+,Câncer metastático avançado,Antiemético,0800-500-1680,Hospital Geral
+467,1967-10-29,A-,Doença pulmonar obstrutiva crônica avançada,Analgésico não-opioide,+55 21 4915 0762,Unidade de Cuidados Paliativos
+468,2000-11-02,O-,Doença pulmonar obstrutiva crônica avançada,Fentanil,+55 (081) 9762-0534,Posto de Saúde
+469,1966-08-01,A+,Câncer metastático avançado,Oxicodona,+55 (031) 7779 4620,Hospital Geral
+470,1990-12-07,AB+,Doença pulmonar obstrutiva crônica avançada,Analgésico não-opioide,+55 84 6629 2508,Clínica de Oncologia
+471,1942-05-08,O+,Doença neurológica degenerativa avançada,Morfina; Metadona,(084) 7602-9914,Hospital Geral
+472,1932-11-30,A+,Câncer metastático avançado,Oxicodona,61 8841 3337,Unidade de Cuidados Paliativos
+473,1961-05-30,AB-,Doença pulmonar obstrutiva crônica avançada,Antidepressivo; Ansiolítico,+55 31 2552 3561,Clínica de Oncologia
+474,1993-05-28,A-,Doença pulmonar obstrutiva crônica avançada,Fentanil,71 1703-2119,Unidade de Cuidados Paliativos
+475,1952-01-21,A-,Demência avançada (Alzheimer),Antidepressivo; Ansiolítico,+55 (011) 6136 3852,Posto de Saúde
+476,1993-06-23,AB+,Demência avançada (Alzheimer),Analgésico não-opioide,11 8956-1337,Posto de Saúde
+477,1939-12-09,O+,Doença neurológica degenerativa avançada,Oxicodona,71 4449-0295,Hospital Geral
+478,1936-04-28,B+,Doença neurológica degenerativa avançada,Analgésico não-opioide,+55 (011) 6480-1644,Hospital Geral
+479,1937-01-07,B+,Câncer metastático avançado,Antidepressivo; Ansiolítico,+55 41 7341-6781,Posto de Saúde
+480,1949-02-11,O-,Insuficiência cardíaca congestiva em estágio terminal,Antiemético,(061) 7822-1021,Posto de Saúde
+481,1996-09-21,AB-,Doença renal terminal em diálise,Morfina; Metadona,0900 821 3486,Unidade de Cuidados Paliativos
+482,1953-03-06,O-,Demência avançada (Alzheimer),Morfina; Metadona,0500 857 9736,Posto de Saúde
+483,1961-05-06,O-,Câncer metastático avançado,Morfina; Metadona,71 3182-8560,Clínica de Oncologia
+484,1975-11-20,AB-,Câncer metastático avançado,Analgésico não-opioide,+55 31 9707-9866,Unidade de Cuidados Paliativos
+485,1946-01-06,AB-,Doença renal terminal em diálise,Antiemético,(051) 7067-3682,Hospital Geral
+486,1931-12-04,O+,Doença neurológica degenerativa avançada,Analgésico não-opioide,21 0682 1223,Unidade de Cuidados Paliativos
+487,1977-05-11,O-,Doença pulmonar obstrutiva crônica avançada,Analgésico não-opioide,(061) 2165 0587,Posto de Saúde
+488,1944-02-05,B+,Doença renal terminal em diálise,Antiemético,+55 71 6921-8219,Hospital Geral
+489,1948-09-14,A+,Doença neurológica degenerativa avançada,Oxicodona,(061) 9679 0898,Posto de Saúde
+490,1966-05-14,O-,Insuficiência cardíaca congestiva em estágio terminal,Morfina; Metadona,+55 41 6998-4802,Posto de Saúde
+491,1947-02-01,AB-,Insuficiência cardíaca congestiva em estágio terminal,Fentanil,+55 (051) 5093 8694,Clínica de Oncologia
+492,1998-11-15,A+,Doença renal terminal em diálise,Oxicodona,(021) 2495 9881,Posto de Saúde
+493,1941-04-03,O+,Insuficiência cardíaca congestiva em estágio terminal,Morfina; Metadona,(011) 5788 7071,Posto de Saúde
+494,1978-05-26,O-,Doença renal terminal em diálise,Antidepressivo; Ansiolítico,+55 (051) 3867-6738,Hospital Geral
+495,1955-03-28,O-,Demência avançada (Alzheimer),Fentanil,+55 (041) 9746 1917,Hospital Geral
+496,1997-03-05,O-,Doença neurológica degenerativa avançada,Analgésico não-opioide,0800-876-8299,Hospital Geral
+497,1989-03-22,A-,Demência avançada (Alzheimer),Antidepressivo; Ansiolítico,21 7225-8937,Hospital Geral
+498,1935-01-06,A+,Câncer metastático avançado,Antiemético,61 5806-2350,Clínica de Oncologia
+499,1966-06-23,B-,Doença neurológica degenerativa avançada,Analgésico não-opioide,+55 (041) 5669 5790,Posto de Saúde
+500,1933-12-27,AB-,Doença pulmonar obstrutiva crônica avançada,Morfina; Metadona,+55 71 2482 5544,Unidade de Cuidados Paliativos
