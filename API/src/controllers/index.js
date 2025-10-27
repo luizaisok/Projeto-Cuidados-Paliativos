@@ -12,8 +12,10 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
 
 const {getAdministradores, insertAdministrador, editAdministrador, deleteAdministrador} = require("../models/DAO/AdministradorDAO");
+const {getAcompanhantes, insertAcompanhante, editAcompanhante, deleteAcompanhante} = require("../models/DAO/AcompanhanteDAO");
 const {getPacientes, insertPaciente, editPaciente, deletePaciente} = require("../models/DAO/PacienteDAO");
 const {getConteudos, insertConteudo, editConteudo, deleteConteudo} = require("../models/DAO/ConteudoDAO");
+
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=- ☆ ADMINISTRADOR ☆
 
 app.get("/", (req, res) => {
@@ -249,6 +251,124 @@ app.delete("/api/paciente/:id", async (req, res) => {
     const {id} = req.params;
     //console.log(`Requisição DELETE recebida para o ID: ${id}`); //Para testar o DELETE do paciente
     const result = await deletePaciente(id);
+    if(result){
+        return res.status(200).json({success: true});
+    }  
+    return res.status(404).json({success: false});
+});
+
+// -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=- ☆ ACOMPANHANTE ☆
+// READ
+app.get("/acompanhantes", async (req, res) => {
+    const acompanhantes = await getAcompanhantes();
+    console.log("Acompanhantes: ", acompanhantes);
+
+    res.status(200).render("listaAcompanhantes", {acompanhantesDoController: acompanhantes});
+});
+
+app.get("/api/acompanhantes", async (req, res) => {
+    const acompanhantes = await getAcompanhantes();
+
+    res.status(200).json({success: true, acompanhantes});
+});
+
+// -=-=-=-=-=-=-=-=-=-=-=-=-=-=-
+
+// Formulário - CREATE
+/*
+app.get('/acompanhante', (req, res) => {
+    res.render('formAcompanhante');
+});
+*/
+
+app.get('/acompanhante', async (req, res) => {
+
+    res.json(rows);
+});
+
+// CREATE
+app.post('/acompanhante', async (req, res) => {
+    const {tipo_pessoa, nome_completo, nome_social, idade, email, telefone, genero, data_nascimento, senha, relacionamento} = req.body;
+
+    const result = await insertAcompanhante(tipo_pessoa, nome_completo, nome_social, idade, email, telefone, genero, data_nascimento, senha, relacionamento);
+
+    if (result){
+        res.redirect('/acompanhantes');
+    }else{
+        res.status(400).send("Erro ao cadastrar acompanhante.");
+    }
+});
+
+app.post("/api/acompanhante", async (req, res) => {
+    const {tipo_pessoa, nome_completo, nome_social, idade, email, telefone, genero, data_nascimento, senha, relacionamento} = req.body;
+    console.log("Dados recebidos: ", req.body);
+    const result = await insertAcompanhante(tipo_pessoa, nome_completo, nome_social, idade, email, telefone, genero, data_nascimento, senha, relacionamento);
+    if(result){
+        return res.status(202).json({success: true});
+    }
+    return res.status(400).json({success: false});
+});
+
+// -=-=-=-=-=-=-=-=-=-=-=-=-=-=-
+
+// Formulário - UPDATE
+app.get('/acompanhante/:id', async (req, res) => {
+    const {id} = req.params;
+    const acompanhantes = await getAcompanhantes();
+    const acompanhante = acompanhantes.find(p => p.id == id);
+
+    if(acompanhante){
+        res.render('acompanhante/edit', { acompanhante });
+    }else{
+        res.status(404).send("Acompanhante não encontrado.");
+    }
+});
+
+// UPDATE
+app.put('/acompanhante/:id', async (req, res) => {
+    const {id} = req.params;
+
+    const {tipo_pessoa, nome_completo, nome_social, idade, email, telefone, genero, data_nascimento, senha, relacionamento} = req.body;
+
+    const sucesso = await editAcompanhante( id, tipo_pessoa, nome_completo, nome_social, idade, email, telefone, genero, data_nascimento, senha, relacionamento);
+
+    if(sucesso){
+        res.redirect('/acompanhantes');
+    }else{
+        res.status(400).send("Erro ao editar acompanhante.");
+    }
+});
+
+app.put("/api/acompanhante/:id", async (req, res) => {
+    const {id} = req.params;
+
+    console.log("ID:", req.params.id);
+    const {tipo_pessoa, nome_completo, nome_social, idade, email, telefone, genero, data_nascimento, senha, relacionamento} = req.body;
+    const result = await editAcompanhante(id, tipo_pessoa, nome_completo, nome_social, idade, email, telefone, genero, data_nascimento, senha, relacionamento);
+
+    if(result){
+        return res.status(200).json({success: true});
+    }
+    return res.status(404).json({success: false});
+});
+
+// -=-=-=-=-=-=-=-=-=-=-=-=-=-=-
+
+// DELETE
+app.get('/acompanhante/:id', async (req, res) => {
+    const {id} = req.params;
+    const sucesso = await deleteAcompanhante(id);
+
+    if(sucesso){
+        res.redirect('/acompanhantes');
+    }else{
+        res.status(400).send("Erro ao remover acompanhante.");
+    }
+});
+
+app.delete("/api/acompanhante/:id", async (req, res) => {
+    const {id} = req.params;
+    const result = await deleteAcompanhante(id);
     if(result){
         return res.status(200).json({success: true});
     }  
