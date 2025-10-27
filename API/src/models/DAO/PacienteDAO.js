@@ -1,7 +1,7 @@
 const { createConnection } = require('./db');
 
-// Busca os dados dos pacientes com seus dados de usuário
-async function getPacientes(){
+// Busca todos os pacientes
+async function getPacientes() {
     let connection;
     try {
         connection = await createConnection();
@@ -10,60 +10,56 @@ async function getPacientes(){
             SELECT 
                 p.id_paciente,
                 p.id_usuario,
-                u.nome_completo,
-                u.email,
-                u.telefone,
-                u.sexo,
-                u.estado,
                 p.data_nascimento,
                 p.tipo_sanguineo,
                 p.condicoes_medicas,
                 p.medicacoes,
                 p.contatos_emergencia,
-                p.unidades_saude
+                p.unidades_saude,
+                u.nome_completo,
+                u.email,
+                u.telefone,
+                u.sexo,
+                u.estado
             FROM paciente p
             INNER JOIN usuario u ON p.id_usuario = u.id_usuario
         `);
         
-        return rows; 
-    } catch(e) {
+        return rows;
+    } catch (e) {
         throw new Error(`Falha ao buscar pacientes: ${e.message}`);
     } finally {
         if (connection) await connection.end();
     }
 }
 
-// Busca os dados de um paciente específico com seus dados de usuário
+// Busca um paciente específico
 async function getPacienteById(id_paciente) {
     let connection;
     try {
-        if (!id_paciente) {
-            throw new Error('ID do paciente é obrigatório!');
-        }
-        
         connection = await createConnection();
         
         const [rows] = await connection.query(`
             SELECT 
                 p.id_paciente,
                 p.id_usuario,
-                u.nome_completo,
-                u.email,
-                u.telefone,
-                u.sexo,
-                u.estado,
                 p.data_nascimento,
                 p.tipo_sanguineo,
                 p.condicoes_medicas,
                 p.medicacoes,
                 p.contatos_emergencia,
-                p.unidades_saude
+                p.unidades_saude,
+                u.nome_completo,
+                u.email,
+                u.telefone,
+                u.sexo,
+                u.estado
             FROM paciente p
             INNER JOIN usuario u ON p.id_usuario = u.id_usuario
             WHERE p.id_paciente = ?
         `, [id_paciente]);
 
-        return rows.length > 0 ? rows[0] : null;
+        return rows[0] || null;
     } catch (e) {
         throw new Error(`Falha ao buscar paciente: ${e.message}`);
     } finally {
@@ -71,143 +67,126 @@ async function getPacienteById(id_paciente) {
     }
 }
 
-// Insere um novo paciente (cria um novo usuário também)
-async function insertPaciente(dadosPaciente) {
+// Cria um novo paciente (insere em usuário e paciente)
+async function insertPaciente(dados) {
     let connection;
     
     try {
         connection = await createConnection();
         await connection.beginTransaction();
 
-        try {
-            // 1. Insere na tabela Usuário (pai)
-            const [resultUsuario] = await connection.query(`
-                INSERT INTO usuario (
-                    tipo_usuario, nome_completo, email, senha_hash, 
-                    telefone, sexo, estado
-                ) VALUES (?, ?, ?, ?, ?, ?, ?)
-            `, [
-                'PACIENTE',
-                dadosPaciente.nome_completo,
-                dadosPaciente.email,
-                dadosPaciente.senha_hash,
-                dadosPaciente.telefone,
-                dadosPaciente.sexo,
-                dadosPaciente.estado
-            ]);
+        // 1. Cria o usuário
+        const [resultUsuario] = await connection.query(`
+            INSERT INTO usuario (
+                tipo_usuario, nome_completo, email, senha_hash, 
+                telefone, sexo, estado
+            ) VALUES ('PACIENTE', ?, ?, ?, ?, ?, ?)
+        `, [
+            dados.nome_completo,
+            dados.email,
+            dados.senha_hash,
+            dados.telefone,
+            dados.sexo,
+            dados.estado
+        ]);
 
-            const id_usuario = resultUsuario.insertId;
+        // 2. Cria o paciente
+        const [resultPaciente] = await connection.query(`
+            INSERT INTO paciente (
+                id_usuario, data_nascimento, tipo_sanguineo,
+                condicoes_medicas, medicacoes, contatos_emergencia, unidades_saude
+            ) VALUES (?, ?, ?, ?, ?, ?, ?)
+        `, [
+            resultUsuario.insertId,
+            dados.data_nascimento || null,
+            dados.tipo_sanguineo,
+            dados.condicoes_medicas,
+            dados.medicacoes,
+            dados.contatos_emergencia,
+            dados.unidades_saude
+        ]);
 
-            // 2. Insere na tabela Paciente (filho)
-            const [resultPaciente] = await connection.query(`
-                INSERT INTO paciente (
-                    id_usuario, data_nascimento, tipo_sanguineo,
-                    condicoes_medicas, medicacoes, contatos_emergencia, unidades_saude
-                ) VALUES (?, ?, ?, ?, ?, ?, ?)
-            `, [
-                id_usuario,
-                dadosPaciente.data_nascimento,
-                dadosPaciente.tipo_sanguineo,
-                dadosPaciente.condicoes_medicas,
-                dadosPaciente.medicacoes,
-                dadosPaciente.contatos_emergencia,
-                dadosPaciente.unidades_saude
-            ]);
-
-            await connection.commit();
-
-            console.log(`Paciente inserido com sucesso! ID: ${resultPaciente.insertId}`);
-            return resultPaciente.insertId;
-            
-        } catch (transactionalError) {
-            await connection.rollback();
-            throw transactionalError;
-        }
+        await connection.commit();
+        return resultPaciente.insertId;
+        
     } catch (e) {
+        if (connection) await connection.rollback();
         throw new Error(`Falha ao inserir paciente: ${e.message}`);
     } finally {
         if (connection) await connection.end();
     }
 }
 
-// Atualiza um paciente existente (atualiza o usuário também)
-async function editPaciente(id_paciente, dadosPaciente) {
+// Atualiza um paciente existente
+async function editPaciente(id_paciente, dados) {
     let connection;
     
     try {
         connection = await createConnection();
         await connection.beginTransaction();
 
-        try {
-            // 1. Busca o id_usuario do paciente
-            const [pacienteRows] = await connection.query(
-                'SELECT id_usuario FROM paciente WHERE id_paciente = ?',
-                [id_paciente]
-            );
+        // Busca (e pega) o id_usuario do paciente
+        const [rows] = await connection.query(
+            'SELECT id_usuario FROM paciente WHERE id_paciente = ?',
+            [id_paciente]
+        );
 
-            if (pacienteRows.length === 0) {
-                throw new Error('Paciente não encontrado!');
-            }
-
-            const id_usuario = pacienteRows[0].id_usuario;
-
-            // 2. Atualiza na tabela Usuário (pai)
-            await connection.query(`
-                UPDATE usuario SET
-                    nome_completo = ?,
-                    email = ?,
-                    senha_hash = ?,
-                    telefone = ?,
-                    sexo = ?,
-                    estado = ?
-                WHERE id_usuario = ?
-            `, [
-                dadosPaciente.nome_completo,
-                dadosPaciente.email,
-                dadosPaciente.senha_hash,
-                dadosPaciente.telefone,
-                dadosPaciente.sexo,
-                dadosPaciente.estado,
-                id_usuario
-            ]);
-
-            // 3. Atualiza na tabela Paciente (filho)
-            await connection.query(`
-                UPDATE paciente SET
-                    data_nascimento = ?,
-                    tipo_sanguineo = ?,
-                    condicoes_medicas = ?,
-                    medicacoes = ?,
-                    contatos_emergencia = ?,
-                    unidades_saude = ?
-                WHERE id_paciente = ?
-            `, [
-                dadosPaciente.data_nascimento,
-                dadosPaciente.tipo_sanguineo,
-                dadosPaciente.condicoes_medicas,
-                dadosPaciente.medicacoes,
-                dadosPaciente.contatos_emergencia,
-                dadosPaciente.unidades_saude,
-                id_paciente
-            ]);
-
-            await connection.commit();
-
-            console.log(`Paciente atualizado com sucesso! ID: ${id_paciente}`);
-            return true; // ✅ ADICIONADO
-            
-        } catch (transactionalError) {
-            await connection.rollback();
-            throw transactionalError;
+        if (!rows.length) {
+            throw new Error('Paciente não encontrado');
         }
+
+        const id_usuario = rows[0].id_usuario;
+
+        // Atualiza tabela usuário
+        await connection.query(`
+            UPDATE usuario SET
+                nome_completo = ?,
+                email = ?,
+                telefone = ?,
+                sexo = ?,
+                estado = ?
+            WHERE id_usuario = ?
+        `, [
+            dados.nome_completo,
+            dados.email,
+            dados.telefone,
+            dados.sexo,
+            dados.estado,
+            id_usuario
+        ]);
+
+        // 3. Atualiza tabela paciente
+        await connection.query(`
+            UPDATE paciente SET
+                data_nascimento = ?,
+                tipo_sanguineo = ?,
+                condicoes_medicas = ?,
+                medicacoes = ?,
+                contatos_emergencia = ?,
+                unidades_saude = ?
+            WHERE id_paciente = ?
+        `, [
+            dados.data_nascimento || null,
+            dados.tipo_sanguineo,
+            dados.condicoes_medicas,
+            dados.medicacoes,
+            dados.contatos_emergencia,
+            dados.unidades_saude,
+            id_paciente
+        ]);
+
+        await connection.commit();
+        return true;
+        
     } catch (e) {
+        if (connection) await connection.rollback();
         throw new Error(`Falha ao atualizar paciente: ${e.message}`);
     } finally {
         if (connection) await connection.end();
     }
 }
 
-// Remove um paciente (remove também o usuário em cascata)
+// Remove um paciente (em cascata)
 async function deletePaciente(id_paciente) {
     let connection;
     
@@ -215,40 +194,32 @@ async function deletePaciente(id_paciente) {
         connection = await createConnection();
         await connection.beginTransaction();
 
-        try {
-            // 1. Busca o id_usuario do paciente
-            const [pacienteRows] = await connection.query(
-                'SELECT id_usuario FROM paciente WHERE id_paciente = ?',
-                [id_paciente]
-            );
+        // Busca o id_usuario
+        const [rows] = await connection.query(
+            'SELECT id_usuario FROM paciente WHERE id_paciente = ?',
+            [id_paciente]
+        );
 
-            if (pacienteRows.length === 0) {
-                throw new Error('Paciente não encontrado!');
-            }
-
-            const id_usuario = pacienteRows[0].id_usuario;
-
-            // 2. Deleta o usuário (paciente deletado em cascata)
-            const [result] = await connection.query(
-                'DELETE FROM usuario WHERE id_usuario = ?',
-                [id_usuario]
-            );
-
-            if (result.affectedRows === 0) {
-                throw new Error('Nenhum registro foi removido!');
-            }
-
-            await connection.commit();
-
-            console.log(`Paciente removido com sucesso! ID: ${id_paciente}`);
-            return true;
-            
-        } catch (transactionalError) {
-            await connection.rollback();
-            throw transactionalError;
+        if (!rows.length) {
+            throw new Error('Paciente não encontrado');
         }
+
+        // Deleta o usuário (cascata (em create_tables.sql) deleta o paciente)
+        const [result] = await connection.query(
+            'DELETE FROM usuario WHERE id_usuario = ?',
+            [rows[0].id_usuario]
+        );
+
+        if (result.affectedRows === 0) {
+            throw new Error('Nenhum registro foi removido');
+        }
+
+        await connection.commit();
+        return true;
+        
     } catch (e) {
-        throw new Error(`Falha ao remover paciente: ${error.message}`);
+        if (connection) await connection.rollback();
+        throw new Error(`Falha ao remover paciente: ${e.message}`);
     } finally {
         if (connection) await connection.end();
     }
