@@ -1,71 +1,69 @@
-const { createConnection } = require('./db');
+const pool = require('./db');
+
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 async function getConteudos() {
-    const connection = await createConnection();
-    const [rows] = await connection.query("SELECT * FROM conteudo");
-    return rows;
+  const [rows] = await pool.query("SELECT * FROM conteudo");
+  return rows;
 }
+
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
-async function insertConteudo(titulo, descricao, texto, categoria, data, admin_nome) {
-    const connection = await createConnection();
-    if (titulo && descricao && texto && categoria && data && admin_nome) {
-        const [result] = await connection.query(
-            `INSERT INTO conteudo (titulo, descricao, texto, categoria, data, admin_nome)
-             VALUES (?, ?, ?, ?, ?, ?)`,
-            [titulo, descricao, texto, categoria, data, admin_nome]
-        );
+async function insertConteudo(titulo, descricao, texto, data_post) {
+  if (titulo && descricao && texto && data_post) {
+    const [result] = await pool.query(
+      `INSERT INTO conteudo (titulo, descricao, texto, data_post)
+       VALUES (?, ?, ?, ?)`,
+      [titulo, descricao, texto, data_post]
+    );
 
-       if(result.affectedRows > 0){
-            return true;
-        }
-        
-        return false;
-    }
+    return result.affectedRows > 0;
+  }
 
-    console.error("Falha ao criar o conteúdo. Faltou algum dado");
-    return false;
+  console.error("Falha ao criar o conteúdo. Faltou algum dado");
+  return false;
 }
+
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
-async function editConteudo(id, titulo, descricao, texto, categoria, data) {
-    const connection = await createConnection();
-    if (id && titulo && descricao && texto && categoria && data){
-        const [result] = await connection.query(
-            `UPDATE conteudo SET titulo = ?, descricao = ?, texto = ?, categoria = ?, data = ? WHERE id = ?`,
-            [titulo, descricao, texto, categoria, data, id]
-        );
+async function editConteudo(id, titulo, descricao, texto, data_post) {
+  if (id && titulo && descricao && texto && data_post) {
+    const [result] = await pool.query(
+      `UPDATE conteudo
+       SET titulo = ?, descricao = ?, texto = ?, data_post = ?
+       WHERE id = ?`,
+      [titulo, descricao, texto, data_post, id]
+    );
 
-        if (result.affectedRows === 0) return false;
-        return true;
-    }
+    return result.affectedRows > 0;
+  }
 
-    console.error("Falha ao editar o conteúdo. Faltou algum dado");
-    return false;
+  console.error("Falha ao editar o conteúdo. Faltou algum dado");
+  return false;
 }
+
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 async function deleteConteudo(id) {
-    if (id){
-        const connection = await createConnection();
-        const [result] = await connection.query(
-            `DELETE FROM conteudo WHERE id = ?`,
-            [id]
-        );
+  if (id) {
+    const [result] = await pool.query(
+      `DELETE FROM conteudo WHERE id = ?`,
+      [id]
+    );
 
-        if (result.affectedRows > 0) {
-            console.log(`Conteúdo com ID ${id} removida com sucesso.`);
-            return true;
-        }
-
-        console.error(`Nenhum conteúdo encontrada com ID ${id}.`);
-        return false;
+    if (result.affectedRows > 0) {
+      console.log(`Conteúdo com ID ${id} removido com sucesso.`);
+      return true;
     }
 
-    console.error("Falha ao deletar a tarefa. ID não informado.");
+    console.error(`Nenhum conteúdo encontrado com ID ${id}.`);
     return false;
+  }
+
+  console.error("Falha ao deletar o conteúdo. ID não informado.");
+  return false;
 }
+
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 module.exports = {
-    getConteudos,
-    insertConteudo,
-    editConteudo,
-    deleteConteudo
+  getConteudos,
+  insertConteudo,
+  editConteudo,
+  deleteConteudo
 };

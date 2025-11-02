@@ -510,9 +510,9 @@ app.get('/novoconteudo', (req, res) => {
 
 // CREATE
 app.post('/conteudos', async (req, res) => {
-    const {titulo, descricao, texto, categoria, admin_nome} = req.body;
-    const data = new Date().toISOString().split('T')[0];
-    const sucesso = await insertConteudo(titulo, descricao, texto, categoria, data, admin_nome);
+    const {titulo, descricao, texto} = req.body;
+    const data_post = new Date().toISOString().split('T')[0];
+    const sucesso = await insertConteudo(titulo, descricao, texto, data_post);
 
     if (sucesso) {
         res.redirect('/conteudos');
@@ -523,8 +523,8 @@ app.post('/conteudos', async (req, res) => {
 
 // Inserindo pela API
 app.post("/api/conteudos", async (req, res) => {
-    const {titulo, descricao, texto, categoria, data, admin_nome} = req.body;
-    const result = await insertConteudo(titulo, descricao, texto, categoria, data, admin_nome);
+    const {titulo, descricao, texto, data_post} = req.body;
+    const result = await insertConteudo(titulo, descricao, texto, data_post);
     if(result){
         return res.status(202).json({success: true});
     }
@@ -549,8 +549,8 @@ app.get('/editarconteudo/:id', async (req, res) => {
 // UPDATE
 app.post('/conteudos/:id', async (req, res) => {
     const {id} = req.params;
-    const {titulo, descricao, texto, categoria, data} = req.body;
-    const sucesso = await editConteudo(id, titulo, descricao, texto, categoria, data);
+    const {titulo, descricao, texto, data_post} = req.body;
+    const sucesso = await editConteudo(id, titulo, descricao, texto, data_post);
 
     if(sucesso){
         res.redirect('/conteudos');
@@ -560,14 +560,21 @@ app.post('/conteudos/:id', async (req, res) => {
 });
 
 // Editando por API
-app.put("/api/conteudos", async (req, res) => {
-    const {id, titulo, descricao, texto, categoria, data} = req.body;
-    const result = await editConteudo(id, titulo, descricao, texto, categoria, data);
+app.put('/api/conteudos/:id', async (req, res) => {
+    try {
+        const { id } = req.params;
+        const { titulo, descricao, texto } = req.body;
+        const data_post = new Date().toISOString().split('T')[0]; // Atualiza data
+        const result = await editConteudo(id, titulo, descricao, texto, data_post);
 
-    if(result){
-        return res.status(200).json({success: true});
+        if(result){
+            return res.status(200).json({ success: true, message: "Conteúdo atualizado!" });
+        }
+        return res.status(404).json({ success: false, message: "Conteúdo não encontrado." });
+    } catch (error) {
+        console.error(error);
+        return res.status(500).json({ success: false, message: "Erro no servidor." });
     }
-    return res.status(404).json({success: false});
 });
 
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-
@@ -584,15 +591,23 @@ app.get('/removerconteudo/:id', async (req, res) => {
     }
 });
 
-app.delete("/api/conteudos", async (req, res) => {
-    const {id} = req.body;
-    const result = await deleteConteudo(id);
-    if(result){
-        return res.status(200).json({success: true});
-    }  
-    return res.status(404).json({success: false});
+app.delete('/api/conteudos/:id', async (req, res) => {
+    try {
+        const { id } = req.params;
+        const result = await deleteConteudo(id);
+
+        if(result){
+            return res.status(200).json({ success: true, message: "Conteúdo removido!" });
+        }
+        return res.status(404).json({ success: false, message: "Conteúdo não encontrado." });
+    } catch (error) {
+        console.error(error);
+        return res.status(500).json({ success: false, message: "Erro no servidor." });
+    }
 });
 
-app.listen(3001, 'localhost', () => {
-    console.log("Servidor rodando na porta 3001");
+port = 3000;
+
+app.listen(port, 'localhost', () => {
+    console.log(`Servidor rodando na porta ${port}`);
 });
