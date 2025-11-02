@@ -153,19 +153,31 @@ app.get("/pacientes", async (req, res) => {
     res.status(200).render("listaPacientes", {pacientesDoController: pacientes});
 });
 
+// Seleciona todos os pacientes
+app.get('/api/pacientes', async (req, res) => {
+  try {
+    const pacientes = await getPacientes();
+    res.status(200).json({ error: false, message: pacientes });
+  } catch (e) {
+    console.error(e);
+    res.status(500).json({ error: true, message: 'Erro ao consultar pacientes: ' + e.message,});
+  }
+});
+
+/*
 app.get("/api/pacientes", async (req, res) => {
     const pacientes = await getPacientes();
 
     res.status(200).json({success: true, pacientes});
 });
-
-// -=-=-=-=-=-=-=-=-=-=-=-=-=-=-
+*/
 
 // Formulário - CREATE
 app.get('/novopaciente', (req, res) => {
     res.render('formPaciente');
 });
 
+/*
 // CREATE
 app.post('/paciente', async (req, res) => {
     const {nome, nome_social, email, senha, data_nascimento, genero, estado, cidade, medicacao, doenca, tipo_sanguineo} = req.body;
@@ -189,8 +201,56 @@ app.post("/api/paciente", async (req, res) => {
     }
     return res.status(400).json({success: false});
 });
+*/
 
-// -=-=-=-=-=-=-=-=-=-=-=-=-=-=-
+/*
+// Insere novo pacinte - !FUNCIONA
+app.post('/api/pacientes', async (req, res) => {
+  try {
+    const { nome, email, celular, genero, data_nascimento, estado, tipo_sanguineo, medicacao, contato_emergencia, unidades_de_saude } = req.body;
+
+    const result = await insertPaciente(nome, email, celular, genero, data_nascimento, estado, tipo_sanguineo, medicacao, contato_emergencia, unidades_de_saude);
+
+    if (result) {
+      res.status(201).json({ error: false, message: 'Paciente inserido com sucesso!' });
+    } else {
+      res.status(400).json({ error: true, message: 'Erro ao inserir paciente.' });
+    }
+  } catch (e) {
+    console.error(e);
+    res.status(500).json({ error: true, message: 'Erro no servidor.' });
+  }
+});
+*/
+
+app.post('/api/pacientes', async (req, res) => {  
+  try {
+    const { nome, email, celular, genero, data_nascimento, estado, tipo_sanguineo, medicacao, contato_emergencia, unidades_de_saude } = req.body;
+    
+    const result = await insertPaciente(
+      nome, 
+      email, 
+      celular, 
+      genero, 
+      data_nascimento, 
+      estado, 
+      tipo_sanguineo, 
+      medicacao, 
+      contato_emergencia, 
+      unidades_de_saude
+    );
+    
+    console.log('✅ Resultado do insertPaciente:', result);
+
+    if (result) {
+      res.status(201).json({ error: false, message: 'Paciente inserido com sucesso!' });
+    } else {
+      res.status(400).json({ error: true, message: 'Erro ao inserir paciente.' });
+    }
+  } catch (e) {
+    res.status(500).json({ error: true, message: 'Erro no servidor: ' + e.message,});
+  }
+});
 
 // Formulário - UPDATE
 app.get('/editarpaciente/:id', async (req, res) => {
@@ -205,6 +265,7 @@ app.get('/editarpaciente/:id', async (req, res) => {
     }
 });
 
+/*
 // UPDATE
 app.put('/editarpaciente/:id', async (req, res) => {
     const {id} = req.params;
@@ -232,8 +293,27 @@ app.put("/api/paciente/:id", async (req, res) => {
     }
     return res.status(404).json({success: false});
 });
+*/
 
-// -=-=-=-=-=-=-=-=-=-=-=-=-=-=-
+// Atualiza paciente pelo seu ID - 
+app.put('/api/pacientes/:id', async (req, res) => {
+  try {
+    const { id } = req.params;
+    
+    const { nome, email, celular, genero, data_nascimento, estado, tipo_sanguineo, medicacao, contato_emergencia, unidades_de_saude } = req.body;
+
+    const result = await editPaciente(id, nome, email, celular, genero, data_nascimento, estado, tipo_sanguineo, medicacao, contato_emergencia, unidades_de_saude);
+
+    if (result) {
+      res.status(200).json({ error: false, message: 'Paciente atualizado com sucesso!' });
+    } else {
+      res.status(404).json({ error: true, message: 'Paciente não encontrado.' });
+    }
+  } catch (e) {
+    console.error(e);
+    res.status(500).json({ error: true, message: 'Erro no servidor: ' + e.message,});
+  }
+});
 
 // DELETE
 app.get('/removerpaciente/:id', async (req, res) => {
@@ -247,6 +327,7 @@ app.get('/removerpaciente/:id', async (req, res) => {
     }
 });
 
+/*
 app.delete("/api/paciente/:id", async (req, res) => {
     const {id} = req.params;
     //console.log(`Requisição DELETE recebida para o ID: ${id}`); //Para testar o DELETE do paciente
@@ -255,6 +336,25 @@ app.delete("/api/paciente/:id", async (req, res) => {
         return res.status(200).json({success: true});
     }  
     return res.status(404).json({success: false});
+});
+*/
+
+// Deleta paciente pelo seu ID
+app.delete('/api/pacientes/:id', async (req, res) => {
+  try {
+    const { id } = req.params;
+    
+    const result = await deletePaciente(id);
+
+    if (result) {
+      res.status(200).json({ error: false, message: 'Paciente removido com sucesso!' });
+    } else {
+      res.status(404).json({ error: true, message: 'Paciente não encontrado.' });
+    }
+  } catch (e) {
+    console.error(e);
+    res.status(500).json({ error: true, message: 'Erro no servidor.' });
+  }
 });
 
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=- ☆ ACOMPANHANTE ☆
