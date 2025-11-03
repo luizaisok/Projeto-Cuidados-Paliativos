@@ -1,8 +1,60 @@
 import { FlatList, Image, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
 import Header from "../components/Header";
 
-import { conteudos } from "../data/conteudo";
+const BASE_URL = "http://localhost:3000/";
 
+const createConteudo = async (car) => {
+    try{
+      const res = await fetch(`${BASE_URL}api/conteudos`, {
+        method: "POST",
+        headers: AUTH_HEADER,
+        body: JSON.stringify(conteudo)
+      });
+  
+      if(!res.ok) throw new Error(await res.text());
+  
+      const data = await res.json();
+      console.log("Data: ", data);
+      return true;
+    }catch(error){
+      console.error("Erro ao realizar requisição POST: ", error);
+      return false;
+    }
+  }
+  
+const updateCar = async (id, car) => {
+    try{
+      const res = await fetch(`${BASE_URL}api/conteudo/${id}`, {
+        method: "PUT",
+        headers: AUTH_HEADER,
+        body: JSON.stringify(conteudo)
+      });
+      
+      if(!res.ok) throw new Error(await res.text());
+  
+      return true;
+    }catch(error){
+      console.error("Erro ao realizar requisição PUT: ", error);
+      return false;
+    }
+}
+
+const deleteCar = async (id) => {
+    try{
+      const res = await fetch(`${BASE_URL}api/conteudo/${id}`,{
+        method: "DELETE",
+        headers: AUTH_HEADER
+      });
+  
+      if(!res.ok) throw new Error(await res.text());
+  
+      return true;
+    }catch(error){
+      console.error("Erro ao realizar requisição DELETE: ", error);
+      return false;
+    }
+  }
+  
 const Card = ({dado}) => (
     <View style={Estilo.containerCard}>
         <Text style={Estilo.cardTitulo}>{dado?.titulo}</Text>
@@ -19,6 +71,34 @@ const Card = ({dado}) => (
 )
 
 export default function Busca() {
+    const [conteudos, setConteudos] = useState([])
+    const [titulo, setTitulo] = useState("")
+    const [descricao, setDescricao] = useState("")
+    const [texto, setTexto] = useState("")
+    const [data, setData] = useState("")
+
+    useEffect(()=>{
+        getConteudos();
+      }, []);
+    
+    const getConteudos = async () => {
+        try{
+          setAtualizando(true);
+          console.log("Iniciando a conexão com a API...");
+          const response = await fetch(`${BASE_URL}api/conteudo`, {
+            method: "GET",
+          });
+          console.log("Conteudo de Response: ", response);
+          
+          const json = await response.json();
+          console.log("Conteudo do JSON: ", json);
+          setConteudos(json);
+          setAtualizando(false);
+        }catch(error){
+          console.error("Erro ao realizar requisição GET: ", error);
+        }
+    }
+
   return (
     <>
         <Header/>
@@ -42,6 +122,22 @@ export default function Busca() {
 
                 ListEmptyComponent={<Text>Não foram postados conteúdos.</Text>}
             />
+
+            {
+                atualizando ? (<ActivityIndicator />) : (
+                <FlatList
+                    data={conteudos}
+                    keyExtractor={item => item.id}
+                    renderItem={({item}) => (
+                        <View> <Card dado={item}/>
+                        {/*<Button title='Editar' onPress={() => preparaUpdate(item.id, item.marca, item.modelo)} />
+                            <Button title='Remover' onPress={() => handleDelete(item.id)} />*/}              
+                        </View>
+                    )}
+                    ListEmptyComponent={<Text>Não foram postados conteúdos.</Text>}
+                />
+                )
+            }
         </View>
     </>
   )
