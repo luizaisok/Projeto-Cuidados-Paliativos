@@ -1,24 +1,19 @@
-const { createConnection } = require('./db');
+const pool = require('./db');
 
-async function getAdministradores(){
-    const connection = await createConnection();
-    const [rows] = await connection.query("SELECT * FROM administrador ORDER BY nome");
-
+async function getAdministradores() {
+    const [rows] = await pool.query("SELECT * FROM administrador ORDER BY nome");
     return rows;
 };
 
-async function insertAdministrador(nome, nome_social, email, senha, data_nascimento, genero, telefone, conselho_profissional, formacao, registro_profissional, ultimo_login, especialidade){
-    const connection = await createConnection();
-    if(nome, nome_social, email, senha, data_nascimento, genero, telefone, conselho_profissional, formacao, registro_profissional, ultimo_login, especialidade){
-        const [result] = await connection.query(`
-            INSERT INTO administrador(nome, nome_social, email, senha, data_nascimento, 
-            genero, telefone, conselho_profissional, formacao, registro_profissional, ultimo_login, especialidade) 
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, Now(), ?)`, 
-            [nome, nome_social, email, senha, data_nascimento, genero, telefone,
-            conselho_profissional, formacao, registro_profissional, ultimo_login, especialidade]
+async function insertAdministrador(nome, nome_social, email, senha, data_nascimento, genero, telefone, conselho_profissional, formacao, registro_profissional, especialidade) {
+    if (nome && nome_social && email && senha && data_nascimento && genero && telefone && conselho_profissional && formacao && registro_profissional && especialidade) {
+        const [result] = await pool.query(`
+            INSERT INTO administrador(nome, nome_social, email, senha, data_nascimento, genero, telefone, conselho_profissional, formacao, registro_profissional, especialidade) 
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+            [nome, nome_social, email, senha, data_nascimento, genero, telefone, conselho_profissional, formacao, registro_profissional, especialidade]
         );
 
-        if(result.affectedRows > 0){
+        if (result.affectedRows > 0) {
             return true;
         }
 
@@ -28,20 +23,14 @@ async function insertAdministrador(nome, nome_social, email, senha, data_nascime
     return false;
 };
 
-async function editAdministrador(id, nome, nome_social, email, senha, confirmacao_senha, data_nascimento, genero, telefone, conselho_profissional, formacao, registro_profissional, especialidade){
+async function editAdministrador(id, nome, nome_social, email, senha, data_nascimento, genero, telefone, conselho_profissional, formacao, registro_profissional, especialidade) {
 
-    const connection = await createConnection();
-    if(!id || !nome || !nome_social || !email || !senha || !confirmacao_senha || !data_nascimento || !genero || !telefone || !conselho_profissional || !formacao || !registro_profissional || !especialidade){
+    if (!id || !nome || !nome_social || !email || !senha || !data_nascimento || !genero || !telefone || !conselho_profissional || !formacao || !registro_profissional || !especialidade) {
         console.error("Falha ao editar administrador, faltou algum dado.");
         return false;
     }
 
-    if(senha !== confirmacao_senha){
-        console.error("Senha e confirmação de senha não conferem.");
-        return false;
-    }
-
-    const [result] = await connection.query(
+    const [result] = await pool.query(
         `UPDATE administrador
         SET nome = ?,
             nome_social = ?,
@@ -53,29 +42,33 @@ async function editAdministrador(id, nome, nome_social, email, senha, confirmaca
             conselho_profissional = ?,
             formacao = ?,
             registro_profissional = ?,
-            ultimo_login = NOW(),
             especialidade = ?
-        WHERE id = ?`, [nome, nome_social, email, senha, data_nascimento, genero, telefone, conselho_profissional, formacao, registro_profissional, especialidade, id]
+        WHERE id = ?`,
+        [nome, nome_social, email, senha, data_nascimento, genero, telefone, conselho_profissional, formacao, registro_profissional, especialidade, id]
     );
 
-    if(result.affectedRows === 0) return false;
+    if (result.affectedRows === 0) return false;
     return true;
 }
 
-async function deleteAdministrador(id){
-    if(id){
-        const connection = await createConnection();
-        const [result] = await connection.query(`
+async function deleteAdministrador(id) {
+    if (id) {
+        const [result] = await pool.query(`
             DELETE FROM administrador
             WHERE id = ?`,
             [id]
         );
 
-        if(result.affectedRows === 0) return false;
+        if (result.affectedRows === 0) return false;
         return true;
     }
     console.error("Falha ao remover o administrador!");
     return false;
 }
 
-module.exports = {getAdministradores, insertAdministrador, editAdministrador, deleteAdministrador};
+module.exports = {
+    getAdministradores,
+    insertAdministrador,
+    editAdministrador,
+    deleteAdministrador
+};
