@@ -15,6 +15,8 @@ const {getAdministradores, insertAdministrador, editAdministrador, deleteAdminis
 const {getAcompanhantes, insertAcompanhante, editAcompanhante, deleteAcompanhante} = require("../models/DAO/AcompanhanteDAO");
 const {getPacientes, insertPaciente, editPaciente, deletePaciente} = require("../models/DAO/PacienteDAO");
 const {getConteudos, insertConteudo, editConteudo, deleteConteudo} = require("../models/DAO/ConteudoDAO");
+const {getRegistro, insertRegistro, editRegistro, deleteRegistro} = require("../models/DAO/RegistroSintomaDAO");
+const {getSintoma, insertSintoma, editSintoma, deleteSintoma} = require("../models/DAO/SintomaDAO");
 
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=- ☆ ADMINISTRADOR ☆
 
@@ -598,6 +600,265 @@ app.delete('/api/conteudos/:id', async (req, res) => {
             return res.status(200).json({ success: true, message: "Conteúdo removido!" });
         }
         return res.status(404).json({ success: false, message: "Conteúdo não encontrado." });
+    } catch (error) {
+        console.error(error);
+        return res.status(500).json({ success: false, message: "Erro no servidor." });
+    }
+});
+
+// ------------------------------------------------------------ * Registro de Sintoma *
+// READ
+app.get("/registros", async (req, res) => {
+    try{
+        const registros = await getRegistro();
+        console.log("Conteúdos: ", registros);
+
+        res.status(200).render("listaRegistro", { registrosDoController: registros });
+    }catch (error) {
+        console.error("Erro ao buscar registros:", error);
+        res.status(500).send("Erro interno ao carregar registros.");
+    }
+});
+
+// API envia lista de registros
+app.get("/api/registros", async (req, res) => {
+    try {
+        const registros = await getRegistro();
+        res.status(200).json({ success: true, registros });
+    } catch (error) {
+        console.error("Erro na API de registros:", error);
+        res.status(500).json({ success: false, message: "Erro interno ao buscar registros." });
+    }
+});
+
+// -=-=-=-=-=-=-=-=-=-=-=-=-=-=-
+
+// Formulário - CREATE
+app.get('/novoregistro', (req, res) => {
+    res.render('novoregistro', { registro: {} });
+});
+
+// CREATE
+app.post('/registros', async (req, res) => {
+    const {intensidade, observacao} = req.body;
+    const data_registro = new Date().toISOString().split('T')[0];
+    const sucesso = await insertRegistro(data_registro, intensidade, observacao);
+
+    if (sucesso) {
+        res.redirect('/registros');
+    } else {
+        res.status(400).send("Erro ao cadastrar registro.");
+    }
+});
+
+// Inserindo pela API
+app.post("/api/registros", async (req, res) => {
+    console.log("Corpo recebido no POST:", req.body);
+    const {data_registro, intensidade, observacao} = req.body;
+    const result = await insertRegistro(data_registro, intensidade, observacao);
+    if(result){
+        return res.status(202).json({success: true});
+    }
+    return res.status(400).json({success: false});
+});
+
+// -=-=-=-=-=-=-=-=-=-=-=-=-=-=-
+
+// Formulário - UPDATE
+app.get('/registros/:id', async (req, res) => {
+    const { id } = req.params;
+    const registros = await getRegistro();
+    const registro = registros.find(c => c.id == id);
+
+    if(registro){
+        res.render('formRegistro', { registro });
+    }else{
+        res.status(404).send("Registro não encontrado.");
+    }
+});
+
+// UPDATE
+app.post('/registros/:id', async (req, res) => {
+    const {id} = req.params;
+    const {data_registro, intensidade, observacao} = req.body;
+    const sucesso = await editRegistro(id, data_registro, intensidade, observacao);
+
+    if(sucesso){
+        res.redirect('/registros');
+    }else{
+        res.status(400).send("Erro ao editar registro.");
+    }
+});
+
+// Editando por API
+app.put('/api/registros/:id', async (req, res) => {
+    try {
+        const { id } = req.params;
+        const { intensidade, observacao } = req.body;
+        const data_registro = new Date().toISOString().split('T')[0]; // Atualiza data
+        const result = await editRegistro(id, data_registro, intensidade, observacao);
+
+        if(result){
+            return res.status(200).json({ success: true, message: "Registro atualizado!" });
+        }
+        return res.status(404).json({ success: false, message: "Registro não encontrado." });
+    } catch (error) {
+        console.error(error);
+        return res.status(500).json({ success: false, message: "Erro no servidor." });
+    }
+});
+
+// -=-=-=-=-=-=-=-=-=-=-=-=-=-=-
+
+// DELETE
+app.get('/removerregistro/:id', async (req, res) => {
+    const {id} = req.params;
+    const sucesso = await deleteRegistro(id);
+
+    if (sucesso) {
+        res.redirect('/registros');
+    } else {
+        res.status(400).send("Erro ao remover registro!");
+    }
+});
+
+app.delete('/api/registros/:id', async (req, res) => {
+    try {
+        const { id } = req.params;
+        const result = await deleteRegistro(id);
+
+        if(result){
+            return res.status(200).json({ success: true, message: "Registro removido!" });
+        }
+        return res.status(404).json({ success: false, message: "Registro não encontrado." });
+    } catch (error) {
+        console.error(error);
+        return res.status(500).json({ success: false, message: "Erro no servidor." });
+    }
+});
+
+// ------------------------------------------------------------ * Sintoma *
+// READ
+app.get("/sintomas", async (req, res) => {
+    try{
+        const sintomas = await getSintoma();
+        console.log("Sintomas: ", sintomas);
+
+        res.status(200).render("listaSintoma", { sintomasDoController: sintomas });
+    }catch (error) {
+        console.error("Erro ao buscar sintomas:", error);
+        res.status(500).send("Erro interno ao carregar sintomas.");
+    }
+});
+
+// API envia lista de registros
+app.get("/api/sintomas", async (req, res) => {
+    try {
+        const sintomas = await getSintoma();
+        res.status(200).json({ success: true, sintomas });
+    } catch (error) {
+        console.error("Erro na API de sintomas:", error);
+        res.status(500).json({ success: false, message: "Erro interno ao buscar sintomas." });
+    }
+});
+
+// -=-=-=-=-=-=-=-=-=-=-=-=-=-=-
+
+// Formulário - CREATE
+app.get('/novosintoma', (req, res) => {
+    res.render('novosintoma', { sintoma: {} });
+});
+
+// CREATE
+app.post('/sintomas', async (req, res) => {
+    const {sintomas, tipo_alerta} = req.body;
+    const sucesso = await insertSintoma(sintomas, tipo_alerta);
+
+    if (sucesso) {
+        res.redirect('/sintomas');
+    } else {
+        res.status(400).send("Erro ao cadastrar sintoma.");
+    }
+});
+
+// Inserindo pela API
+app.post("/api/sintomas", async (req, res) => {
+    const {sintomas, tipo_alerta} = req.body;
+    const result = await insertSintoma(sintomas, tipo_alerta);
+    if(result){
+        return res.status(202).json({success: true});
+    }
+    return res.status(400).json({success: false});
+});
+
+// -=-=-=-=-=-=-=-=-=-=-=-=-=-=-
+
+// Formulário - UPDATE
+app.get('/sintomas/:id', async (req, res) => {
+    const { id } = req.params;
+    const sintomas = await getSintoma();
+    const sintoma = sintomas.find(c => c.id == id);
+
+    if(sintoma){
+        res.render('formSintomas', { sintoma });
+    }else{
+        res.status(404).send("Sintoma não encontrado.");
+    }
+});
+
+// UPDATE
+app.post('/sintomas/:id', async (req, res) => {
+    const {id} = req.params;
+    const {sintomas, tipo_alerta} = req.body;
+    const sucesso = await editSintoma(id, sintomas, tipo_alerta);
+
+    if(sucesso){
+        res.redirect('/sintomas');
+    }else{
+        res.status(400).send("Erro ao editar sintoma.");
+    }
+});
+
+// Editando por API
+app.put('/api/sintomas/:id', async (req, res) => {
+    try {
+        const { id } = req.params;
+        const { sintomas, tipo_alerta } = req.body;
+        const result = await editSintoma(id, sintomas, tipo_alerta);
+
+        if(result){
+            return res.status(200).json({ success: true, message: "Sintoma atualizado!" });
+        }
+        return res.status(404).json({ success: false, message: "Sintoma não encontrado." });
+    } catch (error) {
+        console.error(error);
+        return res.status(500).json({ success: false, message: "Erro no servidor." });
+    }
+});
+
+// -=-=-=-=-=-=-=-=-=-=-=-=-=-=-
+
+// DELETE
+app.get('/removersintoma/:id', async (req, res) => {
+    const {id} = req.params;
+    const sucesso = await deleteSintoma(id);
+
+    if (sucesso) {
+        res.redirect('/sintomas');
+    } else {
+        res.status(400).send("Erro ao remover sintoma!");
+    }
+});
+
+app.delete('/api/sintomas/:id', async (req, res) => {
+    try {
+        const { id } = req.params;
+        const result = await deleteSintoma(id);
+
+        if(result){
+            return res.status(200).json({ success: true, message: "Sintoma removido!" });
+        }
+        return res.status(404).json({ success: false, message: "Sintoma não encontrado." });
     } catch (error) {
         console.error(error);
         return res.status(500).json({ success: false, message: "Erro no servidor." });
