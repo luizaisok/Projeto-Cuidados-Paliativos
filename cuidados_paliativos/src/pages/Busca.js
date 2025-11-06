@@ -1,59 +1,64 @@
-import { FlatList, Image, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
+import { FlatList, Image, StyleSheet, Text, TextInput, TouchableOpacity, View, ActivityIndicator } from "react-native";
+import { useState, useEffect } from "react";
 import Header from "../components/Header";
 
-const BASE_URL = "http://localhost:3000/";
+const BASE_URL = "http://192.168.0.31:3000/";
+const AUTH_HEADER = {
+  "Content-Type": "application/json",
+};
 
-const createConteudo = async (car) => {
-    try{
-      const res = await fetch(`${BASE_URL}api/conteudos`, {
-        method: "POST",
-        headers: AUTH_HEADER,
-        body: JSON.stringify(conteudo)
-      });
-  
-      if(!res.ok) throw new Error(await res.text());
-  
-      const data = await res.json();
-      console.log("Data: ", data);
-      return true;
-    }catch(error){
-      console.error("Erro ao realizar requisição POST: ", error);
-      return false;
-    }
-  }
-  
-const updateCar = async (id, car) => {
-    try{
-      const res = await fetch(`${BASE_URL}api/conteudo/${id}`, {
-        method: "PUT",
-        headers: AUTH_HEADER,
-        body: JSON.stringify(conteudo)
-      });
-      
-      if(!res.ok) throw new Error(await res.text());
-  
-      return true;
-    }catch(error){
-      console.error("Erro ao realizar requisição PUT: ", error);
-      return false;
-    }
-}
+const createConteudo = async (conteudo) => {
+  try {
+    const res = await fetch(`${BASE_URL}api/conteudos`, {
+      method: "POST",
+      headers: AUTH_HEADER,
+      body: JSON.stringify(conteudo),
+    });
 
-const deleteCar = async (id) => {
-    try{
-      const res = await fetch(`${BASE_URL}api/conteudo/${id}`,{
-        method: "DELETE",
-        headers: AUTH_HEADER
-      });
-  
-      if(!res.ok) throw new Error(await res.text());
-  
-      return true;
-    }catch(error){
-      console.error("Erro ao realizar requisição DELETE: ", error);
-      return false;
-    }
+    if (!res.ok) throw new Error(await res.text());
+
+    const data = await res.json();
+    console.log("Conteúdo criado: ", data);
+    return true;
+  } catch (error) {
+    console.error("Erro ao realizar requisição POST: ", error);
+    return false;
   }
+};
+
+const updateConteudo = async (id, conteudo) => {
+  try {
+    const res = await fetch(`${BASE_URL}api/conteudos/${id}`, {
+      method: "PUT",
+      headers: AUTH_HEADER,
+      body: JSON.stringify(conteudo),
+    });
+
+    if (!res.ok) throw new Error(await res.text());
+
+    return true;
+  } catch (error) {
+    console.error("Erro ao realizar requisição PUT: ", error);
+    return false;
+  }
+};
+
+const deleteConteudo = async (id) => {
+  try {
+    const res = await fetch(`${BASE_URL}api/conteudos/${id}`, {
+      method: "DELETE",
+      headers: AUTH_HEADER,
+    });
+
+    if (!res.ok) throw new Error(await res.text());
+
+    return true;
+  } catch (error) {
+    console.error("Erro ao realizar requisição DELETE: ", error);
+    return false;
+  }
+};
+
   
 const Card = ({dado}) => (
     <View style={Estilo.containerCard}>
@@ -76,28 +81,30 @@ export default function Busca() {
     const [descricao, setDescricao] = useState("")
     const [texto, setTexto] = useState("")
     const [data, setData] = useState("")
+    const [atualizando, setAtualizando] = useState(false)
 
     useEffect(()=>{
         getConteudos();
       }, []);
     
     const getConteudos = async () => {
-        try{
-          setAtualizando(true);
-          console.log("Iniciando a conexão com a API...");
-          const response = await fetch(`${BASE_URL}api/conteudo`, {
-            method: "GET",
-          });
-          console.log("Conteudo de Response: ", response);
-          
-          const json = await response.json();
-          console.log("Conteudo do JSON: ", json);
-          setConteudos(json);
-          setAtualizando(false);
-        }catch(error){
-          console.error("Erro ao realizar requisição GET: ", error);
-        }
-    }
+      try {
+        setAtualizando(true);
+        console.log("Iniciando a conexão com a API...");
+        const response = await fetch(`${BASE_URL}api/conteudos`);
+        
+        if (!response.ok) throw new Error(`Erro HTTP: ${response.status}`);
+        
+        const json = await response.json();
+        console.log("Conteúdos recebidos: ", json);
+        setConteudos(json);
+      } catch (error) {
+        console.error("Erro ao realizar requisição GET: ", error);
+      } finally {
+        setAtualizando(false);
+      }
+    };
+
 
   return (
     <>
@@ -115,29 +122,16 @@ export default function Busca() {
                     />
                 </TouchableOpacity>
             </View>
-            <FlatList
+            {atualizando ? (
+              <ActivityIndicator />
+            ) : (
+              <FlatList
                 data={conteudos}
-                keyExtractor={(item) => item.id}
-                renderItem={({item}) => <Card dado={item} />}
-
+                keyExtractor={(item) => item.id.toString()}
+                renderItem={({ item }) => <Card dado={item} />}
                 ListEmptyComponent={<Text>Não foram postados conteúdos.</Text>}
-            />
-
-            {
-                atualizando ? (<ActivityIndicator />) : (
-                <FlatList
-                    data={conteudos}
-                    keyExtractor={item => item.id}
-                    renderItem={({item}) => (
-                        <View> <Card dado={item}/>
-                        {/*<Button title='Editar' onPress={() => preparaUpdate(item.id, item.marca, item.modelo)} />
-                            <Button title='Remover' onPress={() => handleDelete(item.id)} />*/}              
-                        </View>
-                    )}
-                    ListEmptyComponent={<Text>Não foram postados conteúdos.</Text>}
-                />
-                )
-            }
+              />
+            )}
         </View>
     </>
   )
