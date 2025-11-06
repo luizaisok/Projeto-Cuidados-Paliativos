@@ -118,7 +118,7 @@ app.put('/api/administrador/:id', async (req, res) => {
 });
 
 //Removendo Administrador (delete)
-app.get("/removeradministrador/:id", async (req, res) => {
+/*app.get("/removeradministrador/:id", async (req, res) => {
     const id = req.params.id;
     const result = await deleteAdministrador(id);
     if(result){
@@ -134,7 +134,7 @@ app.delete("/administrador", async (req, res) => {
         return res.status(200).send("Administrador removido com sucesso!");
     }  
     return res.status(404).send("Não foi possível remover o administrador!");
-});
+});*/
 
 // API para remover o administrador
 app.delete('/api/administrador/:id', async (req, res) => {
