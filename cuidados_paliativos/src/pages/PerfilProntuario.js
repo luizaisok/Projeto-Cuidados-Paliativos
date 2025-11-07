@@ -1,151 +1,161 @@
-// React Native
-import { View, Text, StyleSheet, FlatList, TouchableOpacity, ScrollView } from 'react-native';
+import { useEffect, useState } from "react";
+import { View, Text, StyleSheet, ScrollView, TouchableOpacity, ActivityIndicator } from "react-native";
 
 // Components
-import Header from '../components/Header';
+import Header from "../components/Header";
 
 // Fonts
-import { useFonts, Comfortaa_400Regular } from '@expo-google-fonts/comfortaa';
+import { useFonts, Comfortaa_400Regular } from "@expo-google-fonts/comfortaa";
 
-// Data
-import { PACIENTE } from '../data/paciente';
+// Baixar npm install @react-native-async-storage/async-storage
+import AsyncStorage from "@react-native-async-storage/async-storage";
+
+const BASE_URL = "http://localhost:3000/api";
 
 export default function PerfilProntuario() {
-    const [fontsLoaded] = useFonts({
-        Comfortaa_400Regular,
-    });
+  const [fontsLoaded] = useFonts({ Comfortaa_400Regular });
+  const [usuario, setUsuario] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [tipo, setTipo] = useState(null);
 
-    function Campo({ label, valor }) {
-        return (
-            <View style={{ marginBottom: 15 }}>
-                <Text style={Estilo.label}>{label}:</Text>
-                <Text style={Estilo.textValue}>{valor}</Text>
-            </View>
-        );
+  const fetchDadosUsuario = async () => {
+    try {
+      const tipoUsuario = await AsyncStorage.getItem("tipoUsuario"); // Paciete, Administrador ou Acompanhante?
+      const idUsuario = await AsyncStorage.getItem("idUsuario");
+
+      if (!tipoUsuario || !idUsuario) {
+        console.log("Usuário não logado");
+        return;
+      }
+
+      setTipo(tipoUsuario);
+
+      const response = await fetch(`${BASE_URL}/${tipoUsuario}/${idUsuario}`);
+      const data = await response.json();
+
+      if (data.success) {
+        setUsuario(data[tipoUsuario]);
+      } else {
+        console.log("Erro ao buscar:", data.message);
+      }
+    } catch (error) {
+      console.error("Erro ao buscar usuário:", error);
+    } finally {
+      setLoading(false);
     }
+  };
 
-    const dataNascimentoFormatada = new Date(PACIENTE.dataNascimento).toLocaleDateString('pt-BR');
+  useEffect(() => {
+    fetchDadosUsuario();
+  }, []);
 
+  if (loading) {
     return (
-        <>
-        <Header/>
-        <ScrollView style={Estilo.container}>
-            <ScrollView contentContainerStyle={Estilo.dados} nestedScrollEnabled={true}>
-                <Text style={Estilo.nome}>{PACIENTE.nome}</Text>
-                <Campo label="Email" valor={PACIENTE.email} />
-                <Campo label="Data de Nascimento" valor={dataNascimentoFormatada} />
-                <Campo label="Estado" valor={PACIENTE.estado} />
-                <Campo label="Cidade" valor={PACIENTE.cidade} />
-                <Campo label="Gênero" valor={PACIENTE.genero} />
-                <Campo label="Tipo Sanguíneo" valor={PACIENTE.tipoSanguineo} />
-
-                <TouchableOpacity style={Estilo.button}>
-                    <Text style={Estilo.buttonText}>Editar informações</Text>
-                </TouchableOpacity>
-
-                <Text style={Estilo.tituloSecao}>Condições Médicas:</Text> {/* FlatList dava BO */}
-                {PACIENTE.condicoesMedicas.map((item) => (
-                    <View style={Estilo.itemContainer} key={item}>
-                        <Text style={Estilo.textValue}>{item}</Text>
-                        <TouchableOpacity onPress={() => console.log(`Excluir: ${item}`)}>
-                            <Text style={Estilo.excluir}>x</Text>
-                        </TouchableOpacity>
-                    </View>
-                ))}
-
-                <TouchableOpacity style={Estilo.button}>
-                    <Text style={Estilo.buttonText}>Adicionar condição</Text>
-                </TouchableOpacity>
-            
-                <Text style={Estilo.tituloSecao}>Medicações:</Text> {/* FlatList dava BO */}
-                {PACIENTE.medicacoes.map((item) => (
-                    <View style={Estilo.itemContainer} key={item.nome}>
-                        <Text style={Estilo.textValue}>
-                            {item.nome} – {item.dosagem}
-                        </Text>
-                        <TouchableOpacity onPress={() => console.log(`Excluir: ${item.nome}`)}>
-                            <Text style={Estilo.excluir}>x</Text>
-                        </TouchableOpacity>
-                    </View>
-                ))}
-
-                <TouchableOpacity style={Estilo.button}>
-                    <Text style={Estilo.buttonText}>Adicionar medicamento</Text>
-                </TouchableOpacity>
-            </ScrollView>
-        </ScrollView>
-        </>
+      <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+        <ActivityIndicator size="large" color="#183102" />
+      </View>
     );
+  }
+
+  if (!usuario) {
+    return (
+      <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+        <Text>Usuário não encontrado</Text>
+      </View>
+    );
+  }
+
+  function Campo({ label, valor }) {
+    return (
+      <View style={{ marginBottom: 15 }}>
+        <Text style={Estilo.label}>{label}:</Text>
+        <Text style={Estilo.textValue}>{valor}</Text>
+      </View>
+    );
+  }
+
+  return (
+    <>
+      <Header />
+      <ScrollView style={Estilo.container}>
+        <View style={Estilo.dados}>
+          <Text style={Estilo.nome}>{usuario.nome}</Text>
+
+          <Campo label="Email" valor={usuario.email} />
+          <Campo label="Data de Nascimento" valor={new Date(usuario.data_nascimento).toLocaleDateString("pt-BR")} />
+          <Campo label="Telefone" valor={usuario.telefone} />
+          <Campo label="Gênero" valor={usuario.genero} />
+
+          {tipo === "paciente" && (
+            <>
+              <Campo label="Cidade" valor={usuario.cidade} />
+              <Campo label="Estado" valor={usuario.estado} />
+              <Campo label="Tipo Sanguíneo" valor={usuario.tipo_sanguineo} />
+            </>
+          )}
+
+          {tipo === "administrador" && (
+            <>
+              <Campo label="Formação" valor={usuario.formacao} />
+              <Campo label="Especialidade" valor={usuario.especialidade} />
+              <Campo label="Conselho Profissional" valor={usuario.conselho_profissional} />
+            </>
+          )}
+
+          {tipo === "acompanhante" && (
+            <>
+              <Campo label="Relação com paciente" valor={usuario.relacao_paciente} />
+            </>
+          )}
+
+          <TouchableOpacity style={Estilo.button}>
+            <Text style={Estilo.buttonText}>Editar informações</Text>
+          </TouchableOpacity>
+        </View>
+      </ScrollView>
+    </>
+  );
 }
 
 const Estilo = StyleSheet.create({
-    container: {
-        flex: 1,
-        backgroundColor: "#FFF3E5"
-    },
-    dados: {
-        padding: 30,
-    },
-    nome: {
-        fontSize: 36,
-        color: '#183102',
-        marginBottom: 20
-    },
-    label: {
-        fontWeight: 'bold',
-        fontSize: 16,
-        marginBottom: 4,
-        fontFamily: 'Comfortaa_400Regular'
-    },
-    textValue: {
-        paddingVertical: 6,
-        paddingHorizontal: 8,
-        backgroundColor: "rgba(255, 255, 255, .5)",
-        borderRadius: 5,
-        fontFamily: 'Comfortaa_400Regular',
-        lineHeight: 22,
-        flex: 1,              // 🔹 ocupa só o espaço disponível
-        marginRight: 8,
-        flexWrap: 'wrap'
-    },
-    tituloSecao: {
-        marginTop: 20,
-        fontWeight: 'bold',
-        fontSize: 16,
-        marginBottom: 8,
-        fontFamily: 'Comfortaa_400Regular'
-    },
-    itemContainer: {
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        alignItems: 'flex-start',
-        marginBottom: 10,
-        backgroundColor: "rgba(255, 255, 255, .5)",
-        paddingVertical: 6,
-        paddingHorizontal: 8,
-        borderRadius: 5,
-        minHeight: 36 // Os itens dentro estavam sendo cortados
-    },
-    excluir: {
-        color: '#900',
-        fontSize: 16,
-        fontWeight: 'bold',
-        paddingHorizontal: 8,
-        lineHeight: 22,
-        textAlignVertical: 'top'
-    },
-    // Button
-    button: {
-        backgroundColor: 'rgba(24, 49, 2, .5)',
-        borderRadius: 10,
-        alignItems: 'center',
-        alignSelf: 'center',
-        paddingVertical: 8,
-        width: '60%',
-    },
-    buttonText: {
-        color: '#FFF',
-        fontWeight: '600',
-        fontSize: 16
-    }
+  container: {
+    flex: 1,
+    backgroundColor: "#FFF3E5",
+  },
+  dados: {
+    padding: 30,
+  },
+  nome: {
+    fontSize: 36,
+    color: "#183102",
+    marginBottom: 20,
+  },
+  label: {
+    fontWeight: "bold",
+    fontSize: 16,
+    marginBottom: 4,
+    fontFamily: "Comfortaa_400Regular",
+  },
+  textValue: {
+    paddingVertical: 6,
+    paddingHorizontal: 8,
+    backgroundColor: "rgba(255, 255, 255, .5)",
+    borderRadius: 5,
+    fontFamily: "Comfortaa_400Regular",
+    lineHeight: 22,
+  },
+  button: {
+    backgroundColor: "rgba(24, 49, 2, .5)",
+    borderRadius: 10,
+    alignItems: "center",
+    alignSelf: "center",
+    paddingVertical: 8,
+    width: "60%",
+    marginTop: 20,
+  },
+  buttonText: {
+    color: "#FFF",
+    fontWeight: "600",
+    fontSize: 16,
+  },
 });
