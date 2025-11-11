@@ -1,8 +1,53 @@
-import { View, StyleSheet, Image, Text, TextInput, TouchableOpacity } from "react-native";
+import { useState, useEffect } from "react";
+import { useNavigation, useRoute } from "@react-navigation/native";
+import { View, StyleSheet, Image, Text, TextInput, TouchableOpacity, ActivityIndicator } from "react-native";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
 
+const API_BASE = "http://localhost:3000";
+
 export default function Login() {
+
+  const navigation = useNavigation();
+  const route = useRoute();
+
+  const [email, setEmail] = useState("");
+  const [senha, setSenha] = useState("");
+  const [loading, setLoading] = useState(false);
+
+  async function entrar() {
+    if (!email || !senha) {
+      alert("Preencha e-mail e senha.");
+      return;
+    }
+    try {
+      setLoading(true);
+      const resp = await fetch(`${API_BASE}/api/auth/login`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, senha })
+      });
+      const data = await resp.json();
+
+      if (!resp.ok || data?.error) {
+        throw new Error(data?.message || "Falha no login");
+      }
+
+      // Salva token e infos básicas (para próximos CRUDs)
+      localStorage.setItem("token", data.token);
+      localStorage.setItem("userId", String(data.user.id));
+      localStorage.setItem("userTipo", data.user.tipo);
+      localStorage.setItem("userEmail", data.user.email);
+
+      // Vai para as ABAS focando a tab Home (HomePage)
+      navigation.replace("AbasPrincipais", { screen: "Home" });
+    } catch (e) {
+      alert(e.message || "Erro ao conectar.");
+    } finally {
+      setLoading(false);
+    }
+  }
+
   return (
     <>
         <Header/>
@@ -14,23 +59,35 @@ export default function Login() {
             <Text style={Estilo.titulo} >Entrar</Text>
             <View>
                 <Text style={Estilo.label}>E-mail</Text>
+
                 <TextInput 
-                    placeholder="Digite o seu e-mail"
-                    style={Estilo.input}
+                placeholder="Digite o seu e-mail"
+                style={Estilo.input}
+                autoCapitalize="none"
+                autoComplete="off"
+                keyboardType="email-address"
+                value={email}
+                onChangeText={setEmail}
                 />
+
                 <Text style={Estilo.label}>Senha</Text>
+                
                 <TextInput 
                     placeholder="Digite a sua senha"
                     style={Estilo.input}
+                    secureTextEntry
+                    value={senha}
+                    onChangeText={setSenha}
                 />
+
                 <TouchableOpacity style={Estilo.botaoSecundario}>
                     <Text>Esqueci minha senha</Text>
                 </TouchableOpacity>
             </View>
-            <TouchableOpacity style={Estilo.botaoEntrar}>
-                <Text style={Estilo.textoEntrar}>Entrar</Text>
+            <TouchableOpacity style={Estilo.botaoEntrar} onPress={entrar} disabled={loading}>
+                {loading ? <ActivityIndicator /> : <Text style={Estilo.textoEntrar}>Entrar</Text>}
             </TouchableOpacity>
-            <TouchableOpacity style={Estilo.botaoSecundario}>
+            <TouchableOpacity style={Estilo.botaoSecundario} onPress={() => navigation.navigate("Cadastro")}>
                 <Text>ou Cadastre-se</Text>
             </TouchableOpacity>
         </View>

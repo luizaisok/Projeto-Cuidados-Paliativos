@@ -1,3 +1,4 @@
+import { useNavigation } from "@react-navigation/native";
 import { Image, Text, StyleSheet, View, TextInput, TouchableOpacity, ActivityIndicator } from "react-native";
 import { useFonts, Comfortaa_400Regular } from "@expo-google-fonts/comfortaa";
 import Header from "../components/Header/index";
@@ -7,6 +8,9 @@ import { useState } from "react";
 const API_BASE = "http://localhost:3000";
 
 export default function Cadastro(){
+    const navigation = useNavigation();
+
+
     let [fontsLoaded] = useFonts({
         Comfortaa_400Regular
     });
@@ -49,7 +53,8 @@ export default function Cadastro(){
             setSenha("");
             setConfirmar("");
             
-            // Navegação (react-navigation)
+            // Redirecionamento para Login
+            navigation.navigate('Login', { emailPrefill: email }); 
         } catch (e) {
             alert(e.message || "Erro ao enviar.");
         } finally {

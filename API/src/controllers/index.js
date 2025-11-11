@@ -3,6 +3,9 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const app = express();
 
+const jwt = require('jsonwebtoken');
+const JWT_SECRET = 'abacate';
+
 app.set("view engine", "ejs"); 
 app.set("views", "./src/views");
 
@@ -17,6 +20,63 @@ const {getPacientes, getPacienteById, getPacienteByEmail, insertPaciente, editPa
 const {getConteudos, insertConteudo, editConteudo, deleteConteudo} = require("../models/DAO/ConteudoDAO");
 const {getRegistro, insertRegistro, editRegistro, deleteRegistro} = require("../models/DAO/RegistroSintomaDAO");
 const {getSintoma, insertSintoma, editSintoma, deleteSintoma} = require("../models/DAO/SintomaDAO");
+
+/********************************************************************************************************
+* LOGIN                                                                                                 *
+********************************************************************************************************/
+
+// Tenta na tabela paciente, se não der, tenta em acompanhante
+app.post('/api/auth/login', async (req, res) => {
+  try {
+    const { email, senha } = req.body;
+    if (!email || !senha) {
+      return res.status(400).json({ error: true, message: 'Informe email e senha.' });
+    }
+
+    // Tenta paciente
+    const paciente = await getPacienteByEmail(email);
+    if (paciente && paciente.senha === senha) {
+      const id = paciente.id_paciente ?? paciente.id;
+
+      const payload = { sub: `paciente:${id}`, id, tipo: 'paciente', email };
+
+      const token = jwt.sign(payload, JWT_SECRET, { expiresIn: '7d' });
+
+      return res.status(200).json({ token, user: { id, tipo: 'paciente', email } });
+    }
+
+    // Tenta acompanhante
+    const acompanhante = await getAcompanhanteByEmail(email);
+    if (acompanhante && acompanhante.senha === senha) {
+      const id = acompanhante.id;
+      
+      const payload = { sub: `acompanhante:${id}`, id, tipo: 'acompanhante', email };
+
+      const token = jwt.sign(payload, JWT_SECRET, { expiresIn: '7d' });
+      
+      return res.json({ token, user: { id, tipo: 'acompanhante', email } });
+    }
+
+    return res.status(401).json({ error: true, message: 'Credenciais inválidas.' });
+  } catch (e) {
+    console.error(e);
+    return res.status(500).json({ error: true, message: 'Erro no servidor.' });
+  }
+});
+
+function auth(req, res, next) {
+  const h = req.headers.authorization || '';
+  if (!h.startsWith('Bearer ')) {
+    return res.status(401).json({ error: true, message: 'Token ausente.' });
+  }
+  const token = h.slice(7);
+  try {
+    req.user = jwt.verify(token, JWT_SECRET); // {sub, id, tipo, email, iat, exp}
+    next();
+  } catch (e) {
+    return res.status(401).json({ error: true, message: 'Token inválido.' });
+  }
+}
 
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=- ☆ ADMINISTRADOR ☆
 
@@ -408,7 +468,7 @@ app.get('/api/pacientes/:id', async (req, res) => {
 });
 
 // UPDATE pelo id_paciente 
-app.put('/api/pacientes/:id', async (req, res) => {
+app.put('/api/pacientes/:id', auth, async (req, res) => {
   try {
     const { id } = req.params;
     const {
@@ -437,7 +497,7 @@ app.put('/api/pacientes/:id', async (req, res) => {
 });
 
 // DELETE pelo id_paciente
-app.delete('/api/pacientes/:id', async (req, res) => {
+app.delete('/api/pacientes/:id', auth, async (req, res) => {
   try {
     const { id } = req.params;
     
@@ -631,7 +691,7 @@ app.get('/api/acompanhantes/:id', async (req, res) => {
 });
 
 // UPDATE
-app.put("/api/acompanhante/:id", async (req, res) => {
+app.put("/api/acompanhante/:id", auth, async (req, res) => {
   try {
     const { id } = req.params;
     
@@ -659,7 +719,7 @@ app.put("/api/acompanhante/:id", async (req, res) => {
 });
 
 // DELETE pelo id_acompanhante
-app.delete("/api/acompanhante/:id", async (req, res) => {
+app.delete("/api/acompanhante/:id", auth, async (req, res) => {
     const {id} = req.params;
 
     const result = await deleteAcompanhante(id);

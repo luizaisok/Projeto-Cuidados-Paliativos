@@ -5,7 +5,8 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node src/controllers/index.js",
-    "dev": "nodemon src/controllers/index.js"
+    "dev": "nodemon src/controllers/index.js",
+    "abrir": "npx expo start -c -w"
   },
   "author": "Ana Carolina e Luiza Mariana",
   "license": "ISC",
@@ -15,6 +16,7 @@
     "cors": "^2.8.5",
     "ejs": "^3.1.10",
     "express": "^5.1.0",
+    "jsonwebtoken": "^9.0.2",
     "method-override": "^3.0.0",
     "mysql2": "^3.15.3",
     "nodemon": "^3.1.10",
