@@ -2,8 +2,7 @@ import React, { useState } from "react";
 import { View, Text, Modal, TouchableOpacity, StyleSheet, Button} from "react-native";
 import { useFonts, Comfortaa_400Regular } from "@expo-google-fonts/comfortaa";
 
-export default function EscalaDeDor() {
-  const [modalVisible, setModalVisible] = useState(false);
+export default function IntensidadeDor({ visible, onClose, sintoma }) {
   const [escalaSelecionada, setEscalaSelecionada] = useState(null);
   const BASE_URL = "http://localhost:3000/";
 
@@ -18,11 +17,11 @@ export default function EscalaDeDor() {
         headers: {'Content-Type': 'application/json'},
         body: JSON.stringify({intensidade: escalaSelecionada})
       });
-      
       if(!res.ok) throw new Error(await res.text());
       const data = await res.json();
       console.log("Resposta API: ", data);
       alert("Registro realizado com sucesso!")
+      onClose();
     }catch(error){
       console.error("Erro ao realizar registro: ", error);
     }
@@ -34,7 +33,7 @@ export default function EscalaDeDor() {
       <Modal
         transparent
         animationType="fade"
-        visible={true}
+        visible={visible}
       >
         <View style={styles.modalOverlay}>
           <View style={styles.modalContainer}>
@@ -66,7 +65,7 @@ export default function EscalaDeDor() {
             <View style={styles.botoesContainer}>
               <TouchableOpacity
                 style={[styles.botao, styles.cancelar]}
-                onPress={() => setModalVisible(false)}
+                onPress={onClose}
               >
                 <Text style={[styles.textoBotao, styles.txt]}>Cancelar</Text>
               </TouchableOpacity>
@@ -102,7 +101,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
   modalContainer: {
-    backgroundColor: "#FFF3E5",
+    backgroundColor: "#f7f2edff",
     borderRadius: 20,
     padding: 15,
     width: "80%",

@@ -2,12 +2,22 @@ import { StyleSheet, Text, View } from "react-native";
 import ListaSintomas from "../components/ListaSintomas";
 import Header from "../components/Header/index";
 import Footer from "../components/Footer/index";
+import IntensidadeDor from '../components/Modals/IntensidadeDor';
 import { useFonts, Comfortaa_400Regular } from "@expo-google-fonts/comfortaa";
+import { useState } from "react";
 
 export default function MenuSintomas(){
+    const [modalVisible, setModalVisible] = useState(false);
+    const [sintomaSelecionado, setSintomaSelecionado] = useState(null);
+    
     let [fontsLoaded] = useFonts({
         Comfortaa_400Regular
     });
+
+    const handleSelecionarSintoma = (sintoma) => {
+        setSintomaSelecionado(sintoma);
+        setModalVisible(true);
+    };
 
     return(
         <View style={Estilo.container}>
@@ -15,8 +25,14 @@ export default function MenuSintomas(){
             <Text style={Estilo.title}>
                 Você apresentou algum desses sintomas hoje?
             </Text>
-            <ListaSintomas />
+            <ListaSintomas onSelecionar={handleSelecionarSintoma} />
             <Footer />
+
+            <IntensidadeDor
+                visible={modalVisible}
+                sintoma={sintomaSelecionado}
+                onClose={() => setModalVisible(false)}
+            />
         </View>
     )
 }

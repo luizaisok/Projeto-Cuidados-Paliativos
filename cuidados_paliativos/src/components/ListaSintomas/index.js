@@ -10,14 +10,23 @@ const Item = ({dado}) => (
     </View>
 )
 
-export default function ListaSintomas(){
+export default function ListaSintomas({ onSelecionar }){
     return(
         <View style={Estilo.container}>
             <FlatList
                 data={SINTOMAS} //Data
                 numColumns={2}
                 keyExtractor={(item) => item.id} //KeyExtrator -> precisa ser String
-                renderItem={({item}) => <Item dado={item} />} //RenderItem
+                renderItem={({ item }) => (
+                <TouchableOpacity
+                    style={Estilo.card}
+                    onPress={() => onSelecionar(item)}
+                >
+                    <Text style={Estilo.textCard}>
+                    {item?.nome}
+                    </Text>
+                </TouchableOpacity>
+                )}
 
                 ListEmptyComponent={<Text>Não existem elementos na lista.</Text>}
             />
