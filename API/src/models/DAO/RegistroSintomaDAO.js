@@ -7,12 +7,12 @@ async function getRegistro() {
 }
 
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
-async function insertRegistro(data_registro, intensidade, observacao) {
-  if (data_registro && intensidade && observacao) {
+async function insertRegistro(intensidade) {
+  if ( intensidade) {
     const [result] = await pool.query(
-      `INSERT INTO registro (data_registro, intensidade, observacao)
-       VALUES (?, ?, ?)`,
-      [data_registro, intensidade, observacao]
+      `INSERT INTO registro (intensidade)
+       VALUES (?)`,
+      [intensidade]
     );
 
     return result.affectedRows > 0;
@@ -23,13 +23,13 @@ async function insertRegistro(data_registro, intensidade, observacao) {
 }
 
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
-async function editRegistro(id, data_registro, intensidade, observacao) {
-  if (id && data_registro && intensidade && observacao) {
+async function editRegistro(id, intensidade) {
+  if (id && intensidade) {
     const [result] = await pool.query(
       `UPDATE registro
-       SET data_registro = ?, intensidade = ?, observacao = ?
+       SET data_registro = NOW(), intensidade = ?
        WHERE id = ?`,
-      [data_registro, intensidade, observacao, id]
+      [intensidade, id]
     );
 
     return result.affectedRows > 0;

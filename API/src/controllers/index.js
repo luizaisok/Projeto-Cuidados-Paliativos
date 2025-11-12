@@ -896,9 +896,8 @@ app.get('/novoregistro', (req, res) => {
 
 // CREATE
 app.post('/registros', async (req, res) => {
-    const {intensidade, observacao} = req.body;
-    const data_registro = new Date().toISOString().split('T')[0];
-    const sucesso = await insertRegistro(data_registro, intensidade, observacao);
+    const {intensidade} = req.body;
+    const sucesso = await insertRegistro(intensidade);
 
     if (sucesso) {
         res.redirect('/registros');
@@ -910,8 +909,8 @@ app.post('/registros', async (req, res) => {
 // Inserindo pela API
 app.post("/api/registros", async (req, res) => {
     console.log("Corpo recebido no POST:", req.body);
-    const {data_registro, intensidade, observacao} = req.body;
-    const result = await insertRegistro(data_registro, intensidade, observacao);
+    const {intensidade} = req.body;
+    const result = await insertRegistro(intensidade);
     if(result){
         return res.status(202).json({success: true});
     }
@@ -936,8 +935,8 @@ app.get('/registros/:id', async (req, res) => {
 // UPDATE
 app.post('/registros/:id', async (req, res) => {
     const {id} = req.params;
-    const {data_registro, intensidade, observacao} = req.body;
-    const sucesso = await editRegistro(id, data_registro, intensidade, observacao);
+    const {intensidade} = req.body;
+    const sucesso = await editRegistro(id, intensidade);
 
     if(sucesso){
         res.redirect('/registros');
@@ -950,9 +949,8 @@ app.post('/registros/:id', async (req, res) => {
 app.put('/api/registros/:id', async (req, res) => {
     try {
         const { id } = req.params;
-        const { intensidade, observacao } = req.body;
-        const data_registro = new Date().toISOString().split('T')[0]; // Atualiza data
-        const result = await editRegistro(id, data_registro, intensidade, observacao);
+        const { intensidade } = req.body;
+        const result = await editRegistro(id, intensidade);
 
         if(result){
             return res.status(200).json({ success: true, message: "Registro atualizado!" });
