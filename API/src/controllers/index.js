@@ -1025,8 +1025,8 @@ app.get('/novosintoma', (req, res) => {
 
 // CREATE
 app.post('/sintomas', async (req, res) => {
-    const {sintomas, tipo_alerta} = req.body;
-    const sucesso = await insertSintoma(sintomas, tipo_alerta);
+    const {nome_sintoma} = req.body;
+    const sucesso = await insertSintoma(nome_sintoma);
 
     if (sucesso) {
         res.redirect('/sintomas');
@@ -1037,8 +1037,8 @@ app.post('/sintomas', async (req, res) => {
 
 // Inserindo pela API
 app.post("/api/sintomas", async (req, res) => {
-    const {sintomas, tipo_alerta} = req.body;
-    const result = await insertSintoma(sintomas, tipo_alerta);
+    const {nome_sintoma} = req.body;
+    const result = await insertSintoma(nome_sintoma);
     if(result){
         return res.status(202).json({success: true});
     }
@@ -1063,8 +1063,8 @@ app.get('/sintomas/:id', async (req, res) => {
 // UPDATE
 app.post('/sintomas/:id', async (req, res) => {
     const {id} = req.params;
-    const {sintomas, tipo_alerta} = req.body;
-    const sucesso = await editSintoma(id, sintomas, tipo_alerta);
+    const {nome_sintoma} = req.body;
+    const sucesso = await editSintoma(id, nome_sintoma);
 
     if(sucesso){
         res.redirect('/sintomas');
@@ -1077,8 +1077,8 @@ app.post('/sintomas/:id', async (req, res) => {
 app.put('/api/sintomas/:id', async (req, res) => {
     try {
         const { id } = req.params;
-        const { sintomas, tipo_alerta } = req.body;
-        const result = await editSintoma(id, sintomas, tipo_alerta);
+        const { nome_sintoma } = req.body;
+        const result = await editSintoma(id, nome_sintoma);
 
         if(result){
             return res.status(200).json({ success: true, message: "Sintoma atualizado!" });

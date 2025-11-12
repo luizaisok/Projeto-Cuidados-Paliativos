@@ -54,52 +54,52 @@ function AbasPrincipais() {
 
 // Se nãoq quiser abrir direto no Login.js, comente a primeira function Rotas e descomente a segunda!!!
 
-export default function Rotas() {
-  return (
-    <NavigationContainer>
-      <Stack.Navigator
-        initialRouteName="Login"
-        screenOptions={{ headerShown: false }}
-      >
-        {/* Auth */}
-        <Stack.Screen name="Login" component={Login} />
-        <Stack.Screen name="Cadastro" component={Cadastro} />
-
-        {/* App */}
-        <Stack.Screen name="AbasPrincipais" component={AbasPrincipais} />
-        <Stack.Screen name="SinalVerde" component={SinalVerde} />
-        <Stack.Screen name="SinalAmarelo" component={SinalAmarelo} />
-        <Stack.Screen name="SinalVermelho" component={SinalVermelho} />
-        <Stack.Screen name="MenuSintomas" component={MenuSintomas} />
-        <Stack.Screen name="DefinicaoSintomas" component={DefinicaoSintomas} />
-      </Stack.Navigator>
-    </NavigationContainer>
-  );
-}
-
 // export default function Rotas() {
 //   return (
 //     <NavigationContainer>
 //       <Stack.Navigator
-//         screenOptions={() => {
-//           headerShown: false
-//         }}
+//         initialRouteName="Login"
+//         screenOptions={{ headerShown: false }}
 //       >
-//         <Stack.Screen
-//           name="AbasPrincipais"
-//           component={AbasPrincipais}
-//           options={{ headerShown: false }}
-//         />
+//         {/* Auth */}
+//         <Stack.Screen name="Login" component={Login} />
+//         <Stack.Screen name="Cadastro" component={Cadastro} />
 
+//         {/* App */}
+//         <Stack.Screen name="AbasPrincipais" component={AbasPrincipais} />
 //         <Stack.Screen name="SinalVerde" component={SinalVerde} />
 //         <Stack.Screen name="SinalAmarelo" component={SinalAmarelo} />
 //         <Stack.Screen name="SinalVermelho" component={SinalVermelho} />
-//         <Stack.Screen name="Cadastro" component={Cadastro} />
-//         <Stack.Screen name="Login" component={Login} />
 //         <Stack.Screen name="MenuSintomas" component={MenuSintomas} />
 //         <Stack.Screen name="DefinicaoSintomas" component={DefinicaoSintomas} />
-
 //       </Stack.Navigator>
 //     </NavigationContainer>
 //   );
 // }
+
+export default function Rotas() {
+  return (
+    <NavigationContainer>
+      <Stack.Navigator
+        screenOptions={() => {
+          headerShown: false
+        }}
+      >
+        <Stack.Screen
+          name="AbasPrincipais"
+          component={AbasPrincipais}
+          options={{ headerShown: false }}
+        />
+
+        <Stack.Screen name="SinalVerde" component={SinalVerde} />
+        <Stack.Screen name="SinalAmarelo" component={SinalAmarelo} />
+        <Stack.Screen name="SinalVermelho" component={SinalVermelho} />
+        <Stack.Screen name="Cadastro" component={Cadastro} />
+        <Stack.Screen name="Login" component={Login} />
+        <Stack.Screen name="MenuSintomas" component={MenuSintomas} />
+        <Stack.Screen name="DefinicaoSintomas" component={DefinicaoSintomas} />
+
+      </Stack.Navigator>
+    </NavigationContainer>
+  );
+}
