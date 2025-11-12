@@ -1,21 +1,82 @@
-const cor = require("cors");
+const cors = require("cors");
 const express = require("express");
 const bodyParser = require("body-parser");
 const app = express();
 
+const jwt = require('jsonwebtoken');
+const JWT_SECRET = 'abacate';
+
 app.set("view engine", "ejs"); 
 app.set("views", "./src/views");
 
+app.use(cors());
 app.use(express.json());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
 
 const {getAdministradores, insertAdministrador, editAdministrador, deleteAdministrador} = require("../models/DAO/AdministradorDAO");
-const {getAcompanhantes, insertAcompanhante, editAcompanhante, deleteAcompanhante} = require("../models/DAO/AcompanhanteDAO");
-const {getPacientes, insertPaciente, editPaciente, deletePaciente} = require("../models/DAO/PacienteDAO");
+const {getAcompanhantes, getAcompanhanteById, getAcompanhanteByEmail, insertAcompanhante, editAcompanhante, deleteAcompanhante} = require("../models/DAO/AcompanhanteDAO");
+const {getPacientes, getPacienteById, getPacienteByEmail, insertPaciente, editPaciente, deletePaciente} = require("../models/DAO/PacienteDAO");
 const {getConteudos, insertConteudo, editConteudo, deleteConteudo} = require("../models/DAO/ConteudoDAO");
 const {getRegistro, insertRegistro, editRegistro, deleteRegistro} = require("../models/DAO/RegistroSintomaDAO");
 const {getSintoma, insertSintoma, editSintoma, deleteSintoma} = require("../models/DAO/SintomaDAO");
+
+/********************************************************************************************************
+* LOGIN                                                                                                 *
+********************************************************************************************************/
+
+// Tenta na tabela paciente, se não der, tenta em acompanhante
+app.post('/api/auth/login', async (req, res) => {
+  try {
+    const { email, senha } = req.body;
+    if (!email || !senha) {
+      return res.status(400).json({ error: true, message: 'Informe email e senha.' });
+    }
+
+    // Tenta paciente
+    const paciente = await getPacienteByEmail(email);
+    if (paciente && paciente.senha === senha) {
+      const id = paciente.id_paciente ?? paciente.id;
+
+      const payload = { sub: `paciente:${id}`, id, tipo: 'paciente', email };
+
+      const token = jwt.sign(payload, JWT_SECRET, { expiresIn: '7d' });
+
+      return res.status(200).json({ token, user: { id, tipo: 'paciente', email } });
+    }
+
+    // Tenta acompanhante
+    const acompanhante = await getAcompanhanteByEmail(email);
+    if (acompanhante && acompanhante.senha === senha) {
+      const id = acompanhante.id;
+      
+      const payload = { sub: `acompanhante:${id}`, id, tipo: 'acompanhante', email };
+
+      const token = jwt.sign(payload, JWT_SECRET, { expiresIn: '7d' });
+      
+      return res.json({ token, user: { id, tipo: 'acompanhante', email } });
+    }
+
+    return res.status(401).json({ error: true, message: 'Credenciais inválidas.' });
+  } catch (e) {
+    console.error(e);
+    return res.status(500).json({ error: true, message: 'Erro no servidor.' });
+  }
+});
+
+function auth(req, res, next) {
+  const h = req.headers.authorization || '';
+  if (!h.startsWith('Bearer ')) {
+    return res.status(401).json({ error: true, message: 'Token ausente.' });
+  }
+  const token = h.slice(7);
+  try {
+    req.user = jwt.verify(token, JWT_SECRET); // {sub, id, tipo, email, iat, exp}
+    next();
+  } catch (e) {
+    return res.status(401).json({ error: true, message: 'Token inválido.' });
+  }
+}
 
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=- ☆ ADMINISTRADOR ☆
 
@@ -142,9 +203,11 @@ app.delete('/api/administrador/:id', async (req, res) => {
   res.json(result);
 });
 
-// -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=- ☆ PACIENTE ☆
+/********************************************************************************************************
+* PACIENTE                                                                                              *
+********************************************************************************************************/
 
-// READ
+/*
 app.get("/pacientes", async (req, res) => {
     const pacientes = await getPacientes();
     console.log("Pacientes: ", pacientes);
@@ -152,7 +215,6 @@ app.get("/pacientes", async (req, res) => {
     res.status(200).render("listaPacientes", {pacientesDoController: pacientes});
 });
 
-// Seleciona todos os pacientes
 app.get('/api/pacientes', async (req, res) => {
   try {
     const pacientes = await getPacientes();
@@ -163,21 +225,16 @@ app.get('/api/pacientes', async (req, res) => {
   }
 });
 
-/*
 app.get("/api/pacientes", async (req, res) => {
     const pacientes = await getPacientes();
 
     res.status(200).json({success: true, pacientes});
 });
-*/
 
-// Formulário - CREATE
 app.get('/novopaciente', (req, res) => {
     res.render('formPaciente');
 });
 
-/*
-// CREATE
 app.post('/paciente', async (req, res) => {
     const {nome, nome_social, email, senha, data_nascimento, genero, estado, cidade, medicacao, doenca, tipo_sanguineo} = req.body;
 
@@ -200,10 +257,7 @@ app.post("/api/paciente", async (req, res) => {
     }
     return res.status(400).json({success: false});
 });
-*/
 
-/*
-// Insere novo pacinte - !FUNCIONA
 app.post('/api/pacientes', async (req, res) => {
   try {
     const { nome, email, celular, genero, data_nascimento, estado, tipo_sanguineo, medicacao, contato_emergencia, unidades_de_saude } = req.body;
@@ -220,7 +274,6 @@ app.post('/api/pacientes', async (req, res) => {
     res.status(500).json({ error: true, message: 'Erro no servidor.' });
   }
 });
-*/
 
 app.post('/api/pacientes', async (req, res) => {  
   try {
@@ -251,7 +304,6 @@ app.post('/api/pacientes', async (req, res) => {
   }
 });
 
-// Formulário - UPDATE
 app.get('/editarpaciente/:id', async (req, res) => {
     const {id} = req.params;
     const pacientes = await getPacientes();
@@ -264,8 +316,6 @@ app.get('/editarpaciente/:id', async (req, res) => {
     }
 });
 
-/*
-// UPDATE
 app.put('/editarpaciente/:id', async (req, res) => {
     const {id} = req.params;
 
@@ -292,9 +342,7 @@ app.put("/api/paciente/:id", async (req, res) => {
     }
     return res.status(404).json({success: false});
 });
-*/
-
-// Atualiza paciente pelo seu ID - 
+ 
 app.put('/api/pacientes/:id', async (req, res) => {
   try {
     const { id } = req.params;
@@ -314,7 +362,6 @@ app.put('/api/pacientes/:id', async (req, res) => {
   }
 });
 
-// DELETE
 app.get('/removerpaciente/:id', async (req, res) => {
     const {id} = req.params;
     const sucesso = await deletePaciente(id);
@@ -326,7 +373,6 @@ app.get('/removerpaciente/:id', async (req, res) => {
     }
 });
 
-/*
 app.delete("/api/paciente/:id", async (req, res) => {
     const {id} = req.params;
     //console.log(`Requisição DELETE recebida para o ID: ${id}`); //Para testar o DELETE do paciente
@@ -336,9 +382,7 @@ app.delete("/api/paciente/:id", async (req, res) => {
     }  
     return res.status(404).json({success: false});
 });
-*/
 
-// Deleta paciente pelo seu ID
 app.delete('/api/pacientes/:id', async (req, res) => {
   try {
     const { id } = req.params;
@@ -355,8 +399,126 @@ app.delete('/api/pacientes/:id', async (req, res) => {
     res.status(500).json({ error: true, message: 'Erro no servidor.' });
   }
 });
+*/
 
-// -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=- ☆ ACOMPANHANTE ☆
+// Nova versão da API para paciente
+// CREATE
+app.post('/api/pacientes', async (req, res) => {  
+  try {
+    const {
+      nome = null,
+      email, // obrigatório
+      senha, // obrigatório
+      celular = null,
+      genero = null,
+      data_nascimento = null,
+      estado = null,
+      tipo_sanguineo = null,
+      medicacao = null,
+      contato_emergencia = null,
+      unidades_de_saude = null
+    } = req.body;
+
+    const id = await insertPaciente(nome, email, senha, celular, genero, data_nascimento, estado, tipo_sanguineo, medicacao, contato_emergencia, unidades_de_saude);
+
+    if (id) {
+      res.status(201).json({ error: false, id });
+    } else {
+      res.status(400).json({ error: true, message: 'Informe email e senha.' });
+    }
+  } catch (e) {
+    res.status(500).json({ error: true, message: 'Erro no servidor: ' + e.message });
+  }
+});
+
+// READ ALL ou pelo email
+app.get('/api/pacientes', async (req, res) => {
+  try {
+    const { email } = req.query;
+
+    if (email) {
+      const paciente = await getPacienteByEmail(email);
+
+      if (!paciente) return res.status(404).json({ error: true, message: 'Paciente não encontrado.' });
+      
+      return res.status(200).json({ error: false, data: paciente });
+    }
+
+    const pacientes = await getPacientes();
+
+    return res.status(200).json({ error: false, data: pacientes });
+  } catch (e) {
+    return res.status(500).json({ error: true, message: 'Erro ao consultar pacientes: ' + e.message });
+  }
+});
+
+// READ pelo id_paciente
+app.get('/api/pacientes/:id', async (req, res) => {
+  try {
+    const { id } = req.params;
+    
+    const paciente = await getPacienteById(id);
+    
+    if (!paciente) return res.status(404).json({ error: true, message: 'Paciente não encontrado.' });
+    
+    return res.status(200).json({ error: false, data: paciente });
+  } catch (e) {
+    return res.status(500).json({ error: true, message: 'Erro no servidor.' });
+  }
+});
+
+// UPDATE pelo id_paciente 
+app.put('/api/pacientes/:id', auth, async (req, res) => {
+  try {
+    const { id } = req.params;
+    const {
+      nome = null,
+      email = null,
+      senha = null, // se enviar, atualiza
+      celular = null,
+      genero = null,
+      data_nascimento = null,
+      estado = null,
+      tipo_sanguineo = null,
+      medicacao = null,
+      contato_emergencia = null,
+      unidades_de_saude = null
+    } = req.body;
+
+    const result = await editPaciente(id, nome, email, senha, celular, genero, data_nascimento, estado,
+      tipo_sanguineo, medicacao, contato_emergencia, unidades_de_saude);
+
+    if (!result) return res.status(404).json({ error: true, message: "Não foi possível atualizar paciente."});
+
+    return res.status(200).json({ error: false, message: 'Paciente atualizado.' });
+  } catch (e) {
+    res.status(500).json({ error: true, message: 'Erro no servidor: ' + e.message });
+  }
+});
+
+// DELETE pelo id_paciente
+app.delete('/api/pacientes/:id', auth, async (req, res) => {
+  try {
+    const { id } = req.params;
+    
+    const result = await deletePaciente(id);
+
+    if (result) {
+      res.status(200).json({ error: false, message: 'Paciente removido com sucesso!' });
+    } else {
+      res.status(404).json({ error: true, message: 'Paciente não encontrado.' });
+    }
+  } catch (e) {
+    console.error(e);
+    res.status(500).json({ error: true, message: 'Erro no servidor.' });
+  }
+});
+
+/********************************************************************************************************
+* ACOMPANHANTE                                                                                          *
+********************************************************************************************************/
+
+/*
 // READ
 app.get("/acompanhantes", async (req, res) => {
     const acompanhantes = await getAcompanhantes();
@@ -371,21 +533,16 @@ app.get("/api/acompanhantes", async (req, res) => {
     res.status(200).json({success: true, acompanhantes});
 });
 
-// -=-=-=-=-=-=-=-=-=-=-=-=-=-=-
-
-// Formulário - CREATE
-/*
+// CREATE
 app.get('/acompanhante', (req, res) => {
     res.render('formAcompanhante');
 });
-*/
 
 app.get('/acompanhante', async (req, res) => {
 
     res.json(rows);
 });
 
-// CREATE
 app.post('/acompanhante', async (req, res) => {
     const {tipo_pessoa, nome_completo, nome_social, idade, email, telefone, genero, data_nascimento, senha, relacionamento} = req.body;
 
@@ -408,9 +565,7 @@ app.post("/api/acompanhante", async (req, res) => {
     return res.status(400).json({success: false});
 });
 
-// -=-=-=-=-=-=-=-=-=-=-=-=-=-=-
-
-// Formulário - UPDATE
+// UPDATE
 app.get('/acompanhante/:id', async (req, res) => {
     const {id} = req.params;
     const acompanhantes = await getAcompanhantes();
@@ -423,7 +578,6 @@ app.get('/acompanhante/:id', async (req, res) => {
     }
 });
 
-// UPDATE
 app.put('/acompanhante/:id', async (req, res) => {
     const {id} = req.params;
 
@@ -451,8 +605,6 @@ app.put("/api/acompanhante/:id", async (req, res) => {
     return res.status(404).json({success: false});
 });
 
-// -=-=-=-=-=-=-=-=-=-=-=-=-=-=-
-
 // DELETE
 app.get('/acompanhante/:id', async (req, res) => {
     const {id} = req.params;
@@ -472,6 +624,111 @@ app.delete("/api/acompanhante/:id", async (req, res) => {
         return res.status(200).json({success: true});
     }  
     return res.status(404).json({success: false});
+});
+*/
+
+// Nova versão da API para acompanhante
+// CREATE
+app.post("/api/acompanhante", async (req, res) => {
+  try {
+    const {
+      tipo_pessoa = null,
+      nome_completo = null,
+      nome_social = null,
+      idade = null,
+      email, // obrigatório
+      telefone = null,
+      genero = null,
+      data_nascimento = null,
+      senha, // obrigatório
+      relacionamento = null
+    } = req.body;
+
+    const id = await insertAcompanhante(tipo_pessoa, nome_completo, nome_social, idade, email, telefone, genero, data_nascimento, senha, relacionamento);
+
+    if (id) return res.status(201).json({ error: false, id });
+
+    return res.status(400).json({ error: true, message: 'Informe email e senha.' });
+  } catch (e) {
+    return res.status(500).json({ error: true, message: 'Erro no servidor.' });
+  }
+});
+
+// READ ALL ou por email
+app.get('/api/acompanhantes', async (req, res) => {
+  try {
+    const { email } = req.query;
+
+    if (email) {
+      
+      const acompanhante = await getAcompanhanteByEmail(email);
+      
+      if (!acompanhante) return res.status(404).json({ error: true, message: 'Acompanhante não encontrado.' });
+     
+      return res.status(200).json({ error: false, data: acompanhante });
+    }
+
+    const lista = await getAcompanhantes();
+    return res.status(200).json({ error: false, data: lista });
+  } catch (e) {
+    return res.status(500).json({ error: true, message: 'Erro no servidor.' });
+  }
+});
+
+// READ pelo id_acompanhante
+app.get('/api/acompanhantes/:id', async (req, res) => {
+  try {
+    const { id } = req.params;
+    
+    const acompanhante = await getAcompanhanteById(id);
+
+    if (!acompanhante) return res.status(404).json({ error: true, message: 'Acompanhante não encontrado.'});
+
+    return res.status(200).json({ error: false, data: acompanhante });
+  } catch (e) {
+    return res.status(500).json({ error: true, message: 'Erro no servidor.' });
+  }
+});
+
+// UPDATE
+app.put("/api/acompanhante/:id", auth, async (req, res) => {
+  try {
+    const { id } = req.params;
+    
+    const {
+      tipo_pessoa = null,
+      nome_completo = null,
+      nome_social = null,
+      idade = null,
+      email = null,
+      telefone = null,
+      genero = null,
+      data_nascimento = null,
+      senha = null, // se enviar, atualiza
+      relacionamento = null
+    } = req.body;
+
+    const result = await editAcompanhante(id, tipo_pessoa, nome_completo, nome_social, idade, email, telefone, genero, data_nascimento, senha, relacionamento);
+
+    if (!result) return res.status(404).json({ error: true, message: "Não foi possível atualizar acompanhante." });
+
+    return res.status(200).json({ error: false, message: 'Acompanhante atualizado.' });
+  } catch (e) {
+    return res.status(500).json({ error: true, message: 'Erro no servidor.' });
+  }
+});
+
+// DELETE pelo id_acompanhante
+app.delete("/api/acompanhante/:id", auth, async (req, res) => {
+    const {id} = req.params;
+
+    const result = await deleteAcompanhante(id);
+    
+    if (result) {
+      res.status(200).json({ error: false, message: 'Acompanhante removido com sucesso!' });
+    } else {
+      res.status(404).json({ error: true, message: 'Acompanhante não encontrado.' });
+    };
 });
 
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=- ☆ CONTEÚDO ☆
@@ -864,8 +1121,11 @@ app.delete('/api/sintomas/:id', async (req, res) => {
     }
 });
 
-port = 3000;
+// rota de saúde (teste rápido)
+app.get('/api/health', (req, res) => res.json({ ok: true }));
 
-app.listen(port, 'localhost', () => {
-    console.log(`Servidor rodando na porta ${port}`);
+const PORT = 3000;
+
+app.listen(PORT, '0.0.0.0', () => {
+    console.log(`Servidor rodando na porta ${PORT}.`);
 });
