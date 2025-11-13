@@ -1117,6 +1117,7 @@ app.post('/sintomas', async (req, res) => {
 
 // Inserindo pela API
 app.post("/api/sintomas", async (req, res) => {
+    console.log("Corpo recebido no POST:", req.body);
     const {nome_sintoma} = req.body;
     const result = await insertSintoma(nome_sintoma);
     if(result){
