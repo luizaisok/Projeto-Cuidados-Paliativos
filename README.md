@@ -68,7 +68,7 @@ Com base na prototipação de autofidelização do cliente, desenvolvemos nossa 
 <div style="display: flex; gap: 10px; flex-wrap: wrap;">
   <img src="./img/loading.png" alt="Protótipo Loading Figma" height="500px">
   <img src="./img/login.png" alt="Protótipo Login Figma" height="500px">
-  <img src="./img/cadastro .png" alt="Protótipo Cadastro Figma" height="500px">
+  <img src="./img/cadastro.png" alt="Protótipo Cadastro Figma" height="500px">
   <img src="./img/checklist.png" alt="Protótipo Checklist Figma" height="500px">
   <img src="./img/inicio.png" alt="Protótipo Início Figma" height="500px">
   <img src="./img/prontuario.png" alt="Protótipo Prontuário Figma" height="500px">
