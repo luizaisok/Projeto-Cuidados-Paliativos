@@ -78,6 +78,7 @@ async function deleteAcompanhante(id){
 module.exports = {getAcompanhantes, insertAcompanhante, editAcompanhante, deleteAcompanhante};
 */
 
+/*
 // Versão padronizada de AcompanhanteDAO.js
 const pool = require('./db');
 
@@ -232,3 +233,134 @@ module.exports = {
   editAcompanhante,
   deleteAcompanhante
 };
+*/
+
+// AcompanhanteDAO.js (compatível com o SQL novo)
+const pool = require('./db');
+
+// Lista todos
+async function getAcompanhantes() {
+  const [rows] = await pool.query(`
+    SELECT
+      id,
+      email,
+      senha,
+      nome_completo,
+      nome_social,
+      telefone,
+      genero,
+      data_nascimento,
+      created_at
+    FROM acompanhante
+    ORDER BY id DESC
+  `);
+  return rows;
+}
+
+async function getAcompanhanteById(id) {
+  const [rows] = await pool.execute(`
+    SELECT
+      id,
+      email,
+      senha,
+      nome_completo,
+      nome_social,
+      telefone,
+      genero,
+      data_nascimento,
+      created_at
+    FROM acompanhante
+    WHERE id = ?
+  `, [id]);
+  return rows[0] || null;
+}
+
+async function getAcompanhanteByEmail(email) {
+  const [rows] = await pool.execute(`
+    SELECT id, email, senha
+    FROM acompanhante
+    WHERE email = ?
+  `, [email]);
+  return rows[0] || null;
+}
+
+// INSERT
+async function insertAcompanhante(
+  nome_completo,
+  nome_social,
+  email,
+  senha,            // obrigatório
+  telefone,
+  genero,
+  data_nascimento
+) {
+  if (!email || !senha) return null;
+
+  const [result] = await pool.execute(`
+    INSERT INTO acompanhante
+      (email, senha, nome_completo, nome_social, telefone, genero, data_nascimento)
+    VALUES (?, ?, ?, ?, ?, ?, ?)
+  `, [
+    email,
+    senha,
+    nome_completo ?? null,
+    nome_social ?? null,
+    telefone ?? null,
+    genero ?? null,
+    data_nascimento ?? null
+  ]);
+
+  return result.insertId || null;
+}
+
+// UPDATE
+async function editAcompanhante(
+  id,
+  email,
+  senha,
+  nome_completo,
+  nome_social,
+  telefone,
+  genero,
+  data_nascimento
+) {
+  const sql = `
+    UPDATE acompanhante
+    SET
+      email = COALESCE(?, email),
+      senha = COALESCE(?, senha),
+      nome_completo = COALESCE(?, nome_completo),
+      nome_social = COALESCE(?, nome_social),
+      telefone = COALESCE(?, telefone),
+      genero = COALESCE(?, genero),
+      data_nascimento = COALESCE(?, data_nascimento)
+    WHERE id = ?
+  `;
+  const params = [
+    email ?? null,
+    senha ?? null,
+    nome_completo ?? null,
+    nome_social ?? null,
+    telefone ?? null,
+    genero ?? null,
+    data_nascimento ?? null,
+    id
+  ];
+  const [result] = await pool.execute(sql, params);
+  return result.affectedRows > 0;
+}
+
+async function deleteAcompanhante(id) {
+  const [result] = await pool.execute(`DELETE FROM acompanhante WHERE id = ?`, [id]);
+  return result.affectedRows > 0;
+}
+
+module.exports = {
+  getAcompanhantes,
+  getAcompanhanteById,
+  getAcompanhanteByEmail,
+  insertAcompanhante,
+  editAcompanhante,
+  deleteAcompanhante
+};
+
