@@ -156,17 +156,19 @@ const Estilo = StyleSheet.create({
         alignItems: 'center',
     }, 
     imgLogo: {
-        width: 92,
-        height: 117
+        marginTop: 25,
+        width: 85,
+        height: 90,
     },
     txt: {
         fontFamily: "Comfortaa_400Regular"
     },
     txtCadastro: {
         color: '#112A6C',
-        fontSize: 48,
+        fontSize: 40,
         fontWeight: 'bold',
-        marginBottom: 30
+        marginBottom: 5,
+        marginTop: 15
     },
     input: {
         backgroundColor: '#8BAAC4',
@@ -174,15 +176,16 @@ const Estilo = StyleSheet.create({
         color: "#FFF6E5",
         borderRadius: 10,
         width: '100%',
-        height: 50,
+        height: 45,
         padding: 10,
-        marginBottom: 25,
+        marginBottom: 15,
         fontSize: 18
     },
     label: {
         color: '#532C1D',
-        fontSize: 20,
-        marginBottom: 5
+        fontSize: 16,
+        marginBottom: 3,
+        fontWeight: 'bold',
     },
 
     ContainerButtons: {
@@ -195,17 +198,17 @@ const Estilo = StyleSheet.create({
     button: {
         backgroundColor: "#015184",
         borderRadius: 10,
-        width: 170,
+        width: 150,
         height: 101,
         alignItems: "center",
         justifyContent: "center",
         shadowOffset: { width: 4, height: 4 },
         shadowOpacity: 0.3,
         shadowRadius: 4.65,
-        elevation: 8,
+        elevation: 8
     },
     txtButton: {
-        fontSize: 24,
+        fontSize: 20,
         color: "#FFF6E5",
         textAlign: "center",
         lineHeight: 30,
