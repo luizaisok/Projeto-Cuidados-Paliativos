@@ -1,7 +1,5 @@
 const pool = require('./db');
 
-// !!!!!!!!!!!!!!!!!!!! ADICIONAR VARIÁVEL "QtdRegistros" APÓS CONECTAR API'S !!!!!!!!!!!!!!!!!!!!!
-
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 async function getSintoma() {
   const [rows] = await pool.query("SELECT * FROM sintoma");
@@ -9,12 +7,12 @@ async function getSintoma() {
 }
 
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
-async function insertSintoma(sintomas, tipo_alerta) {
-  if (sintomas && tipo_alerta) {
+async function insertSintoma(nome_sintoma) {
+  if (nome_sintoma) {
     const [result] = await pool.query(
-      `INSERT INTO sintoma (sintomas, tipo_alerta)
-       VALUES (?, ?)`,
-      [sintomas, tipo_alerta]
+      `INSERT INTO sintoma (nome_sintoma)
+       VALUES (?)`,
+      [nome_sintoma]
     );
 
     return result.affectedRows > 0;
@@ -25,13 +23,13 @@ async function insertSintoma(sintomas, tipo_alerta) {
 }
 
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
-async function editSintoma(id, sintomas, tipo_alerta) {
-  if (id && sintomas && tipo_alerta) {
+async function editSintoma(id, nome_sintoma) {
+  if (id && nome_sintoma) {
     const [result] = await pool.query(
       `UPDATE sintoma
-       SET sintomas = ?, tipo_alerta = ?
+       SET nome_sintoma = ?
        WHERE id = ?`,
-      [sintomas, tipo_alerta, id]
+      [nome_sintoma, id]
     );
 
     return result.affectedRows > 0;

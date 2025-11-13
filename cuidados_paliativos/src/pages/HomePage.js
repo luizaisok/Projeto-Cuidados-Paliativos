@@ -160,6 +160,7 @@ const Estilo = StyleSheet.create({
     },
 
     contatosTitle: {
+        marginBottom: 7,
         fontFamily: "Comfortaa_400Regular",
         fontSize: 24,
         fontWeight: 700,

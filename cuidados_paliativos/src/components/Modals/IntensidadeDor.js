@@ -20,7 +20,7 @@ export default function IntensidadeDor({ visible, onClose, sintoma }) {
       if(!res.ok) throw new Error(await res.text());
       const data = await res.json();
       console.log("Resposta API: ", data);
-      alert("Registro realizado com sucesso!")
+      //alert("Registro realizado com sucesso!")
       onClose();
     }catch(error){
       console.error("Erro ao realizar registro: ", error);
