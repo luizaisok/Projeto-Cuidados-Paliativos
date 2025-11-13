@@ -99,7 +99,6 @@ module.exports = {
   editPaciente,
   deletePaciente
 };
-*/
 
 // Versão padronizada de PacineteDAO.js
 const pool = require('./db');
@@ -254,6 +253,186 @@ async function deletePaciente(id) {
     `DELETE FROM pacientes WHERE id_paciente = ?`,
     [id]
   );
+  return result.affectedRows > 0;
+}
+
+module.exports = {
+  getPacientes,
+  getPacienteById,
+  getPacienteByEmail,
+  insertPaciente,
+  editPaciente,
+  deletePaciente
+};
+*/
+
+const pool = require('./db');
+
+// SELECT
+async function getPacientes() {
+  const [rows] = await pool.query(`
+    SELECT
+      id_paciente AS id,
+      nome,
+      nome_social,
+      email,
+      senha,
+      celular,
+      genero,
+      data_nascimento,
+      cidade,
+      estado,
+      tipo_sanguineo,
+      condicoes_medicas,
+      medicacao,
+      contato_emergencia,
+      unidades_de_saude,
+      created_at
+    FROM pacientes
+    ORDER BY id_paciente DESC
+  `);
+  return rows;
+}
+
+async function getPacienteById(id) {
+  const [rows] = await pool.execute(`
+    SELECT
+      id_paciente AS id,
+      nome,
+      nome_social,
+      email,
+      senha,
+      celular,
+      genero,
+      data_nascimento,
+      cidade,
+      estado,
+      tipo_sanguineo,
+      condicoes_medicas,
+      medicacao,
+      contato_emergencia,
+      unidades_de_saude,
+      created_at
+    FROM pacientes
+    WHERE id_paciente = ?
+  `, [id]);
+  return rows[0] || null;
+}
+
+async function getPacienteByEmail(email) {
+  const [rows] = await pool.execute(`
+    SELECT
+      id_paciente AS id,
+      email,
+      senha
+    FROM pacientes
+    WHERE email = ?
+  `, [email]);
+  return rows[0] || null;
+}
+
+// INSERT
+async function insertPaciente(
+  nome,
+  email,
+  senha,
+  celular,
+  genero,
+  data_nascimento,
+  estado,
+  tipo_sanguineo,
+  medicacao,
+  contato_emergencia,
+  unidades_de_saude,
+  nome_social,
+  cidade,
+  condicoes_medicas
+) {
+  if (!email || !senha) return null;
+
+  const [result] = await pool.execute(`
+    INSERT INTO pacientes
+      (nome, nome_social, email, senha, celular, genero, data_nascimento, cidade, estado, tipo_sanguineo, condicoes_medicas, medicacao, contato_emergencia, unidades_de_saude)
+    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+  `, [
+    nome ?? null,
+    nome_social ?? null,
+    email,
+    senha,
+    celular ?? null,
+    genero ?? null,
+    data_nascimento ?? null,
+    cidade ?? null,
+    estado ?? null,
+    tipo_sanguineo ?? null,
+    condicoes_medicas ?? null,
+    medicacao ?? null,
+    contato_emergencia ?? null,
+    unidades_de_saude ?? null
+  ]);
+
+  return result.insertId || null;
+}
+
+// UPDATE (COALESCE na senha; e mapeia campos)
+async function editPaciente(
+  id,
+  nome,
+  email,
+  senha, // opcional
+  celular,
+  genero,
+  data_nascimento,
+  estado,
+  tipo_sanguineo,
+  medicacao,
+  contato_emergencia,
+  unidades_de_saude,
+  nome_social,
+  cidade,
+  condicoes_medicas
+) {
+  const [result] = await pool.execute(`
+    UPDATE pacientes
+    SET
+      nome = ?,
+      nome_social = ?,
+      email = ?,
+      senha = COALESCE(?, senha),
+      celular = ?,
+      genero = ?,
+      data_nascimento = ?,
+      cidade = ?,
+      estado = ?,
+      tipo_sanguineo = ?,
+      condicoes_medicas = ?,
+      medicacao = ?,
+      contato_emergencia = ?,
+      unidades_de_saude = ?
+    WHERE id_paciente = ?
+  `, [
+    nome ?? null,
+    nome_social ?? null,
+    email ?? null,
+    senha ?? null,
+    celular ?? null,
+    genero ?? null,
+    data_nascimento ?? null,
+    cidade ?? null,
+    estado ?? null,
+    tipo_sanguineo ?? null,
+    condicoes_medicas ?? null,
+    medicacao ?? null,
+    contato_emergencia ?? null,
+    unidades_de_saude ?? null,
+    id
+  ]);
+
+  return result.affectedRows > 0;
+}
+
+async function deletePaciente(id) {
+  const [result] = await pool.execute(`DELETE FROM pacientes WHERE id_paciente = ?`, [id]);
   return result.affectedRows > 0;
 }
 

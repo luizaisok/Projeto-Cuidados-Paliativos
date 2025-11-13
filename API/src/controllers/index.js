@@ -15,11 +15,15 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
 
 const {getAdministradores, insertAdministrador, editAdministrador, deleteAdministrador} = require("../models/DAO/AdministradorDAO");
-const {getAcompanhantes, getAcompanhanteById, getAcompanhanteByEmail, insertAcompanhante, editAcompanhante, deleteAcompanhante} = require("../models/DAO/AcompanhanteDAO");
-const {getPacientes, getPacienteById, getPacienteByEmail, insertPaciente, editPaciente, deletePaciente} = require("../models/DAO/PacienteDAO");
+const { getPacientes, getPacienteById, getPacienteByEmail, insertPaciente, editPaciente, deletePaciente } = require("../models/DAO/PacienteDAO");
+const { getAcompanhantes, getAcompanhanteById, getAcompanhanteByEmail, insertAcompanhante, editAcompanhante, deleteAcompanhante } = require("../models/DAO/AcompanhanteDAO");
+const { linkAcompanhantePaciente, unlinkAcompanhantePaciente, getPacientesDoAcompanhante, getAcompanhantesDoPaciente } = require("../models/DAO/VinculoDAO");
 const {getConteudos, insertConteudo, editConteudo, deleteConteudo} = require("../models/DAO/ConteudoDAO");
 const {getRegistro, insertRegistro, editRegistro, deleteRegistro} = require("../models/DAO/RegistroSintomaDAO");
 const {getSintoma, insertSintoma, editSintoma, deleteSintoma} = require("../models/DAO/SintomaDAO");
+
+// Helper que converte "" em null
+const toNull = (v) => (v === "" ? null : v);
 
 /********************************************************************************************************
 * LOGIN                                                                                                 *
@@ -77,6 +81,72 @@ function auth(req, res, next) {
     return res.status(401).json({ error: true, message: 'Token inválido.' });
   }
 }
+
+/********************************************************************************************************
+ * VÍNCULO PACINTE c/ ACOMPANHANTE                                                                      *
+ *******************************************************************************************************/
+
+// Lista pacientes de um acompanhante
+app.get('/api/acompanhante/:id/pacientes', auth, async (req, res) => {
+  try {
+    const { id } = req.params;
+    if (req.user.tipo !== 'acompanhante' || String(req.user.id) !== String(id)) {
+      return res.status(403).json({ error: true, message: 'Acesso negado.' });
+    }
+    const lista = await getPacientesDoAcompanhante(id);
+    return res.json({ error: false, data: lista });
+  } catch (e) {
+    return res.status(500).json({ error: true, message: 'Erro no servidor.' });
+  }
+});
+
+// Lista acompanhantes de um paciente
+app.get('/api/pacientes/:id/acompanhantes', async (req, res) => {
+  try {
+    const { id } = req.params;
+    const lista = await getAcompanhantesDoPaciente(id);
+    return res.status(200).json({ error: false, data: lista });
+  } catch (e) {
+    return res.status(500).json({ error: true, message: 'Erro no servidor.' });
+  }
+});
+
+// Cria vínculo
+app.post('/api/vinculos', auth, async (req, res) => {
+  try {
+    const { paciente_id } = req.body;
+    // só acompanhante cria vínculo com paciente
+    if (req.user.tipo !== 'acompanhante') {
+      return res.status(403).json({ error: true, message: 'Somente acompanhante pode vincular.' });
+    }
+    if (!paciente_id) {
+      return res.status(400).json({ error: true, message: 'Informe paciente_id.' });
+    }
+    const ok = await linkAcompanhantePaciente(req.user.id, paciente_id);
+    if (!ok) return res.status(400).json({ error: true, message: 'Vínculo já existe ou inválido.' });
+    return res.status(201).json({ error: false });
+  } catch (e) {
+    return res.status(500).json({ error: true, message: 'Erro no servidor.' });
+  }
+});
+
+// Remove vínculo
+app.delete('/api/vinculos', auth, async (req, res) => {
+  try {
+    const { acompanhante_id, paciente_id } = req.body;
+    if (!acompanhante_id || !paciente_id) {
+      return res.status(400).json({ error: true, message: 'acompanhante_id e paciente_id são obrigatórios.' });
+    }
+
+    const ok = await unlinkAcompanhantePaciente(acompanhante_id, paciente_id);
+    if (!ok) return res.status(404).json({ error: true, message: 'Vínculo não encontrado.' });
+
+    return res.status(200).json({ error: false, message: 'Vínculo removido.' });
+  } catch (e) {
+    return res.status(500).json({ error: true, message: 'Erro no servidor.' });
+  }
+});
+
 
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=- ☆ ADMINISTRADOR ☆
 
@@ -403,7 +473,7 @@ app.delete('/api/pacientes/:id', async (req, res) => {
 
 // Nova versão da API para paciente
 // CREATE
-app.post('/api/pacientes', async (req, res) => {  
+app.post('/api/pacientes', async (req, res) => {
   try {
     const {
       nome = null,
@@ -412,22 +482,40 @@ app.post('/api/pacientes', async (req, res) => {
       celular = null,
       genero = null,
       data_nascimento = null,
+      cidade = null,
       estado = null,
       tipo_sanguineo = null,
+      condicoes_medicas = null,
       medicacao = null,
       contato_emergencia = null,
-      unidades_de_saude = null
+      unidades_de_saude = null,
+      nome_social = null
     } = req.body;
 
-    const id = await insertPaciente(nome, email, senha, celular, genero, data_nascimento, estado, tipo_sanguineo, medicacao, contato_emergencia, unidades_de_saude);
-
-    if (id) {
-      res.status(201).json({ error: false, id });
-    } else {
-      res.status(400).json({ error: true, message: 'Informe email e senha.' });
+    if (!email || !senha) {
+      return res.status(400).json({ error: true, message: 'Informe email e senha.' });
     }
+
+    const id = await insertPaciente(
+      toNull(nome),
+      email,
+      senha,
+      toNull(celular),
+      toNull(genero),
+      toNull(data_nascimento),
+      toNull(estado),
+      toNull(tipo_sanguineo),
+      toNull(medicacao),
+      toNull(contato_emergencia),
+      toNull(unidades_de_saude),
+      toNull(nome_social),
+      toNull(cidade),
+      toNull(condicoes_medicas)
+    );
+
+    return res.status(201).json({ error: false, id });
   } catch (e) {
-    res.status(500).json({ error: true, message: 'Erro no servidor: ' + e.message });
+    return res.status(500).json({ error: true, message: 'Erro no servidor: ' + e.message });
   }
 });
 
@@ -468,31 +556,51 @@ app.get('/api/pacientes/:id', async (req, res) => {
 });
 
 // UPDATE pelo id_paciente 
-app.put('/api/pacientes/:id', auth, async (req, res) => {
+app.put('/api/pacientes/:id', async (req, res) => {
   try {
     const { id } = req.params;
+
     const {
       nome = null,
       email = null,
-      senha = null, // se enviar, atualiza
+      senha = null, // se enviar, atualiza; senão mantém
       celular = null,
       genero = null,
       data_nascimento = null,
+      cidade = null,
       estado = null,
       tipo_sanguineo = null,
+      condicoes_medicas = null,
       medicacao = null,
       contato_emergencia = null,
-      unidades_de_saude = null
+      unidades_de_saude = null,
+      nome_social = null
     } = req.body;
 
-    const result = await editPaciente(id, nome, email, senha, celular, genero, data_nascimento, estado,
-      tipo_sanguineo, medicacao, contato_emergencia, unidades_de_saude);
+    const ok = await editPaciente(
+      id,
+      toNull(nome),
+      toNull(email),
+      toNull(senha),
+      toNull(celular),
+      toNull(genero),
+      toNull(data_nascimento),
+      toNull(estado),
+      toNull(tipo_sanguineo),
+      toNull(medicacao),
+      toNull(contato_emergencia),
+      toNull(unidades_de_saude),
+      toNull(nome_social),
+      toNull(cidade),
+      toNull(condicoes_medicas)
+    );
 
-    if (!result) return res.status(404).json({ error: true, message: "Não foi possível atualizar paciente."});
-
-    return res.status(200).json({ error: false, message: 'Paciente atualizado.' });
+    if (!ok) {
+      return res.status(400).json({ error: true, message: "Não foi possível atualizar paciente." });
+    }
+    return res.status(200).json({ error: false, message: "Paciente atualizado." });
   } catch (e) {
-    res.status(500).json({ error: true, message: 'Erro no servidor: ' + e.message });
+    return res.status(500).json({ error: true, message: 'Erro no servidor: ' + e.message });
   }
 });
 
@@ -644,7 +752,15 @@ app.post("/api/acompanhante", async (req, res) => {
       relacionamento = null
     } = req.body;
 
-    const id = await insertAcompanhante(tipo_pessoa, nome_completo, nome_social, idade, email, telefone, genero, data_nascimento, senha, relacionamento);
+    const id = await insertAcompanhante(
+      nome_completo,
+      nome_social,
+      email,
+      senha,
+      telefone,
+      genero,
+      data_nascimento
+    );
 
     if (id) return res.status(201).json({ error: false, id });
 
@@ -696,23 +812,30 @@ app.put("/api/acompanhante/:id", auth, async (req, res) => {
     const { id } = req.params;
     
     const {
-      tipo_pessoa = null,
+      email = null,
+      senha = null,
       nome_completo = null,
       nome_social = null,
-      idade = null,
-      email = null,
       telefone = null,
       genero = null,
-      data_nascimento = null,
-      senha = null, // se enviar, atualiza
-      relacionamento = null
+      data_nascimento = null
     } = req.body;
 
-    const result = await editAcompanhante(id, tipo_pessoa, nome_completo, nome_social, idade, email, telefone, genero, data_nascimento, senha, relacionamento);
+    const toNull = (v) => (v === "" ? null : v);
 
-    if (!result) return res.status(404).json({ error: true, message: "Não foi possível atualizar acompanhante." });
+    const ok = await editAcompanhante(
+      id,
+      toNull(email),
+      toNull(senha),
+      toNull(nome_completo),
+      toNull(nome_social),
+      toNull(telefone),
+      toNull(genero),
+      toNull(data_nascimento)
+    );
 
-    return res.status(200).json({ error: false, message: 'Acompanhante atualizado.' });
+    if (!ok) return res.status(400).json({ error: true, message: "Não foi possível atualizar acompanhante." });
+    return res.status(200).json({ error: false, message: "Acompanhante atualizado." });
   } catch (e) {
     return res.status(500).json({ error: true, message: 'Erro no servidor.' });
   }
@@ -1034,6 +1157,7 @@ app.post('/sintomas', async (req, res) => {
 
 // Inserindo pela API
 app.post("/api/sintomas", async (req, res) => {
+    console.log("Corpo recebido no POST:", req.body);
     const {nome_sintoma} = req.body;
     const result = await insertSintoma(nome_sintoma);
     if(result){

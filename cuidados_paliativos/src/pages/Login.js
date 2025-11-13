@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import { View, StyleSheet, Image, Text, TextInput, TouchableOpacity, ActivityIndicator } from "react-native";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
 
@@ -39,8 +40,23 @@ export default function Login() {
       localStorage.setItem("userTipo", data.user.tipo);
       localStorage.setItem("userEmail", data.user.email);
 
-      // Vai para as ABAS focando a tab Home (HomePage)
-      navigation.replace("AbasPrincipais", { screen: "Home" });
+      await AsyncStorage.multiSet([
+         ["auth_token", data.token],
+         ["auth_id", String(data.user.id)],
+         ["auth_role", data.user.tipo],
+         ["auth_email", data.user.email],
+      ]);
+
+      //Validação pra que se o usuário já logou hoje, vai pra home direto e se não, vai pra tela de MenuSintoma e DEPOIS pra home
+      const hoje = new Date().toISOString().split("T")[0];
+      const ultimaData = await AsyncStorage.getItem("ultimaDataSintoma");
+
+      if (ultimaData === hoje) {
+        navigation.replace("AbasPrincipais", { screen: "Home" });
+      } else {
+        navigation.replace("MenuSintomas");
+      }
+
     } catch (e) {
       alert(e.message || "Erro ao conectar.");
     } finally {
@@ -91,7 +107,7 @@ export default function Login() {
                 <Text>ou Cadastre-se</Text>
             </TouchableOpacity>
         </View>
-        <Footer/>
+        {/*<Footer/>*/}
     </>
     
   )
@@ -106,13 +122,13 @@ const Estilo = StyleSheet.create({
     img: {
         width: 90,
         height: 100,
-        marginTop: 80
+        marginTop: 50
     },
     titulo: {
         fontSize: 48,
         fontWeight: 600,
         color: '#112A6C',
-        marginBottom: 80
+        marginBottom: 15
     },
     label: {
         fontSize: 20,

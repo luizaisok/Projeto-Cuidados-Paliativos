@@ -4,7 +4,7 @@ import Header from "../components/Header/index";
 import Footer from "../components/Footer/index";
 import IntensidadeDor from '../components/Modals/IntensidadeDor';
 import { useFonts, Comfortaa_400Regular } from "@expo-google-fonts/comfortaa";
-import { useState } from "react";
+import { useState,  useEffect } from "react";
 
 export default function MenuSintomas(){
     const [modalVisible, setModalVisible] = useState(false);
@@ -13,6 +13,10 @@ export default function MenuSintomas(){
     let [fontsLoaded] = useFonts({
         Comfortaa_400Regular
     });
+
+    useEffect(() => {
+        console.log("Menu Sintomas Apareceu!!! aaaaaaaaa");
+    }, []);
 
     const handleSelecionarSintoma = (sintoma) => {
         setSintomaSelecionado(sintoma);
@@ -44,7 +48,7 @@ const Estilo = StyleSheet.create({
     },
     title: {                                                                                      
         fontFamily: "Comfortaa_400Regular",
-        fontSize: 42,
+        fontSize: 35,
         marginTop: 25,                                                                                                             
         marginBottom: 25,
         textAlign: "center",

@@ -11,6 +11,28 @@ const Item = ({dado}) => (
 )
 
 export default function ListaSintomas({ onSelecionar }){
+    const BASE_URL = "http://localhost:3000/";
+
+    const handleSelecionarSintoma = async (item) => {
+        try{
+            const res = await fetch(`${BASE_URL}api/sintomas`, {
+                method: "POST",
+                headers: {
+                "Content-Type": "application/json",
+            },
+                body: JSON.stringify({
+                    nome_sintoma: item.nome,
+                }), 
+            });
+
+            if(!res.ok) throw new Error(await res.text());
+            const data = await res.json();
+            console.log("Resposta API: ", data);
+        }catch(error) {
+            console.error("Erro ao selecionar sintoma! Erro: ", error);
+        }
+    }
+
     return(
         <View style={Estilo.container}>
             <FlatList
@@ -20,7 +42,7 @@ export default function ListaSintomas({ onSelecionar }){
                 renderItem={({ item }) => (
                 <TouchableOpacity
                     style={Estilo.card}
-                    onPress={() => onSelecionar(item)}
+                    onPress={() => [handleSelecionarSintoma(item), onSelecionar(item)]}
                 >
                     <Text style={Estilo.textCard}>
                     {item?.nome}
@@ -41,7 +63,7 @@ export default function ListaSintomas({ onSelecionar }){
 
 const Estilo = StyleSheet.create({
     container: {
-        flex: 1
+        flex: "100%"
     },
     card: {
         flex: 1,
