@@ -7,9 +7,6 @@ import Header from "../components/Header";
 // Fonts
 import { useFonts, Comfortaa_400Regular } from "@expo-google-fonts/comfortaa";
 
-// Baixar npm install @react-native-async-storage/async-storage
-import AsyncStorage from "@react-native-async-storage/async-storage";
-
 const BASE_URL = "http://localhost:3000/api";
 
 export default function PerfilProntuario() {
