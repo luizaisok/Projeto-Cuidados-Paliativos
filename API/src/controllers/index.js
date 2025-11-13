@@ -130,20 +130,51 @@ app.post('/api/vinculos', auth, async (req, res) => {
   }
 });
 
-// Remove vínculo
+// Remove vínculo - CORRIGIDO
 app.delete('/api/vinculos', auth, async (req, res) => {
   try {
     const { acompanhante_id, paciente_id } = req.body;
-    if (!acompanhante_id || !paciente_id) {
-      return res.status(400).json({ error: true, message: 'acompanhante_id e paciente_id são obrigatórios.' });
+    
+    // Se vier só paciente_id, usa o ID do usuário logado como acompanhante_id
+    let acompId = acompanhante_id;
+    let pacId = paciente_id;
+    
+    // Se o usuário logado é acompanhante e não passou acompanhante_id, usa o próprio ID
+    if (req.user.tipo === 'acompanhante' && !acompanhante_id) {
+      acompId = req.user.id;
+    }
+    
+    // Se o usuário logado é paciente e não passou paciente_id, usa o próprio ID
+    if (req.user.tipo === 'paciente' && !paciente_id) {
+      pacId = req.user.id;
+    }
+    
+    if (!acompId || !pacId) {
+      return res.status(400).json({ 
+        error: true, 
+        message: 'acompanhante_id e paciente_id são obrigatórios.' 
+      });
     }
 
-    const ok = await unlinkAcompanhantePaciente(acompanhante_id, paciente_id);
-    if (!ok) return res.status(404).json({ error: true, message: 'Vínculo não encontrado.' });
+    const ok = await unlinkAcompanhantePaciente(acompId, pacId);
+    
+    if (!ok) {
+      return res.status(404).json({ 
+        error: true, 
+        message: 'Vínculo não encontrado.' 
+      });
+    }
 
-    return res.status(200).json({ error: false, message: 'Vínculo removido.' });
+    return res.status(200).json({ 
+      error: false, 
+      message: 'Vínculo removido.' 
+    });
   } catch (e) {
-    return res.status(500).json({ error: true, message: 'Erro no servidor.' });
+    console.error('Erro ao remover vínculo:', e);
+    return res.status(500).json({ 
+      error: true, 
+      message: 'Erro no servidor.' 
+    });
   }
 });
 

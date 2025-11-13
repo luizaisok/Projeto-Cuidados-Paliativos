@@ -397,6 +397,7 @@ export default function PerfilProntuario() {
     }
   }
 
+  /*
   async function removerVinculo(acompanhanteId) {
     try {
       const resp = await fetch(`${API_BASE}/api/vinculos`, {
@@ -415,6 +416,7 @@ export default function PerfilProntuario() {
       alert(e.message || "Erro ao desvincular!");
     }
   }
+  */
 
   async function salvarAcomp() {
   try {
@@ -498,6 +500,7 @@ export default function PerfilProntuario() {
     }
   }
 
+  /*
   // Remover vínculo
   async function desvincular(pacienteId) {
     try {
@@ -519,6 +522,71 @@ export default function PerfilProntuario() {
       alert("Erro", e.message || "Falha ao desvincular.");
     }
   }
+  */
+
+  // Função para PACIENTE remover vínculo com acompanhante - CORRIGIDA
+async function removerVinculo(acompanhanteId) {
+  try {
+    const resp = await fetch(`${API_BASE}/api/vinculos`, {
+      method: "DELETE",
+      headers: { 
+        "Content-Type": "application/json", 
+        Authorization: token ? `Bearer ${token}` : undefined 
+      },
+      body: JSON.stringify({
+        acompanhante_id: acompanhanteId,
+        paciente_id: id, // Usa o ID do paciente logado
+      }),
+    });
+    
+    const data = await resp.json();
+    
+    if (!resp.ok || data?.error) {
+      throw new Error(data?.message || "Erro ao desvincular!");
+    }
+    
+    alert("Sucesso", "Vínculo removido!");
+    
+    // Atualiza a lista removendo o acompanhante
+    setMeusAcompanhantes((prev) => 
+      prev.filter((item) => item.id !== acompanhanteId)
+    );
+  } catch (e) {
+    alert("Erro", e.message || "Erro ao desvincular!");
+  }
+}
+
+// Função para ACOMPANHANTE remover vínculo com paciente - CORRIGIDA
+async function desvincular(pacienteId) {
+  try {
+    const resp = await fetch(`${API_BASE}/api/vinculos`, {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({ 
+        acompanhante_id: id, // Usa o ID do acompanhante logado
+        paciente_id: pacienteId 
+      }),
+    });
+    
+    const data = await resp.json();
+    
+    if (!resp.ok || data?.error) {
+      throw new Error(data?.message || "Não foi possível desvincular.");
+    }
+    
+    alert("Sucesso", "Vínculo removido.");
+    
+    // Atualiza a lista removendo o paciente
+    setVinculos((old) => 
+      old.filter((p) => String(p.id) !== String(pacienteId))
+    );
+  } catch (e) {
+    alert("Erro", e.message || "Falha ao desvincular.");
+  }
+}
 
   if (loading) {
     return (
