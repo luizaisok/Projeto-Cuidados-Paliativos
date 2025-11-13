@@ -732,15 +732,14 @@ app.delete("/api/acompanhante/:id", auth, async (req, res) => {
 });
 
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=- ☆ CONTEÚDO ☆
-
 // READ
 app.get("/conteudos", async (req, res) => {
-    try{
+    try {
         const conteudos = await getConteudos();
         console.log("Conteúdos: ", conteudos);
 
         res.status(200).render("listaConteudos", { conteudosDoController: conteudos });
-    }catch (error) {
+    } catch (error) {
         console.error("Erro ao buscar conteúdos:", error);
         res.status(500).send("Erro interno ao carregar conteúdos.");
     }
@@ -758,7 +757,6 @@ app.get("/api/conteudos", async (req, res) => {
 });
 
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-
-
 // Formulário - CREATE
 app.get('/novoconteudo', (req, res) => {
     res.render('novoConteudo', { conteudo: {} });
@@ -766,9 +764,9 @@ app.get('/novoconteudo', (req, res) => {
 
 // CREATE
 app.post('/conteudos', async (req, res) => {
-    const {titulo, descricao, texto} = req.body;
+    const { titulo, descricao, texto, SinaisSintomas, SinaisAlerta } = req.body;
     const data_post = new Date().toISOString().split('T')[0];
-    const sucesso = await insertConteudo(titulo, descricao, texto, data_post);
+    const sucesso = await insertConteudo(titulo, descricao, texto, data_post, SinaisSintomas, SinaisAlerta);
 
     if (sucesso) {
         res.redirect('/conteudos');
@@ -779,38 +777,38 @@ app.post('/conteudos', async (req, res) => {
 
 // Inserindo pela API
 app.post("/api/conteudos", async (req, res) => {
-    const {titulo, descricao, texto, data_post} = req.body;
-    const result = await insertConteudo(titulo, descricao, texto, data_post);
-    if(result){
-        return res.status(202).json({success: true});
+    const { titulo, descricao, texto, data_post, SinaisSintomas, SinaisAlerta } = req.body;
+    const result = await insertConteudo(titulo, descricao, texto, data_post, SinaisSintomas, SinaisAlerta);
+
+    if (result) {
+        return res.status(202).json({ success: true });
     }
-    return res.status(400).json({success: false});
+    return res.status(400).json({ success: false });
 });
 
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-
-
 // Formulário - UPDATE
 app.get('/editarconteudo/:id', async (req, res) => {
     const { id } = req.params;
     const conteudos = await getConteudos();
     const conteudo = conteudos.find(c => c.id == id);
 
-    if(conteudo){
+    if (conteudo) {
         res.render('formConteudo', { conteudo });
-    }else{
+    } else {
         res.status(404).send("Conteúdo não encontrado.");
     }
 });
 
 // UPDATE
 app.post('/conteudos/:id', async (req, res) => {
-    const {id} = req.params;
-    const {titulo, descricao, texto, data_post} = req.body;
-    const sucesso = await editConteudo(id, titulo, descricao, texto, data_post);
+    const { id } = req.params;
+    const { titulo, descricao, texto, data_post, SinaisSintomas, SinaisAlerta } = req.body;
+    const sucesso = await editConteudo(id, titulo, descricao, texto, data_post, SinaisSintomas, SinaisAlerta);
 
-    if(sucesso){
+    if (sucesso) {
         res.redirect('/conteudos');
-    }else{
+    } else {
         res.status(400).send("Erro ao editar conteúdo.");
     }
 });
@@ -819,11 +817,11 @@ app.post('/conteudos/:id', async (req, res) => {
 app.put('/api/conteudos/:id', async (req, res) => {
     try {
         const { id } = req.params;
-        const { titulo, descricao, texto } = req.body;
+        const { titulo, descricao, texto, SinaisSintomas, SinaisAlerta } = req.body;
         const data_post = new Date().toISOString().split('T')[0]; // Atualiza data
-        const result = await editConteudo(id, titulo, descricao, texto, data_post);
+        const result = await editConteudo(id, titulo, descricao, texto, data_post, SinaisSintomas, SinaisAlerta);
 
-        if(result){
+        if (result) {
             return res.status(200).json({ success: true, message: "Conteúdo atualizado!" });
         }
         return res.status(404).json({ success: false, message: "Conteúdo não encontrado." });
@@ -834,10 +832,9 @@ app.put('/api/conteudos/:id', async (req, res) => {
 });
 
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-
-
 // DELETE
 app.get('/removerconteudo/:id', async (req, res) => {
-    const {id} = req.params;
+    const { id } = req.params;
     const sucesso = await deleteConteudo(id);
 
     if (sucesso) {
@@ -852,7 +849,7 @@ app.delete('/api/conteudos/:id', async (req, res) => {
         const { id } = req.params;
         const result = await deleteConteudo(id);
 
-        if(result){
+        if (result) {
             return res.status(200).json({ success: true, message: "Conteúdo removido!" });
         }
         return res.status(404).json({ success: false, message: "Conteúdo não encontrado." });
