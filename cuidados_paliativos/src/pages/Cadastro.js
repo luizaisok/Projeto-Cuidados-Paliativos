@@ -138,7 +138,7 @@ export default function Cadastro(){
         </View>
         </View>
 
-        <Footer />
+        {/*<Footer />*/}
     </View>
     );
 }

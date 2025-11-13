@@ -40,6 +40,13 @@ export default function Login() {
       localStorage.setItem("userTipo", data.user.tipo);
       localStorage.setItem("userEmail", data.user.email);
 
+      await AsyncStorage.multiSet([
+         ["auth_token", data.token],
+         ["auth_id", String(data.user.id)],
+         ["auth_role", data.user.tipo],
+         ["auth_email", data.user.email],
+      ]);
+
       //Validação pra que se o usuário já logou hoje, vai pra home direto e se não, vai pra tela de MenuSintoma e DEPOIS pra home
       const hoje = new Date().toISOString().split("T")[0];
       const ultimaData = await AsyncStorage.getItem("ultimaDataSintoma");
@@ -100,7 +107,7 @@ export default function Login() {
                 <Text>ou Cadastre-se</Text>
             </TouchableOpacity>
         </View>
-        <Footer/>
+        {/*<Footer/>*/}
     </>
     
   )

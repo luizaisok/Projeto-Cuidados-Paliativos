@@ -2,7 +2,6 @@ CREATE DATABASE cuidados_paliativos_db;
 
 USE cuidados_paliativos_db;
 
--- PACIENTE (mantém a sua ideia, só adicionei created_at opcional)
 CREATE TABLE IF NOT EXISTS pacientes (
   id_paciente INT AUTO_INCREMENT PRIMARY KEY,
   email VARCHAR(255) NOT NULL UNIQUE,
@@ -22,7 +21,6 @@ CREATE TABLE IF NOT EXISTS pacientes (
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
--- ACOMPANHANTE
 CREATE TABLE IF NOT EXISTS acompanhante (
   id INT AUTO_INCREMENT PRIMARY KEY,
   email VARCHAR(255) NOT NULL UNIQUE,
@@ -35,7 +33,6 @@ CREATE TABLE IF NOT EXISTS acompanhante (
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
--- VÍNCULO (Acompanhante x Paciente) – M:N
 CREATE TABLE IF NOT EXISTS acompanhante_paciente (
   id INT AUTO_INCREMENT PRIMARY KEY,
   acompanhante_id INT NOT NULL,
@@ -53,5 +50,7 @@ CREATE TABLE IF NOT EXISTS acompanhante_paciente (
 SELECT * FROM pacientes;
 
 SELECT * FROM acompanhante;
+
+SELECT * FROM acompanhante_paciente;
 
 -- DROP DATABASE cuidados_paliativos_db;

@@ -1,12 +1,52 @@
-import { StyleSheet, View, Text, TouchableOpacity } from "react-native";
+import { StyleSheet, View, Text, TouchableOpacity, Image } from "react-native";
+import { useEffect, useState } from "react";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useFonts, Comfortaa_400Regular } from "@expo-google-fonts/comfortaa";
-
 import { useNavigation } from "@react-navigation/native";
-
 import Header from "../components/Header/index";
 
+const API_BASE = "http://localhost:3000";
 
 export default ({user = "Usuário"}) => {
+    const [nomeSocial, setNomeSocial] = useState(null);
+    const [loading, setLoading] = useState(false);
+
+    useEffect(() => {
+      (async () => {
+        try {
+            setLoading(true);
+            const role  = (await AsyncStorage.getItem("auth_role")) || localStorage.getItem("userTipo");
+            const id    = (await AsyncStorage.getItem("auth_id"))   || localStorage.getItem("userId");
+            const token = (await AsyncStorage.getItem("auth_token"))|| localStorage.getItem("token");
+            console.log("[Home] role:", role, "id:", id, "hasToken:", !!token);
+            if (!role || !id) {
+                console.log("[Home] Sem role/id no AsyncStorage — não vou buscar API.");
+                return;
+            }
+            const url =
+                role === "acompanhante"
+                  ? `${API_BASE}/api/acompanhantes/${id}`
+                  : `${API_BASE}/api/pacientes/${id}`;
+            console.log("[Home] GET:", url);
+            const resp = await fetch(url, {
+                headers: {
+                  "Content-Type": "application/json",
+                  ...(token ? { Authorization: `Bearer ${token}` } : {}),
+                },
+            });
+            const json = await resp.json();
+            const row = json?.data || json;
+            setNomeSocial(row?.nome_social || row?.nome || null);
+        } catch (e) {
+          console.log("[Home] erro:", e?.message || e);
+        } finally {
+          setLoading(false);
+        }
+      })();
+    }, []);
+
+    const saudacao = nomeSocial ? `Bem vindo ${nomeSocial}!` : `Bem vindo!`;
+
     const navigation = useNavigation();
 
     const handleProntuario = () => {
@@ -39,7 +79,7 @@ export default ({user = "Usuário"}) => {
 
             <View style={Estilo.bodySection}>
                 {/* Mensagem de boas vindas com placeholder padrão como "Usuário" */}
-                <Text style={Estilo.BodyTitle}>Bem vindo {user}!</Text>
+                <Text style={Estilo.BodyTitle}>{saudacao}</Text>
 
                 {/* Botão para prontuário */}
                 <TouchableOpacity 

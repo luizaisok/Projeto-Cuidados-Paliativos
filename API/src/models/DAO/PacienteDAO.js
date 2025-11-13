@@ -99,9 +99,7 @@ module.exports = {
   editPaciente,
   deletePaciente
 };
-*/
 
-/*
 // Versão padronizada de PacineteDAO.js
 const pool = require('./db');
 
@@ -268,22 +266,24 @@ module.exports = {
 };
 */
 
-// PacienteDAO.js (compatível com o SQL novo)
 const pool = require('./db');
 
-// SELECT * (mapeando nomes do DB -> nomes esperados pelo app)
+// SELECT
 async function getPacientes() {
   const [rows] = await pool.query(`
     SELECT
       id_paciente AS id,
       nome,
+      nome_social,
       email,
       senha,
       celular,
       genero,
       data_nascimento,
+      cidade,
       estado,
       tipo_sanguineo,
+      condicoes_medicas,
       medicacao,
       contato_emergencia,
       unidades_de_saude,
@@ -299,13 +299,16 @@ async function getPacienteById(id) {
     SELECT
       id_paciente AS id,
       nome,
+      nome_social,
       email,
       senha,
       celular,
       genero,
       data_nascimento,
+      cidade,
       estado,
       tipo_sanguineo,
+      condicoes_medicas,
       medicacao,
       contato_emergencia,
       unidades_de_saude,
@@ -328,7 +331,7 @@ async function getPacienteByEmail(email) {
   return rows[0] || null;
 }
 
-// INSERT (recebe 'celular' no app e grava em 'telefone' no DB)
+// INSERT
 async function insertPaciente(
   nome,
   email,
@@ -340,23 +343,29 @@ async function insertPaciente(
   tipo_sanguineo,
   medicacao,
   contato_emergencia,
-  unidades_de_saude
+  unidades_de_saude,
+  nome_social,
+  cidade,
+  condicoes_medicas
 ) {
   if (!email || !senha) return null;
 
   const [result] = await pool.execute(`
     INSERT INTO pacientes
-      (nome, email, senha, celular, genero, data_nascimento, estado, tipo_sanguineo, medicacao, contato_emergencia, unidades_de_saude)
-    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+      (nome, nome_social, email, senha, celular, genero, data_nascimento, cidade, estado, tipo_sanguineo, condicoes_medicas, medicacao, contato_emergencia, unidades_de_saude)
+    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
   `, [
     nome ?? null,
+    nome_social ?? null,
     email,
     senha,
     celular ?? null,
     genero ?? null,
     data_nascimento ?? null,
+    cidade ?? null,
     estado ?? null,
     tipo_sanguineo ?? null,
+    condicoes_medicas ?? null,
     medicacao ?? null,
     contato_emergencia ?? null,
     unidades_de_saude ?? null
@@ -378,32 +387,41 @@ async function editPaciente(
   tipo_sanguineo,
   medicacao,
   contato_emergencia,
-  unidades_de_saude
+  unidades_de_saude,
+  nome_social,
+  cidade,
+  condicoes_medicas
 ) {
   const [result] = await pool.execute(`
     UPDATE pacientes
     SET
       nome = ?,
+      nome_social = ?,
       email = ?,
       senha = COALESCE(?, senha),
       celular = ?,
       genero = ?,
       data_nascimento = ?,
+      cidade = ?,
       estado = ?,
       tipo_sanguineo = ?,
+      condicoes_medicas = ?,
       medicacao = ?,
       contato_emergencia = ?,
       unidades_de_saude = ?
     WHERE id_paciente = ?
   `, [
     nome ?? null,
+    nome_social ?? null,
     email ?? null,
     senha ?? null,
     celular ?? null,
     genero ?? null,
     data_nascimento ?? null,
+    cidade ?? null,
     estado ?? null,
     tipo_sanguineo ?? null,
+    condicoes_medicas ?? null,
     medicacao ?? null,
     contato_emergencia ?? null,
     unidades_de_saude ?? null,

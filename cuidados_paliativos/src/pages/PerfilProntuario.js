@@ -186,22 +186,17 @@ export default function PerfilProntuario() {
   const SANGUES = ["A+","A-","B+","B-","AB+","AB-","O+","O-"];
   const GENEROS = ["Feminino","Masculino","Não-binário","Prefiro não informar","Outro"];
 
-  // pega apenas 'YYYY-MM-DD' de uma string data/datetime
   const onlyDate = (v) => {
     if (!v) return "";
     const s = String(v);
     return s.split("T")[0].split(" ")[0].slice(0, 10);
   };
 
-  // validadores básicos
   const emailOk = (s) => !!s && /^[^\s@]+@[^\s@]+\.[^\s@]+(\.[^\s@]+)?$/.test(String(s).trim());
   const ufOk = (s) => !s || UFS.includes(String(s).toUpperCase());
   const sangueOk = (s) => !s || SANGUES.includes(String(s).toUpperCase());
-  // 10 ou 11 dígitos numéricos
   const foneOk = (s) => !s || /^\d{10,11}$/.test(String(s).trim());
-  // YYYY-MM-DD
   const dateOk = (s) => !s || /^\d{4}-\d{2}-\d{2}$/.test(String(s).trim());
-
 
   const [tipo, setTipo] = useState(null);
   const [id, setId] = useState(null);
@@ -210,10 +205,10 @@ export default function PerfilProntuario() {
   const [loading, setLoading] = useState(true);
   const [salvando, setSalvando] = useState(false);
 
-  // Dados do paciente (compatível com PacienteDAO)
   const [paciente, setPaciente] = useState({
     id: "",
     nome: "",
+    nome_social: "",
     email: "",
     senha: "",
     celular: "",
@@ -222,12 +217,15 @@ export default function PerfilProntuario() {
     cidade: "",
     estado: "",
     tipo_sanguineo: "",
+    condicoes_medicas: "",
     medicacao: "",
-    contato_emergencia: "",
-    unidades_de_saude: "",
+   contato_emergencia: "",
+   unidades_de_saude: "",
   });
 
-  // Dados do acompanhante (compatível com AcompanhanteDAO)
+  const [meusAcompanhantes, setMeusAcompanhantes] = useState([]);
+  const [loadingAcompanhantes, setLoadingAcompanhantes] = useState(false);
+
   const [acomp, setAcomp] = useState({
     id: "",
     email: "",
@@ -239,47 +237,70 @@ export default function PerfilProntuario() {
     data_nascimento: "",
   });
 
-  // Vínculos do acompanhante
   const [vinculos, setVinculos] = useState([]);
   const [pacienteIdDigitado, setPacienteIdDigitado] = useState("");
 
   const fetchQuemSouEu = useCallback(async () => {
     try {
-      // Pega do login (Expo Web)
       const t = localStorage.getItem("token");
+      
       const tp = localStorage.getItem("userTipo");
+      
       const uid = localStorage.getItem("userId");
 
       if (!t || !tp || !uid) {
         alert("Sessão", "Você não está logado.");
         return;
       }
+      
       setToken(t);
+      
       setTipo(tp);
+      
       setId(uid);
 
-      // carrega dados do próprio usuário
       if (tp === "paciente") {
         const resp = await fetch(`${API_BASE}/api/pacientes/${uid}`);
+        
         const data = await resp.json();
+        
         if (!resp.ok || data?.error || !data?.data) {
           throw new Error(data?.message || "Não foi possível carregar paciente.");
         }
+        
         const p = data.data;
+
         setPaciente({
           id: String(p.id),
           nome: p.nome ?? "",
+          nome_social: p.nome_social ?? "",
           email: p.email ?? "",
-          senha: "", // vazio para não forçar troca
+          senha: "",
           celular: p.celular ?? "",
           genero: p.genero ?? "",
           data_nascimento: onlyDate(p.data_nascimento) ?? "",
+          cidade: p.cidade ?? "",
           estado: p.estado ?? "",
           tipo_sanguineo: p.tipo_sanguineo ?? "",
+          condicoes_medicas: p.condicoes_medicas ?? "",
           medicacao: p.medicacao ?? "",
           contato_emergencia: p.contato_emergencia ?? "",
           unidades_de_saude: p.unidades_de_saude ?? "",
         });
+
+        try {
+          setLoadingAcompanhantes(true);
+          const r = await fetch(`${API_BASE}/api/pacientes/${p.id}/acompanhantes`, {
+            headers: { Authorization: token ? `Bearer ${token}` : undefined },
+          });
+          const j = await r.json();
+          if (!r.ok || j?.error) throw new Error(j?.message || "Falha ao carregar acompanhantes.");
+          setMeusAcompanhantes(Array.isArray(j.data) ? j.data : []);
+        } catch (e) {
+          console.log("Erro ao carregar acompanhantes:", e.message);
+        } finally {
+          setLoadingAcompanhantes(false);
+        }
       } else if (tp === "acompanhante") {
         const resp = await fetch(`${API_BASE}/api/acompanhantes/${uid}`);
         const data = await resp.json();
@@ -339,6 +360,7 @@ export default function PerfilProntuario() {
       setSalvando(true);
       const payload = {
         nome: paciente.nome || null,
+        nome_social: paciente.nome_social || null,
         email: paciente.email || null,
         senha: paciente.senha || null,
         celular: paciente.celular || null,
@@ -363,15 +385,34 @@ export default function PerfilProntuario() {
       });
       const data = await resp.json();
       if (!resp.ok || data?.error) {
-        throw new Error(data?.message || "Falha ao salvar paciente.");
+        throw new Error(data?.message || "Falha ao salvar paciente!");
       }
 
-      alert("Sucesso", "Seus dados foram atualizados.");
-      setPaciente({ ...paciente, senha: "" }); // limpa o campo senha após salvar
+      alert("Sucesso", "Seus dados foram atualizados!");
+      setPaciente({ ...paciente, senha: "" });
     } catch (e) {
-      alert("Erro", e.message || "Erro ao atualizar.");
+      alert("Erro", e.message || "Erro ao atualizar!");
     } finally {
       setSalvando(false);
+    }
+  }
+
+  async function removerVinculo(acompanhanteId) {
+    try {
+      const resp = await fetch(`${API_BASE}/api/vinculos`, {
+        method: "DELETE",
+        headers: { "Content-Type": "application/json", Authorization: token ? `Bearer ${token}` : undefined },
+        body: JSON.stringify({
+          acompanhante_id: acompanhanteId,
+          paciente_id: paciente.id,
+        }),
+      });
+      const data = await resp.json();
+      if (!resp.ok || data?.error) throw new Error(data?.message || "Erro ao desvincular!");
+      alert("Vínculo removido!");
+      setMeusAcompanhantes((prev) => prev.filter((i) => i.id !== acompanhanteId));
+    } catch (e) {
+      alert(e.message || "Erro ao desvincular!");
     }
   }
 
@@ -423,7 +464,6 @@ export default function PerfilProntuario() {
     setSalvando(false);
   }
 }
-
 
   // Vincular paciente por ID (acompanhante)
   async function vincular() {
@@ -520,13 +560,22 @@ export default function PerfilProntuario() {
             <>
               {/* Form paciente */}
               <View style={Estilo.card}>
-                <Text style={Estilo.subtitulo}>Seus dados (Paciente)</Text>
+                <Text style={Estilo.subtitulo}>Seus dados</Text>
 
                 <Text style={Estilo.label}>Nome Completo</Text>
                 <TextInput
                   style={Estilo.input}
+                  placeholder="Qual o seu nome?"
                   value={paciente.nome}
                   onChangeText={(v) => setPaciente({ ...paciente, nome: v })}
+                />
+
+                <Text style={Estilo.label}>Nome social (opcional)</Text>
+                <TextInput
+                  style={Estilo.input}
+                  placeholder="Como você prefere ser chamado(a)?"
+                  value={paciente.nome_social}
+                  onChangeText={(v) => setPaciente({ ...paciente, nome_social: v })}
                 />
 
                 <Text style={Estilo.label}>E-mail</Text>
@@ -534,7 +583,7 @@ export default function PerfilProntuario() {
                   style={Estilo.input}
                   autoCapitalize="none"
                   keyboardType="email-address"
-                  placeholder="Ex: joao_silva@dominio.com"
+                  placeholder="Qual o seu e-mail favorito?"
                   value={paciente.email}
                   onChangeText={(v) => setPaciente({ ...paciente, email: v })}
                 />
@@ -543,7 +592,7 @@ export default function PerfilProntuario() {
                 <TextInput
                   style={Estilo.input}
                   secureTextEntry
-                  placeholder="Deixe em branco para não alterar"
+                  placeholder="Deixe em branco para não alterar!"
                   value={paciente.senha}
                   onChangeText={(v) => setPaciente({ ...paciente, senha: v })}
                 />
@@ -562,18 +611,22 @@ export default function PerfilProntuario() {
                   <Picker
                     selectedValue={paciente.genero || ""}
                     onValueChange={(v) => setPaciente({ ...paciente, genero: v })}
+                    style={Estilo.picker}
+                    itemStyle={Estilo.pickerItem}
+                    dropdownIconColor="#FFF6E5"
+                    mode="dropdown"
                   >
-                    <Picker.Item label="Selecione o gênero..." value="" />
+                    <Picker.Item label="Selecione o gênero" value="" />
                     {GENEROS.map(g => (
                       <Picker.Item key={g} label={g} value={g} />
                     ))}
                   </Picker>
                 </View>
 
-                <Text style={Estilo.label}>Data de nascimento (YYYY-MM-DD)</Text>
+                <Text style={Estilo.label}>Data de nascimento</Text>
                 <TextInput
                   style={Estilo.input}
-                  placeholder="YYYY-MM-DD (ex: 1980-05-17)"
+                  placeholder="AAAA-MM-DD (ex: 1970-06-24)"
                   value={onlyDate(paciente.data_nascimento)}
                   onChangeText={(v) => setPaciente({ ...paciente, data_nascimento: onlyDate(v) })}
                   />
@@ -583,30 +636,56 @@ export default function PerfilProntuario() {
                   <Picker
                     selectedValue={paciente.estado || ""}
                     onValueChange={(v) => setPaciente({ ...paciente, estado: v })}
+                    style={Estilo.picker}
+                    itemStyle={Estilo.pickerItem}
+                    dropdownIconColor="#FFF6E5"
+                    mode="dropdown"
                   >
-                    <Picker.Item label="Selecione a UF..." value="" />
+                    <Picker.Item label="Selecione a UF" value="" />
                     {UFS.map(uf => (
                       <Picker.Item key={uf} label={uf} value={uf} />
                     ))}
                   </Picker>
                 </View>
 
+                <Text style={Estilo.label}>Cidade</Text>
+                <TextInput
+                  style={Estilo.input}
+                  placeholder="Ex: Londrina"
+                  value={paciente.cidade}
+                  onChangeText={(v) => setPaciente({ ...paciente, cidade: v })}
+                />
+
                 <Text style={Estilo.label}>Tipo sanguíneo</Text>
                 <View style={Estilo.pickerWrap}>
                   <Picker
                     selectedValue={paciente.tipo_sanguineo || ""}
                     onValueChange={(v) => setPaciente({ ...paciente, tipo_sanguineo: v })}
+                    style={Estilo.picker}
+                    itemStyle={Estilo.pickerItem}
+                    dropdownIconColor="#FFF6E5"
+                    mode="dropdown"
                   >
-                    <Picker.Item label="Selecione o tipo..." value="" />
+                    <Picker.Item label="Selecione o tipo sanguíneo" value="" />
                     {SANGUES.map(s => (
                       <Picker.Item key={s} label={s} value={s} />
                     ))}
                   </Picker>
                 </View>
 
+                <Text style={Estilo.label}>Condições médicas (diagnóstico)</Text>
+                <TextInput
+                  style={[Estilo.input, { height: 90 }]}
+                  multiline
+                  placeholder="Ex: Câncer de pulmão, DPOC..."
+                  value={paciente.condicoes_medicas}
+                  onChangeText={(v) => setPaciente({ ...paciente, condicoes_medicas: v })}
+                />
+
                 <Text style={Estilo.label}>Medicação</Text>
                 <TextInput
                   style={Estilo.input}
+                  placeholder="Quais medicações você toma?"
                   value={paciente.medicacao}
                   onChangeText={(v) => setPaciente({ ...paciente, medicacao: v })}
                 />
@@ -615,7 +694,7 @@ export default function PerfilProntuario() {
                 <TextInput
                   style={Estilo.input}
                   value={paciente.contato_emergencia}
-                  placeholder="Nome 1 e telefone 1, Nome 2 e telefone 2"
+                  placeholder="Contato 1 - 99999999999, Contato 2 - 999..."
                   onChangeText={(v) => setPaciente({ ...paciente, contato_emergencia: v })}
                 />
 
@@ -623,9 +702,55 @@ export default function PerfilProntuario() {
                 <TextInput
                   style={Estilo.input}
                   value={paciente.unidades_de_saude}
-                  placeholder="Ex: UBS Centro, Hospital do Coração"
+                  placeholder="Quais unidades de saúde você frequenta?"
                   onChangeText={(v) => setPaciente({ ...paciente, unidades_de_saude: v })}
                 />
+
+                <View style={{ marginTop: 24 }}>
+                  <Text style={[Estilo.txt, { fontSize: 18, marginBottom: 8 }]}>
+                    Meus acompanhantes
+                  </Text>
+
+                  {loadingAcompanhantes ? (
+                    <ActivityIndicator />
+                  ) : meusAcompanhantes.length === 0 ? (
+                    <Text style={{ color: "#532C1D" }}>
+                      Você ainda não tem acompanhantes vinculados.
+                    </Text>
+                  ) : (
+                    meusAcompanhantes.map((item) => (
+                      <View
+                        key={item.id}
+                        style={{
+                          backgroundColor: "#8BAAC4",
+                          borderRadius: 10,
+                          padding: 12,
+                          marginBottom: 10,
+                        }}
+                      >
+                        <Text style={{ color: "#FFF6E5", fontWeight: "600" }}>
+                          {item.nome_completo || "(sem nome)"}
+                        </Text>
+                        <Text style={{ color: "#FFF6E5" }}>{item.email}</Text>
+
+                        <TouchableOpacity
+                          onPress={() => removerVinculo(item.id)}
+                          style={{
+                            marginTop: 10,
+                            backgroundColor: "#b91c1c",
+                            paddingVertical: 10,
+                            borderRadius: 8,
+                            alignItems: "center",
+                          }}
+                        >
+                          <Text style={{ color: "#FFF6E5", fontWeight: "700" }}>
+                            Remover vínculo
+                          </Text>
+                        </TouchableOpacity>
+                      </View>
+                    ))
+                  )}
+                </View>
 
                 <TouchableOpacity
                   onPress={salvarPaciente}
@@ -640,11 +765,12 @@ export default function PerfilProntuario() {
             <>
               {/* Form acompanhante */}
               <View style={Estilo.card}>
-                <Text style={Estilo.subtitulo}>Seus dados (Acompanhante)</Text>
+                <Text style={Estilo.subtitulo}>Seus dados</Text>
 
                 <Text style={Estilo.label}>Nome completo</Text>
                 <TextInput
                   style={Estilo.input}
+                  placeholder="Qual o seu nome?"
                   value={acomp.nome_completo}
                   onChangeText={(v) => setAcomp({ ...acomp, nome_completo: v })}
                 />
@@ -652,6 +778,7 @@ export default function PerfilProntuario() {
                 <Text style={Estilo.label}>Nome social</Text>
                 <TextInput
                   style={Estilo.input}
+                  placeholder="Como você prefere ser chamado(a)?"
                   value={acomp.nome_social}
                   onChangeText={(v) => setAcomp({ ...acomp, nome_social: v })}
                 />
@@ -660,14 +787,16 @@ export default function PerfilProntuario() {
                 <TextInput
                   style={Estilo.input}
                   autoCapitalize="none"
+                  placeholder="Qual o seu e-mail favorito?"
                   value={acomp.email}
                   onChangeText={(v) => setAcomp({ ...acomp, email: v })}
                 />
 
-                <Text style={Estilo.label}>Senha (deixe em branco para não trocar)</Text>
+                <Text style={Estilo.label}>Senha</Text>
                 <TextInput
                   style={Estilo.input}
                   secureTextEntry
+                  placeholder="Deixe em branco para não trocar!"
                   value={acomp.senha}
                   onChangeText={(v) => setAcomp({ ...acomp, senha: v })}
                 />
@@ -675,6 +804,7 @@ export default function PerfilProntuario() {
                 <Text style={Estilo.label}>Telefone</Text>
                 <TextInput
                   style={Estilo.input}
+                  placeholder="Somente números (com DDD)"
                   value={acomp.telefone}
                   onChangeText={(v) => setAcomp({ ...acomp, telefone: v })}
                 />
@@ -684,17 +814,22 @@ export default function PerfilProntuario() {
                   <Picker
                     selectedValue={acomp.genero || ""}
                     onValueChange={(v) => setAcomp({ ...acomp, genero: v })}
+                    style={Estilo.picker}
+                    itemStyle={Estilo.pickerItem}
+                    dropdownIconColor="#FFF6E5"
+                    mode="dropdown"
                   >
-                    <Picker.Item label="Selecione o gênero..." value="" />
+                    <Picker.Item label="Selecione o gênero" value="" />
                     {GENEROS.map(g => (
                       <Picker.Item key={g} label={g} value={g} />
                     ))}
                   </Picker>
                 </View>
 
-                <Text style={Estilo.label}>Data de nascimento (YYYY-MM-DD)</Text>
+                <Text style={Estilo.label}>Data de nascimento</Text>
                 <TextInput
                   style={Estilo.input}
+                  placeholder="AAAA-MM-DD (ex: 1970-06-24)"
                   value={acomp.data_nascimento}
                   onChangeText={(v) => setAcomp({ ...acomp, data_nascimento: v })}
                 />
@@ -747,7 +882,7 @@ export default function PerfilProntuario() {
           )}
         </ScrollView>
       </KeyboardAvoidingView>
-      <Footer />
+      {/*<Footer />*/}
     </>
   );
 }
@@ -787,11 +922,25 @@ const Estilo = StyleSheet.create({
     borderRadius: 8,
     padding: 10,
   },
+
   pickerWrap: {
     backgroundColor: "#8BAAC4",
     borderRadius: 8,
     overflow: "hidden",
+    borderWidth: 1,
+    borderColor: "#8BAAC4",
+    paddingHorizontal: 8,
   },
+  picker: {
+    backgroundColor: "#8baac490",
+    borderWidth: 0,
+    height: 48,
+    color: "#FFF6E5",
+  },
+  pickerItem: {
+    fontSize: 16,
+  },
+
   botaoPrimario: {
     marginTop: 16,
     backgroundColor: "#015184",
