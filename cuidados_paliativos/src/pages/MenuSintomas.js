@@ -48,7 +48,7 @@ const Estilo = StyleSheet.create({
     },
     title: {                                                                                      
         fontFamily: "Comfortaa_400Regular",
-        fontSize: 42,
+        fontSize: 35,
         marginTop: 25,                                                                                                             
         marginBottom: 25,
         textAlign: "center",

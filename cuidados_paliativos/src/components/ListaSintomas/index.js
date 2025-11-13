@@ -41,7 +41,7 @@ export default function ListaSintomas({ onSelecionar }){
 
 const Estilo = StyleSheet.create({
     container: {
-        flex: 1
+        flex: "100%"
     },
     card: {
         flex: 1,
