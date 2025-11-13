@@ -2,7 +2,7 @@ import { FlatList, Image, StyleSheet, Text, TextInput, TouchableOpacity, View, A
 import { useState, useEffect } from "react";
 import Header from "../components/Header";
 
-const BASE_URL = "http://192.168.0.31:3000/";
+const BASE_URL = "http://10.129.142.16:3000/";
 const AUTH_HEADER = {
   "Content-Type": "application/json",
 };
@@ -97,7 +97,7 @@ export default function Busca() {
         
         const json = await response.json();
         console.log("Conteúdos recebidos: ", json);
-        setConteudos(json);
+        setConteudos(json.conteudos);
       } catch (error) {
         console.error("Erro ao realizar requisição GET: ", error);
       } finally {

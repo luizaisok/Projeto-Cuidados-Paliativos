@@ -7,12 +7,12 @@ async function getConteudos() {
 }
 
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
-async function insertConteudo(titulo, descricao, texto, data_post) {
-  if (titulo && descricao && texto && data_post) {
+async function insertConteudo(titulo, descricao, texto, data_post, SinaisSintomas, SinaisAlerta) {
+  if (titulo && descricao && texto && data_post && SinaisSintomas && SinaisAlerta) {
     const [result] = await pool.query(
-      `INSERT INTO conteudo (titulo, descricao, texto, data_post)
-       VALUES (?, ?, ?, ?)`,
-      [titulo, descricao, texto, data_post]
+      `INSERT INTO conteudo (titulo, descricao, texto, data_post, SinaisSintomas, SinaisAlerta)
+       VALUES (?, ?, ?, ?, ?, ?)`,
+      [titulo, descricao, texto, data_post, SinaisSintomas, SinaisAlerta]
     );
 
     return result.affectedRows > 0;
@@ -23,13 +23,13 @@ async function insertConteudo(titulo, descricao, texto, data_post) {
 }
 
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
-async function editConteudo(id, titulo, descricao, texto, data_post) {
-  if (id && titulo && descricao && texto && data_post) {
+async function editConteudo(id, titulo, descricao, texto, data_post, SinaisSintomas, SinaisAlerta) {
+  if (id && titulo && descricao && texto && data_post && SinaisSintomas && SinaisAlerta) {
     const [result] = await pool.query(
       `UPDATE conteudo
-       SET titulo = ?, descricao = ?, texto = ?, data_post = ?
+       SET titulo = ?, descricao = ?, texto = ?, data_post = ?, SinaisSintomas = ?, SinaisAlerta = ?
        WHERE id = ?`,
-      [titulo, descricao, texto, data_post, id]
+      [titulo, descricao, texto, data_post, SinaisSintomas, SinaisAlerta, id]
     );
 
     return result.affectedRows > 0;
