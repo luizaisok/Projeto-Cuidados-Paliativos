@@ -1,8 +1,11 @@
 import React, { useState } from "react";
 import { View, Text, Modal, TouchableOpacity, StyleSheet, Button} from "react-native";
 import { useFonts, Comfortaa_400Regular } from "@expo-google-fonts/comfortaa";
+import { useNavigation } from "@react-navigation/native";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export default function IntensidadeDor({ visible, onClose, sintoma }) {
+  const navigation = useNavigation();
   const [escalaSelecionada, setEscalaSelecionada] = useState(null);
   const BASE_URL = "http://localhost:3000/";
 
@@ -21,7 +24,17 @@ export default function IntensidadeDor({ visible, onClose, sintoma }) {
       const data = await res.json();
       console.log("Resposta API: ", data);
       //alert("Registro realizado com sucesso!")
+      
       onClose();
+
+      const hoje = new Date().toISOString().split("T")[0];
+      await AsyncStorage.setItem("ultimaDataSintoma", hoje);
+
+      navigation.reset({
+        index: 0,
+        routes: [{ name: "AbasPrincipais", params: { screen: "Home" } }],
+      });
+
     }catch(error){
       console.error("Erro ao realizar registro: ", error);
     }
