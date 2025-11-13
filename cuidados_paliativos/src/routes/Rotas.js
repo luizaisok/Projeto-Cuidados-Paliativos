@@ -52,7 +52,7 @@ function AbasPrincipais() {
   );
 }
 
-// Se nãoq quiser abrir direto no Login.js, comente a primeira function Rotas e descomente a segunda!!!
+// Se não quiser abrir direto no Login.js, comente a primeira function Rotas e descomente a segunda!!!
 
 export default function Rotas() {
   return (
