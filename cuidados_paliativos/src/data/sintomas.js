@@ -1,0 +1,20 @@
+export const SINTOMAS = [
+    { id: "1", nome: "Constipação Intestinal" },
+    { id: "2", nome: "Cansaço" },
+    { id: "3", nome: "Fraqueza" },
+    { id: "4", nome: "Vômito" },
+    { id: "5", nome: "Tosse" },
+    { id: "6", nome: "Falta de ar" },
+    { id: "7", nome: "Sonolência" },
+    { id: "8", nome: "Irritabilidade" },
+    { id: "9", nome: "Suor Excessivo" },
+    { id: "10", nome: "Dor de Cabeça" },
+    { id: "11", nome: "Dor no Corpo" },
+    { id: "12", nome: "Náusea" },
+    { id: "13", nome: "Diarreia" },
+    { id: "14", nome: "Congestão Nasal" },
+    { id: "15", nome: "Tontura" },
+    { id: "16", nome: "Insônia" },
+    { id: "17", nome: "Perda de Apetite" },
+    { id: "18", nome: "Calafrios" }
+];
