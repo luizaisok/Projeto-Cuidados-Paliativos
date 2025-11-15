@@ -2,12 +2,16 @@ import { useState, useEffect } from "react";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import { View, StyleSheet, Image, Text, TextInput, TouchableOpacity, ActivityIndicator } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { useFonts, Comfortaa_400Regular } from "@expo-google-fonts/comfortaa";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
 
 const API_BASE = "http://localhost:3000";
 
 export default function Login() {
+    let [fontsLoaded] = useFonts({
+        Comfortaa_400Regular
+    });
 
   const navigation = useNavigation();
   const route = useRoute();
@@ -72,13 +76,13 @@ export default function Login() {
                 source={require("../assets/img/LogoClara.png")} 
                 style={Estilo.img}
             />
-            <Text style={Estilo.titulo} >Entrar</Text>
+            <Text style={[Estilo.titulo, Estilo.txt]} >Entrar</Text>
             <View>
-                <Text style={Estilo.label}>E-mail</Text>
+                <Text style={[Estilo.label, Estilo.txt]}>E-mail</Text>
 
                 <TextInput 
                 placeholder="Digite o seu e-mail"
-                style={Estilo.input}
+                style={[Estilo.input, Estilo.txt]}
                 autoCapitalize="none"
                 autoComplete="off"
                 keyboardType="email-address"
@@ -86,25 +90,25 @@ export default function Login() {
                 onChangeText={setEmail}
                 />
 
-                <Text style={Estilo.label}>Senha</Text>
+                <Text style={[Estilo.label, Estilo.txt]}>Senha</Text>
                 
                 <TextInput 
                     placeholder="Digite a sua senha"
-                    style={Estilo.input}
+                    style={[Estilo.input, Estilo.txt]}
                     secureTextEntry
                     value={senha}
                     onChangeText={setSenha}
                 />
 
                 <TouchableOpacity style={Estilo.botaoSecundario}>
-                    <Text>Esqueci minha senha</Text>
+                    <Text style={[Estilo.txt, {fontSize: 13}]}>Esqueci minha senha</Text>
                 </TouchableOpacity>
             </View>
             <TouchableOpacity style={Estilo.botaoEntrar} onPress={entrar} disabled={loading}>
-                {loading ? <ActivityIndicator /> : <Text style={Estilo.textoEntrar}>Entrar</Text>}
+                {loading ? <ActivityIndicator /> : <Text style={[Estilo.textoEntrar, Estilo.txt]}>Entrar</Text>}
             </TouchableOpacity>
             <TouchableOpacity style={Estilo.botaoSecundario} onPress={() => navigation.navigate("Cadastro")}>
-                <Text>ou Cadastre-se</Text>
+                <Text style={[Estilo.txt, {fontSize: 20}]}>ou Cadastre-se</Text>
             </TouchableOpacity>
         </View>
         {/*<Footer/>*/}
@@ -119,22 +123,27 @@ const Estilo = StyleSheet.create({
         alignItems: 'center',
         backgroundColor: '#FFF3E5'
     },
+    txt: {
+        fontFamily: "Comfortaa_400Regular"
+    },
     img: {
         width: 90,
         height: 100,
-        marginTop: 50
+        marginTop: 20
     },
     titulo: {
         fontSize: 48,
         fontWeight: 600,
         color: '#112A6C',
-        marginBottom: 15
+        marginBottom: 25,
+        marginTop: 15
     },
     label: {
         fontSize: 20,
         fontWeight: 500,
         color: '#532C1D',
-        marginBottom: 5
+        marginBottom: 5,
+        fontWeight: 'bold'
     },
     input: {
         padding: 10,
@@ -142,6 +151,8 @@ const Estilo = StyleSheet.create({
         backgroundColor: '#8BAAC4',
         color: '#FFF',
         borderRadius: 10,
+        width: 230,
+        height: 50,
         marginBottom: 10,
     },
     botaoSecundario: {
@@ -155,10 +166,14 @@ const Estilo = StyleSheet.create({
         padding: 10,
         backgroundColor: '#015184',
         borderRadius: 10,
+        width: 120,
+        height: 50,
+        justifyContent: 'center',
+        alignItems: 'center'
     },
     textoEntrar: {
         color: '#FFF',
-        fontSize: 20,
+        fontSize: 24,
         fontWeight: 'bold'
     }
 })
