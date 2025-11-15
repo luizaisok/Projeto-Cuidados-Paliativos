@@ -156,7 +156,7 @@ const Estilo = StyleSheet.create({
         alignItems: 'center',
     }, 
     imgLogo: {
-        marginTop: 25,
+        marginTop: 20,
         width: 85,
         height: 90,
     },
@@ -167,8 +167,9 @@ const Estilo = StyleSheet.create({
         color: '#112A6C',
         fontSize: 40,
         fontWeight: 'bold',
-        marginBottom: 5,
-        marginTop: 15
+        marginBottom: 3,
+        marginTop: 15,
+        marginBottom: 15
     },
     input: {
         backgroundColor: '#8BAAC4',
@@ -178,7 +179,7 @@ const Estilo = StyleSheet.create({
         width: '100%',
         height: 45,
         padding: 10,
-        marginBottom: 15,
+        marginBottom: 20,
         fontSize: 18
     },
     label: {
@@ -189,11 +190,12 @@ const Estilo = StyleSheet.create({
     },
 
     ContainerButtons: {
+        flex: 1,
         flexDirection: "row",
         justifyContent: "space-evenly",
         alignItems: "center",
         width: "100%",
-        marginTop: 10,
+        marginTop: 3,
     },
     button: {
         backgroundColor: "#015184",
