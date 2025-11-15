@@ -2,7 +2,7 @@ import { FlatList, Image, StyleSheet, Text, TextInput, TouchableOpacity, View, A
 import { useState, useEffect } from "react";
 import Header from "../components/Header";
 
-const BASE_URL = "http://10.129.142.16:3000/";
+const BASE_URL = "http://192.168.0.31:3000/";
 const AUTH_HEADER = {
   "Content-Type": "application/json",
 };
@@ -77,10 +77,6 @@ const Card = ({dado}) => (
 
 export default function Busca() {
     const [conteudos, setConteudos] = useState([])
-    const [titulo, setTitulo] = useState("")
-    const [descricao, setDescricao] = useState("")
-    const [texto, setTexto] = useState("")
-    const [data, setData] = useState("")
     const [atualizando, setAtualizando] = useState(false)
 
     useEffect(()=>{
@@ -140,8 +136,10 @@ export default function Busca() {
 const Estilo = StyleSheet.create({
     container: {
         flex: 1,
+        backgroundColor: '#E8DAC0',
+        paddingTop: 20,
         alignItems: 'center',
-        backgroundColor: '#E8DAC0'
+        width: '100%'   
     },
     inputContainer: {
         flexDirection: 'row',
@@ -163,12 +161,17 @@ const Estilo = StyleSheet.create({
     },
     containerCard: {
         width: '90%',
-        margin: 'auto',
+        alignSelf: 'center',
         marginBottom: 40,
         backgroundColor: '#FFF',
         padding: 16,
         borderRadius: 10,
-        boxShadow: '5px 5px rgba(0, 0, 0, 0.2)'
+        
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.2,
+        shadowRadius: 3,
+        elevation: 3,   
     },
     cardTitulo: {
         fontSize: 20,
