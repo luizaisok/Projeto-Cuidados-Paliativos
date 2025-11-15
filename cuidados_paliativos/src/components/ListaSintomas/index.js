@@ -1,6 +1,7 @@
 import { FlatList, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { SINTOMAS } from "../../data/sintomas";
 import { useFonts, Comfortaa_400Regular } from "@expo-google-fonts/comfortaa";
+import { useNavigation } from "@react-navigation/native";
 
 const Item = ({dado}) => (
     <View style={Estilo.card}>
@@ -12,6 +13,7 @@ const Item = ({dado}) => (
 
 export default function ListaSintomas({ onSelecionar }){
     const BASE_URL = "http://localhost:3000/";
+    const navigation = useNavigation();
 
     const handleSelecionarSintoma = async (item) => {
         try{
@@ -53,7 +55,10 @@ export default function ListaSintomas({ onSelecionar }){
                 ListEmptyComponent={<Text>Não existem elementos na lista.</Text>}
             />
             <View>
-                <TouchableOpacity style={Estilo.button}>
+                <TouchableOpacity
+                    style={Estilo.button}
+                    onPress={() => navigation.navigate("SinalVerde")}    
+                >
                 <Text style={Estilo.textButton}>Não tive nenhum desses sintomas</Text>
                 </TouchableOpacity>
             </View>

@@ -1,8 +1,10 @@
 import { FlatList, Image, StyleSheet, Text, TextInput, TouchableOpacity, View, ActivityIndicator } from "react-native";
 import { useState, useEffect } from "react";
+import { useNavigation } from "@react-navigation/native";
+
 import Header from "../components/Header";
 
-const BASE_URL = "http://192.168.0.31:3000/";
+const BASE_URL = "http://localhost:3000/";
 const AUTH_HEADER = {
   "Content-Type": "application/json",
 };
@@ -58,22 +60,30 @@ const deleteConteudo = async (id) => {
     return false;
   }
 };
-
   
-const Card = ({dado}) => (
+const Card = ({ dado }) => {
+  const navigation = useNavigation();
+
+  return (
     <View style={Estilo.containerCard}>
-        <Text style={Estilo.cardTitulo}>{dado?.titulo}</Text>
-        <View style={Estilo.cardDivisor}></View>
-        <Text style={Estilo.cardDescricao}>{dado?.descricao}</Text>
-        <View style={Estilo.footerCard}>
-            <TouchableOpacity style={Estilo.footerButton}>
-                <Text style={Estilo.footerText}>Ler mais</Text>
-                <Image source={require('../assets/img/seta.png')} style={{width: 16, height: 16}}/>
-            </TouchableOpacity>
-            <Text style={Estilo.footerDate}>{dado?.data}</Text>
-        </View>
+      <Text style={Estilo.cardTitulo}>{dado?.titulo}</Text>
+      <View style={Estilo.cardDivisor}></View>
+      <Text style={Estilo.cardDescricao}>{dado?.descricao}</Text>
+
+      <View style={Estilo.footerCard}>
+        <TouchableOpacity 
+          style={Estilo.footerButton}
+          onPress={() => navigation.navigate("ConteudoDetalhe", { id: dado.id })}
+        >
+          <Text style={Estilo.footerText}>Ler mais</Text>
+          <Image source={require('../assets/img/seta.png')} style={{width: 16, height: 16}}/>
+        </TouchableOpacity>
+
+        <Text style={Estilo.footerDate}>{dado?.data}</Text>
+      </View>
     </View>
-)
+  );
+};
 
 export default function Busca() {
     const [conteudos, setConteudos] = useState([])

@@ -32,7 +32,15 @@ export default function IntensidadeDor({ visible, onClose, sintoma }) {
 
       navigation.reset({
         index: 0,
-        routes: [{ name: "AbasPrincipais", params: { screen: "Home" } }],
+        routes: [
+          {
+            name: "AbasPrincipais",
+            state: {
+              index: 0,
+              routes: [{ name: "Home" }],
+            },
+          },
+        ],
       });
 
     }catch(error){
