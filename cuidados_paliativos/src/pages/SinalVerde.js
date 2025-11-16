@@ -2,7 +2,6 @@ import { View, Text, StyleSheet, TouchableOpacity } from 'react-native'
 import { useNavigation } from '@react-navigation/native'
 
 import Header from '../components/Header'
-import Footer from '../components/Footer'
 
 export default function SinalVerde() {
 
@@ -25,7 +24,6 @@ export default function SinalVerde() {
           </Text>
         </View>
 
-        {/* BOTÃO PARA HOME */}
         <TouchableOpacity 
           style={Estilo.button}
           onPress={() => navigation.navigate("AbasPrincipais", { screen: "Home" })}
@@ -34,8 +32,6 @@ export default function SinalVerde() {
         </TouchableOpacity>
 
       </View>
-
-      <Footer />
     </>
   )
 }

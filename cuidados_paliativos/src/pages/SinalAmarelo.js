@@ -1,88 +1,90 @@
-import { ScrollView, View, Text, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity } from 'react-native'
+import { useNavigation } from '@react-navigation/native'
 
-import Header from "../components/Header";
-import Footer from "../components/Footer";
+import Header from '../components/Header'
 
-import { useFonts, Comfortaa_400Regular } from "@expo-google-fonts/comfortaa";
+export default function SinalAmarelo() {
 
-export default () => {
-    let [fontsLoaded] = useFonts({
-        Comfortaa_400Regular
-    });
+  const navigation = useNavigation();
 
-    return ( 
-    // Optei pela utilização do ScrollView pois, na Web, a largura ultrassa o limite de visualização da tela   
-    <ScrollView style={styles.container}>
+  return (
+    <>
       <Header />
-      <View style={styles.content}>
-        {/* Badge (ex.: Atenção moderada, etc.) */}
-        <View style={styles.badge}>
-          <Text style={styles.badgeText}>Atenção moderada</Text>
-        </View>
-        {/* "Div" principal que conterá o conteúdo da página */}
-        <View style={styles.card}>
-          <Text style={styles.cardTitle}>Fique atento aos sinais do seu corpo</Text>
 
-          <Text style={styles.cardDescription}>Os sintomas que você relatou merecem acompanhamento, mas não são alarmantes neste momento. Em cuidados paliativos, é importante manter o bem-estar físico e emocional. Hidrate-se, descanse e, se os sintomas piorarem ou novos surgirem, avise sua equipe de saúde.</Text>
+      <View style={Estilo.container}>
+        <Text style={Estilo.aviso}>Atenção</Text>
+
+        <View style={Estilo.card}>
+          <Text style={Estilo.titulo}>Alguns sintomas exigem cuidado</Text>
+          <Text style={Estilo.descricao}>
+            Observamos sinais que merecem atenção. Em cuidados paliativos, 
+            é importante monitorar qualquer mudança e comunicar a equipe de saúde 
+            caso algo se intensifique. Estamos aqui para te acompanhar em cada passo.
+          </Text>
         </View>
+
+        <TouchableOpacity 
+          style={Estilo.button}
+          onPress={() => navigation.navigate("AbasPrincipais", { screen: "Home" })}
+        >
+          <Text style={Estilo.textButton}>Voltar ao início</Text>
+        </TouchableOpacity>
+
       </View>
-      <Footer />
-    </ScrollView>
-  );
-};
+    </>
+  )
+}
 
-const styles = StyleSheet.create({
+const Estilo = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#E8994B',
+    alignItems: 'center',
+    backgroundColor: '#FFBE3B' // cor amarela do seu padrão
   },
-
-  content: {
-    paddingVertical: 16, paddingHorizontal: 8,
-  },
-
-  badge: {
+  aviso: {
+    width: 400,
+    marginVertical: 50,
+    padding: 30,
     backgroundColor: '#FFF',
-    height: "auto", width: "auto",
-    borderRadius: 16,
-    paddingVertical: 16, paddingHorizontal: 8,
-    marginVertical: 20,marginHorizontal: "auto",
-    boxShadow: "4px 4px 4px rgba (0, 0, 0, 0.25)",
+    color: '#FFBE3B',
+    fontSize: 30,
+    fontWeight: 'bold',
+    borderRadius: 10,
+    textAlign: 'center'
   },
-
-  badgeText: {
-    fontFamily: "Comfortaa_400Regular",
-    fontSize: 32,
-    fontWeight: 700,
-    color: '#E8994B',
-    textAlign: 'center',
-  },
-
   card: {
+    width: 400,
+    padding: 30,
     backgroundColor: '#FFF',
-    height: "auto", width: "auto",
-    borderRadius: 16,
-    paddingVertical: 16, paddingHorizontal: 8,
-    boxShadow: "4px 4px 4px rgba (0, 0, 0, 0.25)", 
+    borderRadius: 10,
   },
-
-  cardTitle: {
-    fontFamily: "Comfortaa_400Regular",
-    fontSize: 24,
-    fontWeight: 700,
-    color: '#E8994B',
+  titulo: {
+    fontSize: 30,
     textAlign: 'center',
-    marginVertical: 20, marginHorizontal: 5, 
+    marginBottom: 30
   },
-
-  cardDescription: {
-    fontFamily: "Comfortaa_400Regular",
-    fontSize: 24,
-    fontWeight: 400,
-    color: '#E8994B',
+  descricao: {
     textAlign: 'center',
-    lineHeight: 35,
-    marginTop: 20, marginBottom: 40,
-    marginHorizontal: 5, 
+    fontSize: 22
   },
-});
+  button: {
+    marginTop: 40,
+    backgroundColor: "#fff",
+    paddingVertical: 12,
+    paddingHorizontal: 30,
+    borderRadius: 10,
+
+    shadowColor: "#000",
+    shadowOffset: { width: 4, height: 4 },
+    shadowOpacity: 0.3,
+    shadowRadius: 4.65,
+
+    elevation: 8,
+  },
+  textButton: {
+    color: "#4A4A4A",
+    fontSize: 20,
+    fontWeight: "bold",
+    textAlign: "center"
+  }
+})

@@ -910,6 +910,23 @@ app.get("/api/conteudos", async (req, res) => {
     }
 });
 
+app.get("/api/conteudos/:id", async (req, res) => {
+    try {
+        const { id } = req.params;
+        const conteudos = await getConteudos();
+        const conteudo = conteudos.find(c => c.id == id);
+
+        if (!conteudo) {
+            return res.status(404).json({ success: false, message: "Conteúdo não encontrado" });
+        }
+
+        return res.status(200).json(conteudo);
+    } catch (error) {
+        console.error("Erro ao buscar conteúdo:", error);
+        return res.status(500).json({ success: false, message: "Erro no servidor" });
+    }
+});
+
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 // Formulário - CREATE
 app.get('/novoconteudo', (req, res) => {

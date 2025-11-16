@@ -46,7 +46,6 @@ export default function ConteudoDetalhe() {
         <Text style={styles.subtitulo}>Sinais e Sintomas:</Text>
         <Text style={styles.texto}>{conteudo.SinaisSintomas}</Text>
 
-        {/* Botão Laranja */}
         <TouchableOpacity
           style={styles.btnLaranja}
           onPress={() => navigation.navigate("SinalAmarelo")}
@@ -57,7 +56,6 @@ export default function ConteudoDetalhe() {
         <Text style={styles.subtitulo}>Sinais de Alerta:</Text>
         <Text style={styles.texto}>{conteudo.SinaisAlerta}</Text>
 
-        {/* Botão Vermelho */}
         <TouchableOpacity
           style={styles.btnVermelho}
           onPress={() => navigation.navigate("SinalVermelho")}
