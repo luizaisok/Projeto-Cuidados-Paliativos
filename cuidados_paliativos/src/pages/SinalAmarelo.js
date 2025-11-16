@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native'
+import { View, Text, StyleSheet, TouchableOpacity, ScrollView } from 'react-native'
 import { useNavigation } from '@react-navigation/native'
 
 import Header from '../components/Header'
@@ -10,15 +10,20 @@ export default function SinalAmarelo() {
   return (
     <>
       <Header />
+      
+      <ScrollView
+        style={{ backgroundColor: '#FFBE3B' }}
+        contentContainerStyle={Estilo.scrollContainer}
+        showsVerticalScrollIndicator={false}
+      >
 
-      <View style={Estilo.container}>
         <Text style={Estilo.aviso}>Atenção</Text>
 
         <View style={Estilo.card}>
           <Text style={Estilo.titulo}>Alguns sintomas exigem cuidado</Text>
           <Text style={Estilo.descricao}>
-            Observamos sinais que merecem atenção. Em cuidados paliativos, 
-            é importante monitorar qualquer mudança e comunicar a equipe de saúde 
+            Observamos sinais que merecem atenção. Em cuidados paliativos,
+            é importante monitorar qualquer mudança e comunicar a equipe de saúde
             caso algo se intensifique. Estamos aqui para te acompanhar em cada passo.
           </Text>
         </View>
@@ -30,57 +35,68 @@ export default function SinalAmarelo() {
           <Text style={Estilo.textButton}>Voltar ao início</Text>
         </TouchableOpacity>
 
-      </View>
+      </ScrollView>
     </>
   )
 }
 
 const Estilo = StyleSheet.create({
-  container: {
-    flex: 1,
+
+  scrollContainer: {
+    paddingHorizontal: 20,
+    paddingBottom: 40,
     alignItems: 'center',
-    backgroundColor: '#FFBE3B'
   },
+
   aviso: {
-    width: 400,
-    marginVertical: 50,
+    width: "100%",
+    marginTop: 40,
+    marginBottom: 40,
     padding: 30,
     backgroundColor: '#FFF',
     color: '#FFBE3B',
-    fontSize: 30,
+    fontSize: 28,
     fontWeight: 'bold',
     borderRadius: 10,
     textAlign: 'center'
   },
+
   card: {
-    width: 400,
-    padding: 30,
+    width: "100%",
+    padding: 25,
     backgroundColor: '#FFF',
     borderRadius: 10,
+    marginBottom: 30,
   },
+
   titulo: {
-    fontSize: 30,
+    fontSize: 26,
     textAlign: 'center',
-    marginBottom: 30
+    marginBottom: 20,
+    color: "#4A4A4A",
+    fontWeight: "bold",
   },
+
   descricao: {
     textAlign: 'center',
-    fontSize: 22
+    fontSize: 20,
+    lineHeight: 26,
+    color: "#4A4A4A"
   },
+
   button: {
-    marginTop: 40,
+    width: "100%",
     backgroundColor: "#fff",
-    paddingVertical: 12,
-    paddingHorizontal: 30,
+    paddingVertical: 14,
     borderRadius: 10,
 
     shadowColor: "#000",
     shadowOffset: { width: 4, height: 4 },
     shadowOpacity: 0.3,
     shadowRadius: 4.65,
-
-    elevation: 8,
+    elevation: 6,
   },
+
   textButton: {
     color: "#4A4A4A",
     fontSize: 20,

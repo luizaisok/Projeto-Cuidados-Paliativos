@@ -4,7 +4,6 @@ import { View, StyleSheet, Image, Text, TextInput, TouchableOpacity, ActivityInd
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useFonts, Comfortaa_400Regular } from "@expo-google-fonts/comfortaa";
 import Header from "../components/Header";
-import Footer from "../components/Footer";
 
 const API_BASE = "http://localhost:3000";
 

@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native'
+import { View, Text, StyleSheet, TouchableOpacity, ScrollView } from 'react-native'
 import { useNavigation } from '@react-navigation/native'
 
 import Header from '../components/Header'
@@ -10,16 +10,20 @@ export default function SinalVerde() {
   return (
     <>
       <Header />
-
-      <View style={Estilo.container}>
+      
+      <ScrollView
+        style={{ backgroundColor: '#9BC45A' }}
+        contentContainerStyle={Estilo.scrollContainer}
+        showsVerticalScrollIndicator={false}
+      >
         <Text style={Estilo.aviso}>Tudo certo por hoje</Text>
 
         <View style={Estilo.card}>
           <Text style={Estilo.titulo}>Ótima notícia! Nenhum sintoma hoje</Text>
           <Text style={Estilo.descricao}>
-            Ficamos felizes em saber que você está sem sintomas no momento. 
-            Em cuidados paliativos, cada dia de estabilidade é uma vitória. 
-            Continue seguindo as orientações da equipe de saúde e mantendo 
+            Ficamos felizes em saber que você está sem sintomas no momento.
+            Em cuidados paliativos, cada dia de estabilidade é uma vitória.
+            Continue seguindo as orientações da equipe de saúde e mantendo
             seus cuidados diários. Estamos com você!
           </Text>
         </View>
@@ -31,57 +35,68 @@ export default function SinalVerde() {
           <Text style={Estilo.textButton}>Voltar ao início</Text>
         </TouchableOpacity>
 
-      </View>
+      </ScrollView>
     </>
   )
 }
 
 const Estilo = StyleSheet.create({
-  container: {
-    flex: 1,
+
+  scrollContainer: {
+    paddingHorizontal: 20,
+    paddingBottom: 40,
     alignItems: 'center',
-    backgroundColor: '#9BC45A'
   },
+
   aviso: {
-    width: 400,
-    marginVertical: 50,
+    width: "100%",
+    marginTop: 40,
+    marginBottom: 40,
     padding: 30,
     backgroundColor: '#FFF',
     color: '#9BC45A',
-    fontSize: 30,
+    fontSize: 28,
     fontWeight: 'bold',
     borderRadius: 10,
-    textAlign: 'center'
+    textAlign: 'center',
   },
+
   card: {
-    width: 400,
-    padding: 30,
+    width: "100%",
+    padding: 25,
     backgroundColor: '#FFF',
     borderRadius: 10,
+    marginBottom: 30,
   },
+
   titulo: {
-    fontSize: 30,
+    fontSize: 26,
     textAlign: 'center',
-    marginBottom: 30
+    marginBottom: 20,
+    color: "#4A4A4A",
+    fontWeight: "bold",
   },
+
   descricao: {
     textAlign: 'center',
-    fontSize: 22
+    fontSize: 20,
+    lineHeight: 26,
+    color: "#4A4A4A",
   },
+
   button: {
-    marginTop: 40,
+    width: "100%",
     backgroundColor: "#fff",
-    paddingVertical: 12,
-    paddingHorizontal: 30,
+    paddingVertical: 14,
     borderRadius: 10,
 
     shadowColor: "#000",
     shadowOffset: { width: 4, height: 4 },
     shadowOpacity: 0.3,
     shadowRadius: 4.65,
-
-    elevation: 8,
+    elevation: 6,
   },
+
   textButton: {
     color: "#4A4A4A",
     fontSize: 20,

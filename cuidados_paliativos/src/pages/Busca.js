@@ -55,7 +55,6 @@ const deleteConteudo = async (id) => {
   }
 };
 
-// Card de conteúdo
 const Card = ({ dado, usuario, abrirModalEdicao, getConteudos }) => {
   const navigation = useNavigation();
 

@@ -12,7 +12,7 @@ const Item = ({dado}) => (
 )
 
 export default function ListaSintomas({ onSelecionar }){
-    const BASE_URL = "http://192.168.3.12:3000/";
+    const BASE_URL = "http://localhost:3000/";
     const [sintomas, setSintomas] = useState([]);
     const navigation = useNavigation();
 

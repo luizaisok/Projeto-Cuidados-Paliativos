@@ -1,17 +1,22 @@
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native'
+import { View, Text, StyleSheet, TouchableOpacity, ScrollView } from 'react-native'
 import { useNavigation } from '@react-navigation/native'
 
 import Header from '../components/Header'
 
 export default function SinalVermelho() {
 
-    const navigation = useNavigation();
-    
-    return (
+  const navigation = useNavigation();
+  
+  return (
     <>
       <Header />
 
-      <View style={Estilo.container}>
+      <ScrollView 
+        style={{ backgroundColor: '#D00000' }}  
+        contentContainerStyle={Estilo.scrollContainer}
+        showsVerticalScrollIndicator={false}
+      >
+
         <Text style={Estilo.aviso}>Atenção</Text>
 
         <View style={Estilo.card}>
@@ -30,20 +35,23 @@ export default function SinalVermelho() {
           <Text style={Estilo.textButton}>Voltar ao início</Text>
         </TouchableOpacity>
 
-      </View>
+      </ScrollView>
     </>
   )
 }
 
 const Estilo = StyleSheet.create({
-  container: {
-    flex: 1,
+
+  scrollContainer: {
+    paddingHorizontal: 20,
+    paddingBottom: 40,
     alignItems: 'center',
-    backgroundColor: '#D00000'
   },
+
   aviso: {
-    width: 400,
-    marginVertical: 50,
+    width: '100%',
+    marginTop: 40,
+    marginBottom: 40,
     padding: 30,
     backgroundColor: '#FFF',
     color: '#D00000',
@@ -52,23 +60,29 @@ const Estilo = StyleSheet.create({
     borderRadius: 10,
     textAlign: 'center'
   },
+
   card: {
-    width: 400,
-    padding: 30,
+    width: '100%',
+    padding: 25,
     backgroundColor: '#FFF',
     borderRadius: 10,
+    marginBottom: 30,
   },
+
   titulo: {
-    fontSize: 30,
+    fontSize: 28,
     textAlign: 'center',
-    marginBottom: 30
+    marginBottom: 20
   },
+
   descricao: {
     textAlign: 'center',
-    fontSize: 22
+    fontSize: 20,
+    lineHeight: 28,
   },
+
   button: {
-    marginTop: 40,
+    marginTop: 10,
     backgroundColor: "#fff",
     paddingVertical: 12,
     paddingHorizontal: 30,
@@ -78,9 +92,9 @@ const Estilo = StyleSheet.create({
     shadowOffset: { width: 4, height: 4 },
     shadowOpacity: 0.3,
     shadowRadius: 4.65,
-
     elevation: 8,
   },
+
   textButton: {
     color: "#4A4A4A",
     fontSize: 20,

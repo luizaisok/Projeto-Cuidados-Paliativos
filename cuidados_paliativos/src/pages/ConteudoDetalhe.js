@@ -1,6 +1,5 @@
 import { View, Text, StyleSheet, ScrollView, TouchableOpacity } from "react-native";
 import Header from "../components/Header";
-import Footer from "../components/Footer";
 import { useRoute, useNavigation } from "@react-navigation/native";
 import { useEffect, useState } from "react";
 
@@ -21,7 +20,6 @@ export default function ConteudoDetalhe() {
         console.log("Erro ao carregar conteúdo:", err);
       }
     }
-
     carregar();
   }, [id]);
 
@@ -62,8 +60,14 @@ export default function ConteudoDetalhe() {
         >
           <Text style={styles.txtBtn}>Sinto um ou mais dos sinais de alerta</Text>
         </TouchableOpacity>
-      </ScrollView>
 
+        <TouchableOpacity
+          style={styles.btnVoltar}
+          onPress={() => navigation.navigate("AbasPrincipais", { screen: "Home" })}
+        >
+          <Text style={styles.txtVoltar}>Voltar ao início</Text>
+        </TouchableOpacity>
+      </ScrollView>
     </>
   );
 }
@@ -116,6 +120,28 @@ const styles = StyleSheet.create({
     color: "#FFF",
     fontWeight: "bold",
     fontSize: 16,
+    textAlign: "center",
+  },
+
+  btnVoltar: {
+    marginTop: 30,
+    backgroundColor: "#FFF",
+    paddingVertical: 12,
+    paddingHorizontal: 30,
+    borderRadius: 10,
+    alignSelf: "center",
+
+    shadowColor: "#000",
+    shadowOffset: { width: 4, height: 4 },
+    shadowOpacity: 0.3,
+    shadowRadius: 4.65,
+    elevation: 8,
+  },
+
+  txtVoltar: {
+    color: "#4A4A4A",
+    fontSize: 20,
+    fontWeight: "bold",
     textAlign: "center",
   },
 });

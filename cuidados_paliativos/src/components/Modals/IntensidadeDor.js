@@ -13,7 +13,7 @@ import { useNavigation } from "@react-navigation/native";
 
 export default function IntensidadeDor({ visible, onClose, sintoma }) {
   const [escalaSelecionada, setEscalaSelecionada] = useState(null);
-  const BASE_URL = "http://192.168.3.12:3000/";
+  const BASE_URL = "http://localhost:3000/";
   const navigation = useNavigation();
 
   const handleConfirmar = async () => {
