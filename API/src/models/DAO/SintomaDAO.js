@@ -18,7 +18,7 @@ async function insertSintoma(nome_sintoma) {
     return result.affectedRows > 0;
   }
 
-  console.error("Falha ao criar o sintoma. Faltou algum dado");
+  console.error("Falha ao criar o sintoma. Verifique se faltou algum dado ou esse sintoma já existe!");
   return false;
 }
 

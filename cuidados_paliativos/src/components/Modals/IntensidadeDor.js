@@ -1,119 +1,133 @@
-import React, { useState } from "react";
-import { View, Text, Modal, TouchableOpacity, StyleSheet, Button} from "react-native";
+import { useState } from "react";
+import {
+  View,
+  Text,
+  Modal,
+  TouchableOpacity,
+  StyleSheet,
+  Button,
+} from "react-native";
 import { useFonts, Comfortaa_400Regular } from "@expo-google-fonts/comfortaa";
-import { useNavigation } from "@react-navigation/native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { useNavigation } from "@react-navigation/native";
 
 export default function IntensidadeDor({ visible, onClose, sintoma }) {
-  const navigation = useNavigation();
   const [escalaSelecionada, setEscalaSelecionada] = useState(null);
-  const BASE_URL = "http://localhost:3000/";
+  const BASE_URL = "http://192.168.3.12:3000/";
+  const navigation = useNavigation();
 
-  let [fontsLoaded] = useFonts({
-        Comfortaa_400Regular
-  });
-
-  async function handleModalIntensidadeDor(){
-    try{
-      const res = await fetch(`${BASE_URL}api/registros`, {
-        method: 'POST',
-        headers: {'Content-Type': 'application/json'},
-        body: JSON.stringify({intensidade: escalaSelecionada})
-      });
-      if(!res.ok) throw new Error(await res.text());
-      const data = await res.json();
-      console.log("Resposta API: ", data);
-      //alert("Registro realizado com sucesso!")
-      
-      onClose();
-
-      const hoje = new Date().toISOString().split("T")[0];
-      await AsyncStorage.setItem("ultimaDataSintoma", hoje);
-
-      navigation.reset({
-        index: 0,
-        routes: [
-          {
-            name: "AbasPrincipais",
-            state: {
-              index: 0,
-              routes: [{ name: "Home" }],
-            },
-          },
-        ],
-      });
-
-    }catch(error){
-      console.error("Erro ao realizar registro: ", error);
+  const handleConfirmar = async () => {
+    if (escalaSelecionada === null) {
+      alert("Selecione uma intensidade!");
+      return;
     }
-  }
+
+    const pacienteIdStr = await AsyncStorage.getItem("auth_id");
+    const pacienteId = parseInt(pacienteIdStr, 10);
+
+    if (!pacienteId) {
+      alert("Erro: paciente não encontrado.");
+      return;
+    }
+
+    const hoje = new Date().toISOString().split("T")[0];
+    await AsyncStorage.setItem("ultimaDataSintoma", hoje);
+
+    navigation.reset({
+      index: 0,
+      routes: [
+        {
+          name: "AbasPrincipais",
+          state: {
+            index: 0,
+            routes: [{ name: "Home" }],
+          },
+        },
+      ],
+    });
+
+    try {
+      const resposta = await fetch(`${BASE_URL}api/registros`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          paciente_id: pacienteId,
+          sintoma_id: sintoma?.id,
+          intensidade: escalaSelecionada,
+        }),
+      });
+
+      const json = await resposta.json();
+
+      if (json.success) {
+        setEscalaSelecionada(null);
+        onClose();
+        if (onConfirm) onConfirm();
+      }
+    } catch (error) {
+      console.log("Erro ao enviar intensidade:", error);
+    }
+  };
 
   return (
-    <View style={styles.container}>
-
-      <Modal
-        transparent
-        animationType="fade"
-        visible={visible}
-      >
-        <View style={styles.modalOverlay}>
-          <View style={styles.modalContainer}>
-            <Text style={[styles.titulo, styles.txt]}>Qual é a intensidade do sintoma?</Text>
-
-            <View style={styles.escalaContainer}>
-              {[...Array(11).keys()].map((num) => (
-                <TouchableOpacity
-                  key={num}
+    <Modal transparent animationType="fade" visible={visible}>
+      <View style={Estilo.modalOverlay}>
+        <View style={Estilo.modalContainer}>
+          <Text style={[Estilo.titulo, Estilo.txt]}>
+            Qual é a intensidade do sintoma?
+          </Text>
+          <View style={Estilo.escalaContainer}>
+            {[...Array(11).keys()].map((num) => (
+              <TouchableOpacity
+                key={num}
+                style={[
+                  Estilo.botaoEscala,
+                  escalaSelecionada === num && Estilo.botaoSelecionado,
+                ]}
+                onPress={() => setEscalaSelecionada(num)}
+              >
+                <Text
                   style={[
-                    styles.botaoEscala,
-                    escalaSelecionada === num && styles.botaoSelecionado,
+                    Estilo.textoEscala,
+                    Estilo.txt,
+                    escalaSelecionada === num && Estilo.textoSelecionado,
                   ]}
-                  onPress={() => setEscalaSelecionada(num)}
                 >
-                  <Text
-                    style={[
-                      styles.textoEscala,
-                      styles.txt,
-                      escalaSelecionada === num && styles.textoSelecionado,
-                    ]}
-                  >
-                    {num}
-                  </Text>
-                </TouchableOpacity>
-              ))}
-            </View>
-
-            <View style={styles.botoesContainer}>
-              <TouchableOpacity
-                style={[styles.botao, styles.cancelar]}
-                onPress={onClose}
-              >
-                <Text style={[styles.textoBotao, styles.txt]}>Cancelar</Text>
+                  {num}
+                </Text>
               </TouchableOpacity>
+            ))}
+          </View>
 
-              <TouchableOpacity
-                style={[styles.botao, styles.confirmar]}
-                onPress={handleModalIntensidadeDor}
-              >
-                <Text style={[styles.textoBotao, styles.txt]}>Confirmar</Text>
-              </TouchableOpacity>
-            </View>
+          <View style={Estilo.botoesContainer}>
+            <TouchableOpacity
+              style={[Estilo.botao, Estilo.cancelar]}
+              onPress={onClose}
+            >
+              <Text style={[Estilo.textoBotao, Estilo.txt]}>Cancelar</Text>
+            </TouchableOpacity>
+
+            <TouchableOpacity
+              style={[Estilo.botao, Estilo.confirmar]}
+              onPress={handleConfirmar}
+            >
+              <Text style={[Estilo.textoBotao, Estilo.txt]}>Confirmar</Text>
+            </TouchableOpacity>
           </View>
         </View>
-      </Modal>
-    </View>
+      </View>
+    </Modal>
   );
 }
 
-// 🎨 Estilos
-const styles = StyleSheet.create({
+const Estilo = StyleSheet.create({
   container: {
     flex: 1,
     alignItems: "center",
     justifyContent: "center",
   },
   txt: {
-    fontFamily: "Comfortaa_400Regular"
+    fontFamily: "Comfortaa_400Regular",
   },
   modalOverlay: {
     flex: 1,

@@ -1076,13 +1076,14 @@ app.post('/registros', async (req, res) => {
 
 // Inserindo pela API
 app.post("/api/registros", async (req, res) => {
-    console.log("Corpo recebido no POST:", req.body);
-    const {intensidade} = req.body;
-    const result = await insertRegistro(intensidade);
-    if(result){
-        return res.status(202).json({success: true});
-    }
-    return res.status(400).json({success: false});
+  console.log("Corpo recebido no POST:", req.body);
+  const { paciente_id, sintoma_id, intensidade } = req.body;
+  const result = await insertRegistro(paciente_id, sintoma_id, intensidade);
+
+  if(result){
+      return res.status(201).json({success: true});
+  }
+  return res.status(400).json({success: false});
 });
 
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-

@@ -10,7 +10,6 @@ const API_BASE = "http://localhost:3000";
 export default function Cadastro(){
     const navigation = useNavigation();
 
-
     let [fontsLoaded] = useFonts({
         Comfortaa_400Regular
     });

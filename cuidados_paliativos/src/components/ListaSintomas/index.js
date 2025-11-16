@@ -1,7 +1,7 @@
 import { FlatList, StyleSheet, Text, TouchableOpacity, View } from "react-native";
-import { SINTOMAS } from "../../data/sintomas";
 import { useFonts, Comfortaa_400Regular } from "@expo-google-fonts/comfortaa";
 import { useNavigation } from "@react-navigation/native";
+import { useState, useEffect } from "react";
 
 const Item = ({dado}) => (
     <View style={Estilo.card}>
@@ -12,47 +12,48 @@ const Item = ({dado}) => (
 )
 
 export default function ListaSintomas({ onSelecionar }){
-    const BASE_URL = "http://localhost:3000/";
+    const BASE_URL = "http://192.168.3.12:3000/";
+    const [sintomas, setSintomas] = useState([]);
     const navigation = useNavigation();
 
-    const handleSelecionarSintoma = async (item) => {
-        try{
-            const res = await fetch(`${BASE_URL}api/sintomas`, {
-                method: "POST",
-                headers: {
-                "Content-Type": "application/json",
-            },
-                body: JSON.stringify({
-                    nome_sintoma: item.nome,
-                }), 
-            });
+    const fetchSintomas = async () => {
+        try {
+            const resposta = await fetch(`${BASE_URL}api/sintomas`);
+            const json = await resposta.json();
+            console.log("JSON RECEBIDO:", json);
 
-            if(!res.ok) throw new Error(await res.text());
-            const data = await res.json();
-            console.log("Resposta API: ", data);
-        }catch(error) {
-            console.error("Erro ao selecionar sintoma! Erro: ", error);
+            if (Array.isArray(json)) setSintomas(json);
+            else if (Array.isArray(json.sintomas)) setSintomas(json.sintomas);
+            else setSintomas([]);
+
+        } catch (error) {
+            console.log("Erro ao buscar sintomas:", error);
+            setSintomas([]);
         }
-    }
+    };
+
+    useEffect(() => { fetchSintomas(); }, []);
+
+    const handlePress = (item) => {
+        console.log("Clicou em:", item);
+        onSelecionar(item);
+    };
 
     return(
         <View style={Estilo.container}>
             <FlatList
-                data={SINTOMAS} //Data
+                data={sintomas}
                 numColumns={2}
-                keyExtractor={(item) => item.id} //KeyExtrator -> precisa ser String
+                keyExtractor={item => item.id.toString()}
                 renderItem={({ item }) => (
-                <TouchableOpacity
-                    style={Estilo.card}
-                    onPress={() => [handleSelecionarSintoma(item), onSelecionar(item)]}
-                >
-                    <Text style={Estilo.textCard}>
-                    {item?.nome}
-                    </Text>
-                </TouchableOpacity>
+                    <TouchableOpacity
+                        style={Estilo.card}
+                        onPress={() => handlePress(item)}
+                    >
+                        <Text style={Estilo.textCard}>{item.nome_sintoma}</Text>
+                    </TouchableOpacity>
                 )}
-
-                ListEmptyComponent={<Text>Não existem elementos na lista.</Text>}
+                ListEmptyComponent={<Text>Não há sintomas cadastrados.</Text>}
             />
             <View>
                 <TouchableOpacity

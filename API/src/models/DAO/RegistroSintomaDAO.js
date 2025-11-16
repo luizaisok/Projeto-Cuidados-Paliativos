@@ -7,7 +7,29 @@ async function getRegistro() {
 }
 
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
-async function insertRegistro(intensidade) {
+async function insertRegistro(paciente_id, sintoma_id, intensidade) {
+
+  try {
+    const [result] = await pool.query(
+      `INSERT INTO registro (paciente_id, sintoma_id, intensidade)
+       VALUES (?, ?, ?)`,
+      [paciente_id, sintoma_id, intensidade]
+    );
+
+    return result.affectedRows > 0;
+
+  } catch (err) {
+    if (err.code === "ER_NO_REFERENCED_ROW_2") {
+      console.error("Erro de FK: paciente ou sintoma inexistente.");
+    } else {
+      console.error("Erro no insert:", err);
+    }
+
+    return false;
+  }
+}
+
+/*async function insertRegistro(intensidade) {
   if ( intensidade) {
     const [result] = await pool.query(
       `INSERT INTO registro (intensidade)
@@ -21,7 +43,7 @@ async function insertRegistro(intensidade) {
   console.error("Falha ao criar o registro do sintoma. Faltou algum dado");
   return false;
 }
-
+*/
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 async function editRegistro(id, intensidade) {
   if (id && intensidade) {
