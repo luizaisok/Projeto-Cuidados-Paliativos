@@ -10,20 +10,15 @@ export default function SinalVerde() {
   return (
     <>
       <Header />
-      
-      <ScrollView
-        style={{ backgroundColor: '#9BC45A' }}
-        contentContainerStyle={Estilo.scrollContainer}
-        showsVerticalScrollIndicator={false}
-      >
+      <ScrollView contentContainerStyle={Estilo.container}>
         <Text style={Estilo.aviso}>Tudo certo por hoje</Text>
 
         <View style={Estilo.card}>
           <Text style={Estilo.titulo}>Ótima notícia! Nenhum sintoma hoje</Text>
           <Text style={Estilo.descricao}>
-            Ficamos felizes em saber que você está sem sintomas no momento.
-            Em cuidados paliativos, cada dia de estabilidade é uma vitória.
-            Continue seguindo as orientações da equipe de saúde e mantendo
+            Ficamos felizes em saber que você está sem sintomas no momento. 
+            Em cuidados paliativos, cada dia de estabilidade é uma vitória. 
+            Continue seguindo as orientações da equipe de saúde e mantendo 
             seus cuidados diários. Estamos com você!
           </Text>
         </View>
@@ -34,35 +29,34 @@ export default function SinalVerde() {
         >
           <Text style={Estilo.textButton}>Voltar ao início</Text>
         </TouchableOpacity>
-
       </ScrollView>
     </>
   )
 }
 
 const Estilo = StyleSheet.create({
-
-  scrollContainer: {
-    paddingHorizontal: 20,
-    paddingBottom: 40,
+  container: {
+    flexGrow: 1,
     alignItems: 'center',
+    paddingVertical: 40,
+    paddingHorizontal: 20,
+    backgroundColor: '#9BC45A',
   },
 
   aviso: {
-    width: "100%",
-    marginTop: 40,
-    marginBottom: 40,
+    width: "90%",
+    marginBottom: 30,
     padding: 30,
     backgroundColor: '#FFF',
     color: '#9BC45A',
-    fontSize: 28,
+    fontSize: 26,
     fontWeight: 'bold',
     borderRadius: 10,
     textAlign: 'center',
   },
 
   card: {
-    width: "100%",
+    width: "90%",
     padding: 25,
     backgroundColor: '#FFF',
     borderRadius: 10,
@@ -85,7 +79,7 @@ const Estilo = StyleSheet.create({
   },
 
   button: {
-    width: "100%",
+    width: "90%",
     backgroundColor: "#fff",
     paddingVertical: 14,
     borderRadius: 10,

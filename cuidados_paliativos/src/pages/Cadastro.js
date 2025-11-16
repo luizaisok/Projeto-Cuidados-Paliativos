@@ -1,8 +1,7 @@
 import { useNavigation } from "@react-navigation/native";
-import { Image, Text, StyleSheet, View, TextInput, TouchableOpacity, ActivityIndicator } from "react-native";
+import { Image, Text, StyleSheet, View, TextInput, TouchableOpacity, ActivityIndicator, ScrollView } from "react-native";
 import { useFonts, Comfortaa_400Regular } from "@expo-google-fonts/comfortaa";
 import Header from "../components/Header/index";
-import Footer from "../components/Footer/index";
 import { useState } from "react";
 
 const API_BASE = "http://localhost:3000";
@@ -19,7 +18,6 @@ export default function Cadastro(){
     const [confirmar, setConfirmar] = useState("");
     const [loading, setLoading] = useState(false);
 
-    // Função de cadastro
     async function cadastrar(url) {
         if (!email || !senha || !confirmar) {
             alert("Preencha e-mail, senha e confirmação.");
@@ -47,13 +45,11 @@ export default function Cadastro(){
             }
 
             alert(`Cadastro realizado! ID: ${data.id}`);
-        
-            // Limpa os campos
+
             setSenha("");
             setConfirmar("");
-            
-            // Redirecionamento para Login
-            navigation.navigate('Login', { emailPrefill: email }); 
+            navigation.navigate('Login', { emailPrefill: email });
+
         } catch (e) {
             alert(e.message || "Erro ao enviar.");
         } finally {
@@ -65,80 +61,84 @@ export default function Cadastro(){
     const onCadastrarAcompanhante = () => cadastrar(`${API_BASE}/api/acompanhante`);
 
     return (
-    <View style={Estilo.container}>
-        <Header />
+        <View style={Estilo.container}>
+            <Header />
 
-        <View style={Estilo.body}>
-        <Image
-            source={require("../assets/img/maos-projeto-cuidados-paliativos.png")}
-            style={Estilo.imgLogo}
-        />
-        <Text style={[Estilo.txt, Estilo.txtCadastro]}>Cadastre-se</Text>
+            <ScrollView
+                style={{ width: "100%" }}
+                contentContainerStyle={{ alignItems: "center", paddingBottom: 40 }}
+                showsVerticalScrollIndicator={false}
+            >
+
+                <Image 
+                    source={require("../assets/img/LogoClara.png")} 
+                    style={Estilo.img}
+                />
+
+                <Text style={[Estilo.titulo, Estilo.txt]}>Cadastre-se</Text>
+
+                <View>
+                    <Text style={[Estilo.label, Estilo.txt]}>E-mail</Text>
+                    <TextInput
+                        style={[Estilo.input, Estilo.txt]}
+                        placeholder="Digite o seu e-mail"
+                        keyboardType="email-address"
+                        autoCapitalize="none"
+                        autoComplete="off"
+                        value={email}
+                        onChangeText={setEmail}
+                    />
+
+                    <Text style={[Estilo.label, Estilo.txt]}>Senha</Text>
+                    <TextInput
+                        style={[Estilo.input, Estilo.txt]}
+                        placeholder="Digite a sua senha"
+                        secureTextEntry
+                        value={senha}
+                        onChangeText={setSenha}
+                    />
+
+                    <Text style={[Estilo.label, Estilo.txt]}>Confirmar senha</Text>
+                    <TextInput
+                        style={[Estilo.input, Estilo.txt]}
+                        placeholder="Confirme sua senha"
+                        secureTextEntry
+                        value={confirmar}
+                        onChangeText={setConfirmar}
+                    />
+                </View>
+
+                <View style={Estilo.ContainerButtons}>
+                    <View style={Estilo.button}>
+                        <TouchableOpacity onPress={onCadastrarPaciente} disabled={loading}>
+                            {loading ? (
+                                <ActivityIndicator />
+                            ) : (
+                                <Text style={[Estilo.txt, Estilo.txtButton]}>Cadastrar como Paciente</Text>
+                            )}
+                        </TouchableOpacity>
+                    </View>
+
+                    <View style={Estilo.button}>
+                        <TouchableOpacity onPress={onCadastrarAcompanhante} disabled={loading}>
+                            {loading ? (
+                                <ActivityIndicator />
+                            ) : (
+                                <Text style={[Estilo.txt, Estilo.txtButton]}>Cadastrar como Cuidador</Text>
+                            )}
+                        </TouchableOpacity>
+                    </View>
+                </View>
+
+                <TouchableOpacity 
+                    style={Estilo.buttonVoltar}
+                    onPress={() => navigation.navigate("Login")}
+                >
+                    <Text style={Estilo.textButtonVoltar}>Voltar ao Login</Text>
+                </TouchableOpacity>
+
+            </ScrollView>
         </View>
-
-        <View>
-        <Text style={[Estilo.label, Estilo.txt]}>E-mail</Text>
-        <TextInput
-            style={Estilo.input}
-            placeholder="Seu e-mail"
-            keyboardType="email-address"
-            autoCapitalize="none"
-            autoComplete="off"
-            value={email}
-            onChangeText={setEmail}
-        />
-
-        <Text style={[Estilo.label, Estilo.txt]}>Senha</Text>
-        <TextInput
-            style={Estilo.input}
-            placeholder="Sua senha"
-            keyboardType="default"
-            autoCapitalize="none"
-            autoComplete="off"
-            secureTextEntry
-            autoCorrect={false}
-            value={senha}
-            onChangeText={setSenha}
-        />
-
-        <Text style={[Estilo.label, Estilo.txt]}>Confirmar senha</Text>
-        <TextInput
-            style={Estilo.input}
-            placeholder="Sua senha"
-            keyboardType="default"
-            autoCapitalize="none"
-            autoComplete="off"
-            secureTextEntry
-            autoCorrect={false}
-            value={confirmar}
-            onChangeText={setConfirmar}
-        />
-        </View>
-
-        <View style={Estilo.ContainerButtons}>
-        <View style={Estilo.button}>
-            <TouchableOpacity onPress={onCadastrarPaciente} disabled={loading}>
-            {loading ? (
-                <ActivityIndicator />
-            ) : (
-                <Text style={[Estilo.txt, Estilo.txtButton]}>Cadastrar como Paciente</Text>
-            )}
-            </TouchableOpacity>
-        </View>
-
-        <View style={Estilo.button}>
-            <TouchableOpacity onPress={onCadastrarAcompanhante} disabled={loading}>
-            {loading ? (
-                <ActivityIndicator />
-            ) : (
-                <Text style={[Estilo.txt, Estilo.txtButton]}>Cadastrar como Cuidador</Text>
-            )}
-            </TouchableOpacity>
-        </View>
-        </View>
-
-        {/*<Footer />*/}
-    </View>
     );
 }
 
@@ -146,55 +146,47 @@ export default function Cadastro(){
 const Estilo = StyleSheet.create({
     container: {
         flex: 1,
-        justifyContent: 'space-between',
         alignItems: 'center',
-        backgroundColor: '#E8DAC0'
-    },
-    body: {
-        justifyContent: 'center',
-        alignItems: 'center',
-    }, 
-    imgLogo: {
-        marginTop: 20,
-        width: 85,
-        height: 90,
+        backgroundColor: '#FFF3E5'
     },
     txt: {
         fontFamily: "Comfortaa_400Regular"
     },
-    txtCadastro: {
-        color: '#112A6C',
-        fontSize: 40,
-        fontWeight: 'bold',
-        marginBottom: 3,
-        marginTop: 15,
-        marginBottom: 15
+    img: {
+        width: 90,
+        height: 100,
+        marginTop: 20
     },
-    input: {
-        backgroundColor: '#8BAAC4',
-        borderColor: "#8BAAC4",
-        color: "#FFF6E5",
-        borderRadius: 10,
-        width: '100%',
-        height: 45,
-        padding: 10,
-        marginBottom: 20,
-        fontSize: 18
+    titulo: {
+        fontSize: 48,
+        fontWeight: 600,
+        color: '#112A6C',
+        marginBottom: 25,
+        marginTop: 15
     },
     label: {
+        fontSize: 20,
         color: '#532C1D',
-        fontSize: 16,
-        marginBottom: 3,
-        fontWeight: 'bold',
+        marginBottom: 5,
+        fontWeight: 'bold'
+    },
+    input: {
+        padding: 10,
+        paddingLeft: 20,
+        backgroundColor: '#8BAAC4',
+        color: '#FFF',
+        borderRadius: 10,
+        width: 230,
+        height: 50,
+        marginBottom: 15,
     },
 
     ContainerButtons: {
-        flex: 1,
         flexDirection: "row",
         justifyContent: "space-evenly",
         alignItems: "center",
         width: "100%",
-        marginTop: 3,
+        marginTop: 25,
     },
     button: {
         backgroundColor: "#015184",
@@ -209,9 +201,28 @@ const Estilo = StyleSheet.create({
         elevation: 8
     },
     txtButton: {
-        fontSize: 20,
+        fontSize: 18,
         color: "#FFF6E5",
         textAlign: "center",
-        lineHeight: 30,
+        lineHeight: 26,
+    },
+
+    buttonVoltar: {
+        width: "85%",
+        backgroundColor: "#fff",
+        paddingVertical: 14,
+        borderRadius: 10,
+        marginTop: 30,
+        shadowColor: "#000",
+        shadowOffset: { width: 4, height: 4 },
+        shadowOpacity: 0.3,
+        shadowRadius: 4.65,
+        elevation: 6,
+    },
+    textButtonVoltar: {
+        color: "#4A4A4A",
+        fontSize: 20,
+        fontWeight: "bold",
+        textAlign: "center"
     }
-})
+});
