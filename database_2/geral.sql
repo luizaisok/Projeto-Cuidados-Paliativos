@@ -1,5 +1,6 @@
 create DATABASE cuidados_paliativos_db
 
+USE cuidados_paliativos_db;
 create table conteudo (
     id INT PRIMARY KEY AUTO_INCREMENT,
     titulo VARCHAR(150) NOT NULL,
@@ -46,33 +47,43 @@ VALUES
 ('Fernando Lima', 'Fernando L.', 'fernando.lima@example.com', 'admin123', '1982-08-17', 'Masculino', '11977776666', 'CREFITO', 'Fisioterapia', '556677-FIS', 'Reabilitação em Pacientes Terminais'),
 ('Beatriz Moura', 'Bia Moura', 'beatriz.moura@example.com', 'pass1234', '1993-03-29', 'Feminino', '11933334444', 'CRN', 'Nutrição', '889900-NUT', 'Nutrição em Cuidados Paliativos');
 
-CREATE TABLE registro (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    data_registro DATETIME DEFAULT CURRENT_TIME,
-    intensidade INT NOT NULL
-);
-
-INSERT INTO registro (data_registro, intensidade) VALUES
-('2025-11-12 08:30:00', 3),
-('2025-11-12 12:15:00', 5),
-('2025-11-13 09:00:00', 2),
-('2025-11-13 18:45:00', 7),
-('2025-11-14 10:20:00', 6),
-('2025-11-14 15:40:00', 4),
-('2025-11-15 07:55:00', 8),
-('2025-11-15 20:10:00', 1);
+--DROP TABLE sintoma
 
 CREATE TABLE sintoma (
     id INT AUTO_INCREMENT PRIMARY KEY,
-    nome_sintoma VARCHAR(255) NOT NULL
+    nome_sintoma VARCHAR(255) NOT NULL,
+    UNIQUE (nome_sintoma)
 );
 
 INSERT INTO sintoma (nome_sintoma) VALUES
-('Dor de cabeça'),
-('Náusea'),
-('Tontura'),
+('Constipação Intestinal'),
 ('Cansaço'),
-('Falta de apetite'),
-('Insônia'),
+('Fraqueza'),
+('Vômito'),
+('Tosse'),
 ('Falta de ar'),
-('Febre');
+('Sonolência'),
+('Irritabilidade'),
+('Suor Excessivo'),
+('Dor de Cabeça'),
+('Dor no Corpo'),
+('Náusea'),
+('Diarreia'),
+('Congestão Nasal'),
+('Tontura'),
+('Insônia'),
+('Perda de Apetite'),
+('Calafrios');
+
+--DROP TABLE registro;
+
+CREATE TABLE registro (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    paciente_id INT NOT NULL,
+    sintoma_id INT NOT NULL,
+    intensidade INT,
+    data_registro DATETIME DEFAULT CURRENT_TIMESTAMP,
+
+    FOREIGN KEY (paciente_id) REFERENCES pacientes(id_paciente) ON DELETE CASCADE ON UPDATE CASCADE,
+    FOREIGN KEY (sintoma_id) REFERENCES sintoma(id) ON DELETE CASCADE ON UPDATE CASCADE
+);
