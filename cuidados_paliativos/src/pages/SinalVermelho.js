@@ -39,7 +39,7 @@ const Estilo = StyleSheet.create({
   container: {
     flex: 1,
     alignItems: 'center',
-    backgroundColor: '#D00000' // vermelho original
+    backgroundColor: '#D00000'
   },
   aviso: {
     width: 400,

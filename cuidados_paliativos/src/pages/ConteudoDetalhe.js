@@ -64,7 +64,6 @@ export default function ConteudoDetalhe() {
         </TouchableOpacity>
       </ScrollView>
 
-      <Footer />
     </>
   );
 }
