@@ -45,7 +45,7 @@ export default ({user = "Usuário"}) => {
       })();
     }, []);
 
-    const saudacao = nomeSocial ? `Bem vindo ${nomeSocial}!` : `Bem vindo!`;
+    const saudacao = nomeSocial ? `Bem vindo, ${nomeSocial}!` : `Bem vindo!`;
 
     const navigation = useNavigation();
 
@@ -155,7 +155,7 @@ const Estilo = StyleSheet.create({
 
     BodyTitle: {
         fontFamily: "Comfortaa_400Regular",
-        fontSize: 28,
+        fontSize: 22,
         fontWeight: "bold",
         marginTop: 25, marginLeft: 39,
         textAlign: "left",
@@ -179,7 +179,7 @@ const Estilo = StyleSheet.create({
     },
 
     duvidasButton: {
-        height: 300, width: 300,
+        height: 250, width: 250,
         backgroundColor: 'white',
         borderWidth: 2, borderColor: '#767714',
         borderRadius: "50%",
