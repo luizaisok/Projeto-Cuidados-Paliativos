@@ -105,10 +105,10 @@ const Card = ({ dado, usuario, abrirModalEdicao, getConteudos }) => {
 export default function Busca() {
   const [conteudos, setConteudos] = useState([]);
   const [atualizando, setAtualizando] = useState(false);
+  const [pesquisa, setPesquisa] = useState("");
 
-  const [usuario, setUsuario] = useState({ tipo: "adm" }); // ou "user"
+  const [usuario, setUsuario] = useState({ tipo: "adm" });
 
-  // Modal para adicionar/editar
   const [modalVisivel, setModalVisivel] = useState(false);
   const [conteudoModal, setConteudoModal] = useState({
     id: null,
@@ -158,6 +158,11 @@ export default function Busca() {
     }
   };
 
+  const conteudosFiltrados = conteudos.filter((item) =>
+    item.titulo.toLowerCase().includes(pesquisa.toLowerCase()) ||
+    item.descricao.toLowerCase().includes(pesquisa.toLowerCase())
+  );
+
   return (
     <>
       <Header />
@@ -168,8 +173,10 @@ export default function Busca() {
           <TextInput
             placeholder="Procurar por tema"
             style={Estilo.input}
+            value={pesquisa}
+            onChangeText={(texto) => setPesquisa(texto)}
           />
-          <TouchableOpacity onPress={() => console.log('Pesquisar...')}>
+          <TouchableOpacity onPress={() => console.log('Buscando...', pesquisa)}>
             <Image
               source={require('../assets/img/lupa.png')}
               style={Estilo.iconeLupa}
@@ -187,7 +194,7 @@ export default function Busca() {
           <ActivityIndicator />
         ) : (
           <FlatList
-            data={conteudos}
+            data={conteudosFiltrados}
             keyExtractor={(item) => item.id.toString()}
             renderItem={({ item }) => (
               <Card dado={item} usuario={usuario} abrirModalEdicao={abrirModalEdicao} getConteudos={getConteudos} />
