@@ -23,7 +23,7 @@ CREATE TABLE IF NOT EXISTS pacientes (
   contato_emergencia  VARCHAR(255) NULL,
   unidades_de_saude VARCHAR(255) NULL,
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 CREATE TABLE IF NOT EXISTS acompanhante (
   id INT AUTO_INCREMENT PRIMARY KEY,
@@ -35,7 +35,7 @@ CREATE TABLE IF NOT EXISTS acompanhante (
   genero VARCHAR(30) NULL,
   data_nascimento DATE NULL,
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 CREATE TABLE IF NOT EXISTS acompanhante_paciente (
   id INT AUTO_INCREMENT PRIMARY KEY,
@@ -69,10 +69,7 @@ CREATE TABLE IF NOT EXISTS administrador (
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
-INSERT INTO administrador (nome, email, senha)
-VALUES ('Maicon', 'adm@email.com', 'adm1234');
-
-create table conteudo (
+CREATE TABLE conteudo (
     id INT PRIMARY KEY AUTO_INCREMENT,
     titulo VARCHAR(150) NOT NULL,
     descricao VARCHAR(150) NOT NULL,
@@ -80,57 +77,21 @@ create table conteudo (
     data_post DATE,
     SinaisSintomas VARCHAR(150),
     SinaisAlerta VARCHAR(150)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;;
-
-INSERT INTO conteudo (titulo, descricao, texto, data_post, sinaisSintomas, sinaisAlerta)
-VALUES
-  ('Dor Crônica em Cuidados Paliativos', 'Reconhecendo a dor persistente', 'A dor é um dos sintomas mais comuns e deve ser avaliada de forma contínua.', '2025-10-01', 'Dor contínua, limitação de movimento', 'Dor súbita intensa, perda de consciência'),
-  ('Fadiga Intensa no Paciente Terminal', 'Identificando sinais de esgotamento', 'A fadiga pode afetar a qualidade de vida e requer manejo multidisciplinar.', '2025-09-18', 'Cansaço extremo, fraqueza', 'Incapacidade de realizar atividades básicas'),
-  ('Falta de Apetite e Perda de Peso', 'Anorexia e caquexia em estágios avançados', 'Esses sintomas são frequentes e demandam suporte nutricional adequado.', '2025-09-05', 'Apetite reduzido, emagrecimento', 'Perda de peso acelerada, desidratação'),
-  ('Dispneia e Dificuldade para Respirar', 'Sinais de desconforto respiratório', 'A sensação de falta de ar é comum e pode ser aliviada com oxigênio e posicionamento adequado.', '2025-08-20', 'Falta de ar leve, respiração acelerada', 'Cianose, respiração muito dificultada'),
-  ('Ansiedade e Angústia Emocional', 'Aspectos psicológicos do paciente', 'O apoio emocional e espiritual é essencial no manejo paliativo.', '2025-08-01', 'Preocupação constante, inquietação', 'Crises de pânico, agitação grave'),
-  ('Náuseas e Vômitos em Cuidados Paliativos', 'Identificando causas e controle', 'Podem estar relacionados a medicamentos ou à progressão da doença.', '2025-07-15', 'Enjoo, mal-estar', 'Vômitos persistentes, sinais de desidratação'),
-  ('Confusão Mental e Delirium', 'Alterações cognitivas frequentes', 'É importante identificar causas reversíveis e oferecer ambiente calmo e seguro.', '2025-07-02', 'Desorientação leve, lapsos de memória', 'Alucinações, agitação intensa'),
-  ('Insônia e Distúrbios do Sono', 'Impactos na qualidade de vida', 'A falta de sono pode agravar sintomas físicos e emocionais.', '2025-06-25', 'Dificuldade para dormir, despertares frequentes', 'Vigília prolongada, exaustão intensa'),
-  ('Feridas e Lesões de Pele', 'Cuidados com integridade cutânea', 'As lesões exigem manejo adequado para evitar dor e infecção.', '2025-06-10', 'Vermelhidão, dor localizada', 'Infecção, mau odor, secreção'),
-  ('Comunicação com a Família', 'Reconhecendo sinais de sofrimento familiar', 'A equipe deve apoiar e orientar familiares sobre o processo de fim de vida.', '2025-05-30', 'Tristeza, preocupação', 'Conflitos graves, desesperação');
-
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 CREATE TABLE sintoma (
     id INT AUTO_INCREMENT PRIMARY KEY,
-    nome_sintoma VARCHAR(255) NOT NULL,
+    nome_sintoma VARCHAR(255) NOT NULL UNIQUE,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;;
-
-INSERT INTO sintoma (nome_sintoma) 
-VALUES
-  ('Dor de cabeça'),
-  ('Náusea'),
-  ('Tontura'),
-  ('Cansaço'),
-  ('Falta de apetite'),
-  ('Insônia'),
-  ('Falta de ar'),
-  ('Febre');
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 CREATE TABLE registro (
     id INT AUTO_INCREMENT PRIMARY KEY,
+    paciente_id INT NOT NULL,
+    sintoma_id INT NOT NULL,
+    intensidade INT,
     data_registro DATETIME DEFAULT CURRENT_TIMESTAMP,
-    intensidade INT NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;;
 
-SELECT * FROM pacientes;
-
-SELECT * FROM acompanhante;
-
-SELECT * FROM acompanhante_paciente;
-
-SELECT * FROM administrador;
-
-SELECT * FROM conteudo;
-
-SELECT * FROM registro;
-
-SELECT * FROM sintoma;
-
--- DROP DATABASE cuidados_paliativos_db;
+    FOREIGN KEY (paciente_id) REFERENCES pacientes(id_paciente) ON DELETE CASCADE ON UPDATE CASCADE,
+    FOREIGN KEY (sintoma_id) REFERENCES sintoma(id) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;

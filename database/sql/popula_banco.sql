@@ -2,9 +2,9 @@ USE cuidados_paliativos_db;
 
 SET NAMES utf8mb4;
 
--- Inserir administrador
--- INSERT INTO administrador (nome, email, senha)
--- VALUES ('Maicon', 'adm@email.com', 'adm1234');
+-- Inserir administrador (se não existir)
+INSERT IGNORE INTO administrador (nome, email, senha)
+VALUES ('Maicon', 'adm@email.com', 'adm1234');
 
 -- Carregar pacientes
 LOAD DATA LOCAL INFILE '../data/pacientes.csv'
@@ -56,3 +56,13 @@ ENCLOSED BY '"'
 LINES TERMINATED BY '\n'
 IGNORE 1 ROWS
 (nome_sintoma);
+
+-- Carregar registros
+LOAD DATA LOCAL INFILE '../data/registro.csv'
+INTO TABLE registro
+CHARACTER SET utf8mb4
+FIELDS TERMINATED BY ',' 
+ENCLOSED BY '"'
+LINES TERMINATED BY '\n'
+IGNORE 1 ROWS
+(paciente_id, sintoma_id, intensidade, data_registro);
