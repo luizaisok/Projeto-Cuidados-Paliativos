@@ -237,6 +237,9 @@ export default function PerfilProntuario() {
   const [vinculos, setVinculos] = useState([]);
   const [pacienteIdDigitado, setPacienteIdDigitado] = useState("");
 
+  const [pacientesSelecionados, setPacientesSelecionados] = useState({});
+  const [loadingPaciente, setLoadingPaciente] = useState(false);
+
   const fetchQuemSouEu = useCallback(async () => {
     try {
       const t = localStorage.getItem("token");
@@ -582,6 +585,38 @@ async function desvincular(pacienteId) {
     );
   } catch (e) {
     alert("Erro", e.message || "Falha ao desvincular.");
+  }
+}
+
+// Função para buscar dados de um paciente específico
+async function carregarDadosPaciente(pacienteId) {
+  if (pacientesSelecionados[pacienteId]) {
+    // Se já carregou, limpa (toggle)
+    setPacientesSelecionados(prev => {
+      const novo = { ...prev };
+      delete novo[pacienteId];
+      return novo;
+    });
+    return;
+  }
+  try {
+    setLoadingPaciente(true);
+    const resp = await fetch(`${API_BASE}/api/pacientes/${pacienteId}`, {
+      headers: { Authorization: token ? `Bearer ${token}` : undefined },
+    });
+    const data = await resp.json();
+    
+    if (!resp.ok || data?.error) {
+      throw new Error(data?.message || "Erro ao carregar paciente");
+    }
+    setPacientesSelecionados(prev => ({
+      ...prev,
+      [pacienteId]: data.data
+    }));
+  } catch (e) {
+    alert("Erro", e.message || "Não foi possível carregar dados do paciente");
+  } finally {
+    setLoadingPaciente(false);
   }
 }
 
@@ -931,6 +966,114 @@ async function desvincular(pacienteId) {
                   ) : (
                     vinculos.map((p) => (
                       <View key={p.id} style={Estilo.itemVinculo}>
+                        <View style={{ flex: 1 }}>
+                        <Text style={{ fontWeight: "600", fontSize: 16, marginBottom: 4 }}>
+                          {p.nome ?? "(sem nome)"} - ID: {p.id}
+                        </Text>
+                        <Text style={{ color: "#666", marginBottom: 8 }}>{p.email}</Text>
+                        
+                        <TouchableOpacity
+                          onPress={() => carregarDadosPaciente(p.id)}
+                          style={{
+                            backgroundColor: "#015184",
+                            paddingVertical: 8,
+                            paddingHorizontal: 12,
+                            borderRadius: 8,
+                            alignItems: "center",
+                          }}
+                        >
+                          <Text style={{ color: "#FFF", fontWeight: "600" }}>
+                            {pacientesSelecionados[p.id] ? "Ocultar dados" : "Ver dados completos"}
+                          </Text>
+                        </TouchableOpacity>
+                        {/* Exibe dados completos do paciente quando expandido */}
+                        {pacientesSelecionados[p.id] && (
+                          <View style={Estilo.dadosPaciente}>
+                            {loadingPaciente ? (
+                              <ActivityIndicator />
+                            ) : (
+                              <>
+                                <Text style={Estilo.dadosTitulo}>📋 Dados do Paciente</Text>
+                                
+                                <View style={Estilo.dadosItem}>
+                                  <Text style={Estilo.dadosLabel}>Nome completo:</Text>
+                                  <Text style={Estilo.dadosValor}>
+                                    {pacientesSelecionados[p.id].nome || "Não informado"}
+                                  </Text>
+                                </View>
+                                <View style={Estilo.dadosItem}>
+                                  <Text style={Estilo.dadosLabel}>Nome social:</Text>
+                                  <Text style={Estilo.dadosValor}>
+                                    {pacientesSelecionados[p.id].nome_social || "Não informado"}
+                                  </Text>
+                                </View>
+                                <View style={Estilo.dadosItem}>
+                                  <Text style={Estilo.dadosLabel}>Email:</Text>
+                                  <Text style={Estilo.dadosValor}>
+                                    {pacientesSelecionados[p.id].email || "Não informado"}
+                                  </Text>
+                                </View>
+                                <View style={Estilo.dadosItem}>
+                                  <Text style={Estilo.dadosLabel}>Celular:</Text>
+                                  <Text style={Estilo.dadosValor}>
+                                    {pacientesSelecionados[p.id].celular || "Não informado"}
+                                  </Text>
+                                </View>
+                                <View style={Estilo.dadosItem}>
+                                  <Text style={Estilo.dadosLabel}>Gênero:</Text>
+                                  <Text style={Estilo.dadosValor}>
+                                    {pacientesSelecionados[p.id].genero || "Não informado"}
+                                  </Text>
+                                </View>
+                                <View style={Estilo.dadosItem}>
+                                  <Text style={Estilo.dadosLabel}>Data de nascimento:</Text>
+                                  <Text style={Estilo.dadosValor}>
+                                    {pacientesSelecionados[p.id].data_nascimento 
+                                      ? onlyDate(pacientesSelecionados[p.id].data_nascimento)
+                                      : "Não informado"}
+                                  </Text>
+                                </View>
+                                <View style={Estilo.dadosItem}>
+                                  <Text style={Estilo.dadosLabel}>Cidade/Estado:</Text>
+                                  <Text style={Estilo.dadosValor}>
+                                    {pacientesSelecionados[p.id].cidade || "Não informado"} / {pacientesSelecionados[p.id].estado || "Não informado"}
+                                  </Text>
+                                </View>
+                                <View style={Estilo.dadosItem}>
+                                  <Text style={Estilo.dadosLabel}>Tipo sanguíneo:</Text>
+                                  <Text style={Estilo.dadosValor}>
+                                    {pacientesSelecionados[p.id].tipo_sanguineo || "Não informado"}
+                                  </Text>
+                                </View>
+                                <View style={Estilo.dadosItem}>
+                                  <Text style={Estilo.dadosLabel}>Condições médicas:</Text>
+                                  <Text style={Estilo.dadosValor}>
+                                    {pacientesSelecionados[p.id].condicoes_medicas || "Não informado"}
+                                  </Text>
+                                </View>
+                                <View style={Estilo.dadosItem}>
+                                  <Text style={Estilo.dadosLabel}>Medicação:</Text>
+                                  <Text style={Estilo.dadosValor}>
+                                    {pacientesSelecionados[p.id].medicacao || "Não informado"}
+                                  </Text>
+                                </View>
+                                <View style={Estilo.dadosItem}>
+                                  <Text style={Estilo.dadosLabel}>Contato de emergência:</Text>
+                                  <Text style={Estilo.dadosValor}>
+                                    {pacientesSelecionados[p.id].contato_emergencia || "Não informado"}
+                                  </Text>
+                                </View>
+                                <View style={Estilo.dadosItem}>
+                                  <Text style={Estilo.dadosLabel}>Unidades de saúde:</Text>
+                                  <Text style={Estilo.dadosValor}>
+                                    {pacientesSelecionados[p.id].unidades_de_saude || "Não informado"}
+                                  </Text>
+                                </View>
+                              </>
+                            )}
+                          </View>
+                        )}
+                      </View>
                         <Text>{p.id} — {p.nome ?? "(sem nome)"} — {p.email}</Text>
                         <TouchableOpacity
                           onPress={() => desvincular(p.id)}
@@ -1031,9 +1174,9 @@ const Estilo = StyleSheet.create({
     fontWeight: "600",
   },
   itemVinculo: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-between",
+    // flexDirection: "row",
+    // alignItems: "center",
+    // justifyContent: "space-between",
     backgroundColor: "#F4F4F4",
     borderRadius: 8,
     padding: 10,
@@ -1044,6 +1187,38 @@ const Estilo = StyleSheet.create({
     paddingHorizontal: 10,
     paddingVertical: 6,
     borderRadius: 8,
+  },
+  dadosPaciente: {
+    marginTop: 12,
+    backgroundColor: "#F0F4F8",
+    borderRadius: 8,
+    padding: 12,
+    borderLeftWidth: 4,
+    borderLeftColor: "#015184",
+  },
+  dadosTitulo: {
+    fontSize: 16,
+    fontWeight: "700",
+    color: "#112A6C",
+    marginBottom: 12,
+  },
+  dadosItem: {
+    marginBottom: 10,
+  },
+  dadosLabel: {
+    fontSize: 13,
+    fontWeight: "600",
+    color: "#532C1D",
+    marginBottom: 2,
+  },
+  dadosValor: {
+    fontSize: 14,
+    color: "#333",
+    backgroundColor: "#FFF",
+    padding: 8,
+    borderRadius: 6,
+    borderWidth: 1,
+    borderColor: "#E0E0E0",
   },
 });
 
