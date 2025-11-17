@@ -1,6 +1,10 @@
-CREATE DATABASE cuidados_paliativos_db;
+CREATE DATABASE IF NOT EXISTS cuidados_paliativos_db
+DEFAULT CHARACTER SET utf8mb4
+DEFAULT COLLATE utf8mb4_unicode_ci;
 
 USE cuidados_paliativos_db;
+
+SET NAMES utf8mb4;
 
 CREATE TABLE IF NOT EXISTS pacientes (
   id_paciente INT AUTO_INCREMENT PRIMARY KEY,
@@ -19,7 +23,7 @@ CREATE TABLE IF NOT EXISTS pacientes (
   contato_emergencia  VARCHAR(255) NULL,
   unidades_de_saude VARCHAR(255) NULL,
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-);
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;;
 
 CREATE TABLE IF NOT EXISTS acompanhante (
   id INT AUTO_INCREMENT PRIMARY KEY,
@@ -31,7 +35,7 @@ CREATE TABLE IF NOT EXISTS acompanhante (
   genero VARCHAR(30) NULL,
   data_nascimento DATE NULL,
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-);
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;;
 
 CREATE TABLE IF NOT EXISTS acompanhante_paciente (
   id INT AUTO_INCREMENT PRIMARY KEY,
@@ -47,7 +51,7 @@ CREATE TABLE IF NOT EXISTS acompanhante_paciente (
     FOREIGN KEY (paciente_id) REFERENCES pacientes(id_paciente)
     ON DELETE CASCADE
     ON UPDATE CASCADE
-);
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 CREATE TABLE IF NOT EXISTS administrador (
   id INT AUTO_INCREMENT PRIMARY KEY,
@@ -63,7 +67,7 @@ CREATE TABLE IF NOT EXISTS administrador (
   registro_profissional VARCHAR(50) NULL,
   especialidade VARCHAR(120) NULL,
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-);
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 INSERT INTO administrador (nome, email, senha)
 VALUES ('Maicon', 'adm@email.com', 'adm1234');
@@ -76,7 +80,7 @@ create table conteudo (
     data_post DATE,
     SinaisSintomas VARCHAR(150),
     SinaisAlerta VARCHAR(150)
-)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;;
 
 INSERT INTO conteudo (titulo, descricao, texto, data_post, sinaisSintomas, sinaisAlerta)
 VALUES
@@ -96,7 +100,7 @@ CREATE TABLE sintoma (
     id INT AUTO_INCREMENT PRIMARY KEY,
     nome_sintoma VARCHAR(255) NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-);
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;;
 
 INSERT INTO sintoma (nome_sintoma) 
 VALUES
@@ -113,7 +117,7 @@ CREATE TABLE registro (
     id INT AUTO_INCREMENT PRIMARY KEY,
     data_registro DATETIME DEFAULT CURRENT_TIMESTAMP,
     intensidade INT NOT NULL
-);
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;;
 
 SELECT * FROM pacientes;
 
