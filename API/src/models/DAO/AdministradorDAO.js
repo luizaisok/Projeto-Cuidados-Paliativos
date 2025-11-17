@@ -5,6 +5,14 @@ async function getAdministradores() {
     return rows;
 };
 
+async function getAdministradorByEmail(email) {
+    const [rows] = await pool.execute(
+        "SELECT id, email, senha FROM administrador WHERE email = ?",
+        [email]
+    );
+    return rows[0] || null;
+}
+
 async function insertAdministrador(nome, nome_social, email, senha, data_nascimento, genero, telefone, conselho_profissional, formacao, registro_profissional, especialidade) {
     if (nome && nome_social && email && senha && data_nascimento && genero && telefone && conselho_profissional && formacao && registro_profissional && especialidade) {
         const [result] = await pool.query(`
@@ -68,6 +76,7 @@ async function deleteAdministrador(id) {
 
 module.exports = {
     getAdministradores,
+    getAdministradorByEmail,
     insertAdministrador,
     editAdministrador,
     deleteAdministrador

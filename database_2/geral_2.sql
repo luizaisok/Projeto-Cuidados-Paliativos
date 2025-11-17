@@ -47,6 +47,25 @@ CREATE TABLE IF NOT EXISTS acompanhante_paciente (
     ON DELETE CASCADE ON UPDATE CASCADE
 );
 
+CREATE TABLE IF NOT EXISTS administrador (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  nome VARCHAR(120) NOT NULL,
+  nome_social VARCHAR(120) NULL,
+  email VARCHAR(255) NOT NULL UNIQUE,
+  senha VARCHAR(255) NOT NULL,
+  data_nascimento DATE NULL,
+  genero VARCHAR(30) NULL,
+  telefone VARCHAR(30) NULL,
+  conselho_profissional VARCHAR(50) NULL,
+  formacao VARCHAR(120) NULL,
+  registro_profissional VARCHAR(50) NULL,
+  especialidade VARCHAR(120) NULL,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+INSERT INTO administrador (nome, nome_social, email, senha, data_nascimento, genero, telefone, conselho_profissional, formacao, registro_profissional, especialidade)
+VALUES ('Administrador Sistema', 'Admin', 'admin@palivida.com', 'admin123', '1990-01-01', 'Não informado', '(00) 00000-0000', 'N/A', 'Administração', 'N/A', 'Gestão');
+
 CREATE TABLE registro (
     id INT AUTO_INCREMENT PRIMARY KEY,
     data_registro DATETIME DEFAULT CURRENT_TIMESTAMP,
@@ -73,6 +92,8 @@ SELECT * FROM pacientes;
 SELECT * FROM acompanhante;
 
 SELECT * FROM acompanhante_paciente;
+
+SELECT * FROM administrador;
 
 SELECT * FROM conteudo;
 

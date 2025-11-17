@@ -14,7 +14,7 @@ app.use(express.json());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
 
-const {getAdministradores, insertAdministrador, editAdministrador, deleteAdministrador} = require("../models/DAO/AdministradorDAO");
+const {getAdministradores, getAdministradorByEmail, insertAdministrador, editAdministrador, deleteAdministrador} = require("../models/DAO/AdministradorDAO");
 const { getPacientes, getPacienteById, getPacienteByEmail, insertPaciente, editPaciente, deletePaciente } = require("../models/DAO/PacienteDAO");
 const { getAcompanhantes, getAcompanhanteById, getAcompanhanteByEmail, insertAcompanhante, editAcompanhante, deleteAcompanhante } = require("../models/DAO/AcompanhanteDAO");
 const { linkAcompanhantePaciente, unlinkAcompanhantePaciente, getPacientesDoAcompanhante, getAcompanhantesDoPaciente } = require("../models/DAO/VinculoDAO");
@@ -37,7 +37,16 @@ app.post('/api/auth/login', async (req, res) => {
       return res.status(400).json({ error: true, message: 'Informe email e senha.' });
     }
 
-    // Tenta paciente
+  // 1. Tenta administrador 1º
+  const administrador = await getAdministradorByEmail(email);
+  if (administrador && administrador.senha === senha) {
+    const id = administrador.id;
+    const payload = { sub: `administrador:${id}`, id, tipo: 'administrador', email };
+    const token = jwt.sign(payload, JWT_SECRET, { expiresIn: '7d' });
+    return res.status(200).json({ token, user: { id, tipo: 'administrador', email } });
+  }
+
+    // Tenta paciente 2º
     const paciente = await getPacienteByEmail(email);
     if (paciente && paciente.senha === senha) {
       const id = paciente.id_paciente ?? paciente.id;
@@ -49,7 +58,7 @@ app.post('/api/auth/login', async (req, res) => {
       return res.status(200).json({ token, user: { id, tipo: 'paciente', email } });
     }
 
-    // Tenta acompanhante
+    // Tenta acompanhante 3º
     const acompanhante = await getAcompanhanteByEmail(email);
     if (acompanhante && acompanhante.senha === senha) {
       const id = acompanhante.id;

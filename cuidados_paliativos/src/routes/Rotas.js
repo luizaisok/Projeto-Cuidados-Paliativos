@@ -15,6 +15,7 @@ import Login from "../pages/Login";
 import MenuSintomas from "../pages/MenuSintomas";
 import DefinicaoSintomas from "../pages/DefinicaoSintomas";
 import ConteudoDetalhe from "../pages/ConteudoDetalhe";
+import AdminDashboard from "../pages/AdminDashboard";
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
@@ -56,6 +57,7 @@ export default function Rotas() {
         <Stack.Screen name="Cadastro" component={Cadastro} />
 
         <Stack.Screen name="AbasPrincipais" component={AbasPrincipais} />
+        <Stack.Screen name="AdminDashboard" component={AdminDashboard} />
 
         <Stack.Screen name="SinalVerde" component={SinalVerde} />
         <Stack.Screen name="SinalAmarelo" component={SinalAmarelo} />
