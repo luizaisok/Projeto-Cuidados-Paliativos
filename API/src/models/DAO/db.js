@@ -5,7 +5,7 @@ async function createConnection() {
   const connection = await mysql.createConnection({
     host: 'localhost',
     user: 'root',
-    password: '1234',
+    password: '',
     database: 'cuidados_paliativos_db'
   });
 
@@ -20,7 +20,7 @@ const mysql = require('mysql2/promise');
 const pool = mysql.createPool({
   host: 'localhost',
   user: 'root',
-  password: '',
+  password: '1234',
   database: 'cuidados_paliativos_db',
 });
 
