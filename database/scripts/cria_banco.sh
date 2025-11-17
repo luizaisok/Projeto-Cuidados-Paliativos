@@ -24,6 +24,3 @@ fi
 
 # 3. Executar
 # ./cria_banco.sh
-
-# Simplificado
-# cd database/scripts >> chmod +x cria_banco.sh >> ./cria_banco.sh
