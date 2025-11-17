@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useNavigation, useRoute } from "@react-navigation/native";
-import { View, StyleSheet, Image, Text, TextInput, TouchableOpacity, ActivityIndicator } from "react-native";
+import { View, StyleSheet, Image, Text, TextInput, TouchableOpacity, ActivityIndicator, ScrollView } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useFonts, Comfortaa_400Regular } from "@expo-google-fonts/comfortaa";
 import Header from "../components/Header";
@@ -58,12 +58,13 @@ export default function Login() {
       // Paciente/Acompanhante: verifica se já preencheu sintomas hoje
       const hoje = new Date().toISOString().split("T")[0];
       const ultimaData = await AsyncStorage.getItem("ultimaDataSintoma");
-      if (ultimaData === hoje) {
+      if (ultimaData === hoje || data.user.tipo === "acompanhante") {
         navigation.replace("AbasPrincipais", { screen: "Home" });
       } else {
         navigation.replace("MenuSintomas");
       }
     }
+    
 
     } catch (e) {
       alert(e.message || "Erro ao conectar.");
@@ -76,6 +77,11 @@ export default function Login() {
     <>
         <Header/>
         <View style={Estilo.container}>
+          <ScrollView
+            style={{ width: "100%" }}
+            contentContainerStyle={{ alignItems: "center", paddingBottom: 40 }}
+            showsVerticalScrollIndicator={false}
+          >
             <Image 
                 source={require("../assets/img/LogoClara.png")} 
                 style={Estilo.img}
@@ -114,6 +120,7 @@ export default function Login() {
             <TouchableOpacity style={Estilo.botaoSecundario} onPress={() => navigation.navigate("Cadastro")}>
                 <Text style={[Estilo.txt, {fontSize: 20}]}>ou Cadastre-se</Text>
             </TouchableOpacity>
+          </ScrollView>
         </View>
         {/*<Footer/>*/}
     </>
