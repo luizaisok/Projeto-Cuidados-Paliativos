@@ -18,7 +18,12 @@ fi
 # Como rodar:
 # 1. Navegar até a pasta do script
 # cd database/scripts
+
 # 2. Dar permissão de execução (só precisa fazer uma vez)
 # chmod +x cria_banco.sh
+
 # 3. Executar
 # ./cria_banco.sh
+
+# Simplificado
+# cd database/scripts >> chmod +x cria_banco.sh >> ./cria_banco.sh
