@@ -1,6 +1,7 @@
-# IMPORTANTE! 
-# Para gerar os CSVs na pasta correta (root\database\data\), execute raíz do projeto:
-# cd database/scripts >> python gera_dados.py 
+# IMPORTANTE!
+# Execute desta forma:
+# cd database/scripts
+# python gera_dados.py
 
 import csv
 import random
@@ -23,7 +24,7 @@ def random_date(start_year=1940, end_year=2005):
     return start + timedelta(days=random.randint(0, (end - start).days))
 
 # Gerar 100 pacientes
-with open('../data/pacientes.csv', 'w', newline='', encoding='utf-8') as f:
+with open(os.path.join(data_path, 'pacientes.csv'), 'w', newline='', encoding='utf-8') as f:
     writer = csv.writer(f)
     writer.writerow(['email', 'senha', 'nome', 'nome_social', 'celular', 'genero', 
                      'data_nascimento', 'cidade', 'estado', 'tipo_sanguineo', 
@@ -55,7 +56,7 @@ with open('../data/pacientes.csv', 'w', newline='', encoding='utf-8') as f:
                         cidade, estado, tipo_sang, condicao, medicacao, contato_emerg, unidade])
 
 # Gerar 50 acompanhantes
-with open('../data/acompanhantes.csv', 'w', newline='', encoding='utf-8') as f:
+with open(os.path.join(data_path, 'acompanhantes.csv'), 'w', newline='', encoding='utf-8') as f:
     writer = csv.writer(f)
     writer.writerow(['email', 'senha', 'nome_completo', 'nome_social', 'telefone', 
                      'genero', 'data_nascimento'])
@@ -72,7 +73,7 @@ with open('../data/acompanhantes.csv', 'w', newline='', encoding='utf-8') as f:
         writer.writerow([email, senha, nome, nome_social, telefone, genero, data_nasc])
 
 # Gerar vínculos acompanhante-paciente
-with open('../data/acompanhante_paciente.csv', 'w', newline='', encoding='utf-8') as f:
+with open(os.path.join(data_path, 'acompanhante_paciente.csv'), 'w', newline='', encoding='utf-8') as f:
     writer = csv.writer(f)
     writer.writerow(['acompanhante_id', 'paciente_id'])
     
@@ -89,7 +90,7 @@ with open('../data/acompanhante_paciente.csv', 'w', newline='', encoding='utf-8'
                 writer.writerow([acomp_id, pac_id])
 
 # Gerar conteúdos
-with open('../data/conteudo.csv', 'w', newline='', encoding='utf-8') as f:
+with open(os.path.join(data_path, 'conteudo.csv'), 'w', newline='', encoding='utf-8') as f:
     writer = csv.writer(f)
     writer.writerow(['titulo', 'descricao', 'texto', 'data_post', 'sinaisSintomas', 'sinaisAlerta'])
     
@@ -139,7 +140,7 @@ with open('../data/conteudo.csv', 'w', newline='', encoding='utf-8') as f:
         writer.writerow(conteudo)
 
 # Gerar sintomas
-with open('../data/sintomas.csv', 'w', newline='', encoding='utf-8') as f:
+with open(os.path.join(data_path, 'sintomas.csv'), 'w', newline='', encoding='utf-8') as f:
     writer = csv.writer(f)
     writer.writerow(['nome_sintoma'])
     
@@ -157,4 +158,18 @@ with open('../data/sintomas.csv', 'w', newline='', encoding='utf-8') as f:
     for sintoma in sintomas:
         writer.writerow([sintoma])
 
-print("\nCSVs gerados com sucesso na pasta 'data'!")
+# Gerar registros de sintomas
+with open(os.path.join(data_path, 'registro.csv'), 'w', newline='', encoding='utf-8') as f:
+    writer = csv.writer(f)
+    writer.writerow(['data_registro', 'intensidade'])
+    
+    # Gerar 100 registros aleatórios
+    for i in range(100):
+        # Data aleatória nos últimos 30 dias
+        dias_atras = random.randint(0, 30)
+        data_registro = (datetime.now() - timedelta(days=dias_atras)).strftime('%Y-%m-%d %H:%M:%S')
+        intensidade = random.randint(1, 10)  # Escala de 1 a 10
+        
+        writer.writerow([data_registro, intensidade])
+
+print(f"\nCSVs gerados com sucesso em: {data_path}")
