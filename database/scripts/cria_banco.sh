@@ -15,7 +15,7 @@ else
     exit 1
 fi
 
-# Como rodar:
+# Como rodar (deve ser no GitBash):
 # 1. Navegar até a pasta do script
 # cd database/scripts
 

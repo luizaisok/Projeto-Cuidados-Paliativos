@@ -1,3 +1,7 @@
+# Não precise re-executar esse script, pq os CSVs já foram geradaos
+# Mas caso necessite gerá-los novamente, execute: cd database/scripts/ >> python gera_dados.py 
+# Você deve estar em root/database/scripts/ para executar o script Python se não gerará os CVSs em outro lugar fora de roo/database/data/ !!!
+
 import csv
 import random
 from datetime import datetime, timedelta

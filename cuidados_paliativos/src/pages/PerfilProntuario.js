@@ -222,7 +222,7 @@ export default function PerfilProntuario() {
 
   const [meusAcompanhantes, setMeusAcompanhantes] = useState([]);
   const [loadingAcompanhantes, setLoadingAcompanhantes] = useState(false);
-
+  
   const [acomp, setAcomp] = useState({
     id: "",
     email: "",
