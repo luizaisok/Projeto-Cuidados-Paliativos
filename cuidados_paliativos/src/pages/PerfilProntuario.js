@@ -240,6 +240,9 @@ export default function PerfilProntuario() {
   const [pacientesSelecionados, setPacientesSelecionados] = useState({});
   const [loadingPaciente, setLoadingPaciente] = useState(false);
 
+  const [pacientesEmEdicao, setPacientesEmEdicao] = useState({});
+  const [salvandoPaciente, setSalvandoPaciente] = useState(false);
+
   const fetchQuemSouEu = useCallback(async () => {
     try {
       const t = localStorage.getItem("token");
@@ -620,6 +623,90 @@ async function carregarDadosPaciente(pacienteId) {
   }
 }
 
+// Função para atualizar campo do paciente em edição
+function atualizarCampoPaciente(pacienteId, campo, valor) {
+  setPacientesEmEdicao(prev => ({
+    ...prev,
+    [pacienteId]: {
+      ...(prev[pacienteId] || pacientesSelecionados[pacienteId]),
+      [campo]: valor
+    }
+  }));
+}
+// Função para salvar alterações do paciente
+async function salvarPacienteVinculado(pacienteId) {
+  try {
+    const dadosEditados = pacientesEmEdicao[pacienteId];
+    if (!dadosEditados) {
+      alert("Atenção", "Nenhuma alteração detectada.");
+      return;
+    }
+    // Validações
+    if (dadosEditados.email && !emailOk(dadosEditados.email)) {
+      return alert("E-mail inválido", "Use o formato algo@dominio.com");
+    }
+    if (dadosEditados.celular && !foneOk(dadosEditados.celular)) {
+      return alert("Celular inválido", "Informe apenas números (10 ou 11 dígitos, com DDD).");
+    }
+    if (dadosEditados.data_nascimento && !dateOk(onlyDate(dadosEditados.data_nascimento))) {
+      return alert("Data inválida", "Use o formato YYYY-MM-DD.");
+    }
+    if (dadosEditados.estado && !ufOk(dadosEditados.estado)) {
+      return alert("UF inválida", "Use uma UF válida (ex.: SP, RJ, MG...).");
+    }
+    if (dadosEditados.tipo_sanguineo && !sangueOk(dadosEditados.tipo_sanguineo)) {
+      return alert("Tipo sanguíneo inválido", "Valores aceitos: A A-, B B-, AB AB-, O O-.");
+    }
+    setSalvandoPaciente(true);
+    const payload = {
+      nome: dadosEditados.nome || null,
+      nome_social: dadosEditados.nome_social || null,
+      email: dadosEditados.email || null,
+      senha: null, // Acompanhante não pode alterar senha
+      celular: dadosEditados.celular || null,
+      genero: dadosEditados.genero || null,
+      data_nascimento: onlyDate(dadosEditados.data_nascimento) || null,
+      cidade: dadosEditados.cidade || null,
+      estado: dadosEditados.estado ? dadosEditados.estado.toUpperCase() : null,
+      tipo_sanguineo: dadosEditados.tipo_sanguineo ? dadosEditados.tipo_sanguineo.toUpperCase() : null,
+      condicoes_medicas: dadosEditados.condicoes_medicas || null,
+      medicacao: dadosEditados.medicacao || null,
+      contato_emergencia: dadosEditados.contato_emergencia || null,
+      unidades_de_saude: dadosEditados.unidades_de_saude || null,
+    };
+    const resp = await fetch(`${API_BASE}/api/pacientes/${pacienteId}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: token ? `Bearer ${token}` : undefined,
+      },
+      body: JSON.stringify(payload),
+    });
+    const data = await resp.json();
+    if (!resp.ok || data?.error) {
+      throw new Error(data?.message || "Falha ao atualizar paciente!");
+    }
+    alert("Sucesso", "Dados do paciente atualizados com sucesso!");
+    
+    // Atualiza os dados exibidos
+    setPacientesSelecionados(prev => ({
+      ...prev,
+      [pacienteId]: dadosEditados
+    }));
+    
+    // Limpa estado de edição
+    setPacientesEmEdicao(prev => {
+      const novo = { ...prev };
+      delete novo[pacienteId];
+      return novo;
+    });
+  } catch (e) {
+    alert("Erro", e.message || "Erro ao atualizar paciente!");
+  } finally {
+    setSalvandoPaciente(false);
+  }
+}
+
   if (loading) {
     return (
       <>
@@ -993,82 +1080,215 @@ async function carregarDadosPaciente(pacienteId) {
                               <ActivityIndicator />
                             ) : (
                               <>
-                                <Text style={Estilo.dadosTitulo}>📋 Dados do Paciente</Text>
-                                
-                                <View style={Estilo.dadosItem}>
-                                  <Text style={Estilo.dadosLabel}>Nome completo:</Text>
-                                  <Text style={Estilo.dadosValor}>
-                                    {pacientesSelecionados[p.id].nome || "Não informado"}
-                                  </Text>
-                                </View>
-                                <View style={Estilo.dadosItem}>
-                                  <Text style={Estilo.dadosLabel}>Nome social:</Text>
-                                  <Text style={Estilo.dadosValor}>
-                                    {pacientesSelecionados[p.id].nome_social || "Não informado"}
-                                  </Text>
-                                </View>
-                                <View style={Estilo.dadosItem}>
-                                  <Text style={Estilo.dadosLabel}>Email:</Text>
-                                  <Text style={Estilo.dadosValor}>
-                                    {pacientesSelecionados[p.id].email || "Não informado"}
-                                  </Text>
-                                </View>
-                                <View style={Estilo.dadosItem}>
-                                  <Text style={Estilo.dadosLabel}>Celular:</Text>
-                                  <Text style={Estilo.dadosValor}>
-                                    {pacientesSelecionados[p.id].celular || "Não informado"}
-                                  </Text>
-                                </View>
-                                <View style={Estilo.dadosItem}>
-                                  <Text style={Estilo.dadosLabel}>Gênero:</Text>
-                                  <Text style={Estilo.dadosValor}>
-                                    {pacientesSelecionados[p.id].genero || "Não informado"}
-                                  </Text>
-                                </View>
-                                <View style={Estilo.dadosItem}>
-                                  <Text style={Estilo.dadosLabel}>Data de nascimento:</Text>
-                                  <Text style={Estilo.dadosValor}>
-                                    {pacientesSelecionados[p.id].data_nascimento 
-                                      ? onlyDate(pacientesSelecionados[p.id].data_nascimento)
-                                      : "Não informado"}
-                                  </Text>
-                                </View>
-                                <View style={Estilo.dadosItem}>
-                                  <Text style={Estilo.dadosLabel}>Cidade/Estado:</Text>
-                                  <Text style={Estilo.dadosValor}>
-                                    {pacientesSelecionados[p.id].cidade || "Não informado"} / {pacientesSelecionados[p.id].estado || "Não informado"}
-                                  </Text>
-                                </View>
-                                <View style={Estilo.dadosItem}>
-                                  <Text style={Estilo.dadosLabel}>Tipo sanguíneo:</Text>
-                                  <Text style={Estilo.dadosValor}>
-                                    {pacientesSelecionados[p.id].tipo_sanguineo || "Não informado"}
-                                  </Text>
-                                </View>
-                                <View style={Estilo.dadosItem}>
-                                  <Text style={Estilo.dadosLabel}>Condições médicas:</Text>
-                                  <Text style={Estilo.dadosValor}>
-                                    {pacientesSelecionados[p.id].condicoes_medicas || "Não informado"}
-                                  </Text>
-                                </View>
-                                <View style={Estilo.dadosItem}>
-                                  <Text style={Estilo.dadosLabel}>Medicação:</Text>
-                                  <Text style={Estilo.dadosValor}>
-                                    {pacientesSelecionados[p.id].medicacao || "Não informado"}
-                                  </Text>
-                                </View>
-                                <View style={Estilo.dadosItem}>
-                                  <Text style={Estilo.dadosLabel}>Contato de emergência:</Text>
-                                  <Text style={Estilo.dadosValor}>
-                                    {pacientesSelecionados[p.id].contato_emergencia || "Não informado"}
-                                  </Text>
-                                </View>
-                                <View style={Estilo.dadosItem}>
-                                  <Text style={Estilo.dadosLabel}>Unidades de saúde:</Text>
-                                  <Text style={Estilo.dadosValor}>
-                                    {pacientesSelecionados[p.id].unidades_de_saude || "Não informado"}
-                                  </Text>
-                                </View>
+                                <Text style={Estilo.dadosTitulo}>Dados do paciente</Text>                                
+                               {/* Nome completo */}
+                               <View style={Estilo.dadosItem}>
+                                 <Text style={Estilo.dadosLabel}>Nome completo:</Text>
+                                 <TextInput
+                                   style={Estilo.inputEdicao}
+                                   placeholder="Nome completo"
+                                   value={
+                                     pacientesEmEdicao[p.id]?.nome ?? 
+                                     pacientesSelecionados[p.id].nome ?? ""
+                                   }
+                                   onChangeText={(v) => atualizarCampoPaciente(p.id, 'nome', v)}
+                                 />
+                               </View>
+                               {/* Nome social */}
+                               <View style={Estilo.dadosItem}>
+                                 <Text style={Estilo.dadosLabel}>Nome social:</Text>
+                                 <TextInput
+                                   style={Estilo.inputEdicao}
+                                   placeholder="Nome social"
+                                   value={
+                                     pacientesEmEdicao[p.id]?.nome_social ?? 
+                                     pacientesSelecionados[p.id].nome_social ?? ""
+                                   }
+                                   onChangeText={(v) => atualizarCampoPaciente(p.id, 'nome_social', v)}
+                                 />
+                               </View>
+                               {/* Email */}
+                               <View style={Estilo.dadosItem}>
+                                 <Text style={Estilo.dadosLabel}>Email:</Text>
+                                 <TextInput
+                                   style={Estilo.inputEdicao}
+                                   placeholder="email@exemplo.com"
+                                   autoCapitalize="none"
+                                   keyboardType="email-address"
+                                   value={
+                                     pacientesEmEdicao[p.id]?.email ?? 
+                                     pacientesSelecionados[p.id].email ?? ""
+                                   }
+                                   onChangeText={(v) => atualizarCampoPaciente(p.id, 'email', v)}
+                                 />
+                               </View>
+                               {/* Celular */}
+                               <View style={Estilo.dadosItem}>
+                                 <Text style={Estilo.dadosLabel}>Celular:</Text>
+                                 <TextInput
+                                   style={Estilo.inputEdicao}
+                                   placeholder="11987654321"
+                                   keyboardType="number-pad"
+                                   value={
+                                     pacientesEmEdicao[p.id]?.celular ?? 
+                                     pacientesSelecionados[p.id].celular ?? ""
+                                   }
+                                   onChangeText={(v) => atualizarCampoPaciente(p.id, 'celular', v)}
+                                 />
+                               </View>
+                               {/* Gênero */}
+                               <View style={Estilo.dadosItem}>
+                                 <Text style={Estilo.dadosLabel}>Gênero:</Text>
+                                 <View style={Estilo.pickerWrapEdicao}>
+                                   <Picker
+                                     selectedValue={
+                                       pacientesEmEdicao[p.id]?.genero ?? 
+                                       pacientesSelecionados[p.id].genero ?? ""
+                                     }
+                                     onValueChange={(v) => atualizarCampoPaciente(p.id, 'genero', v)}
+                                     style={Estilo.pickerEdicao}
+                                     dropdownIconColor="#015184"
+                                   >
+                                     <Picker.Item label="Selecione" value="" />
+                                     {GENEROS.map(g => (
+                                       <Picker.Item key={g} label={g} value={g} />
+                                     ))}
+                                   </Picker>
+                                 </View>
+                               </View>
+                               {/* Data de nascimento */}
+                               <View style={Estilo.dadosItem}>
+                                 <Text style={Estilo.dadosLabel}>Data de nascimento:</Text>
+                                 <TextInput
+                                   style={Estilo.inputEdicao}
+                                   placeholder="YYYY-MM-DD"
+                                   value={
+                                     onlyDate(pacientesEmEdicao[p.id]?.data_nascimento) ?? 
+                                     onlyDate(pacientesSelecionados[p.id].data_nascimento) ?? ""
+                                   }
+                                   onChangeText={(v) => atualizarCampoPaciente(p.id, 'data_nascimento', v)}
+                                 />
+                               </View>
+                               {/* Cidade */}
+                               <View style={Estilo.dadosItem}>
+                                 <Text style={Estilo.dadosLabel}>Cidade:</Text>
+                                 <TextInput
+                                   style={Estilo.inputEdicao}
+                                   placeholder="Nome da cidade"
+                                   value={
+                                     pacientesEmEdicao[p.id]?.cidade ?? 
+                                     pacientesSelecionados[p.id].cidade ?? ""
+                                   }
+                                   onChangeText={(v) => atualizarCampoPaciente(p.id, 'cidade', v)}
+                                 />
+                               </View>
+                               {/* Estado */}
+                               <View style={Estilo.dadosItem}>
+                                 <Text style={Estilo.dadosLabel}>Estado (UF):</Text>
+                                 <View style={Estilo.pickerWrapEdicao}>
+                                   <Picker
+                                     selectedValue={
+                                       pacientesEmEdicao[p.id]?.estado ?? 
+                                       pacientesSelecionados[p.id].estado ?? ""
+                                     }
+                                     onValueChange={(v) => atualizarCampoPaciente(p.id, 'estado', v)}
+                                     style={Estilo.pickerEdicao}
+                                     dropdownIconColor="#015184"
+                                   >
+                                     <Picker.Item label="Selecione a UF" value="" />
+                                     {UFS.map(uf => (
+                                       <Picker.Item key={uf} label={uf} value={uf} />
+                                     ))}
+                                   </Picker>
+                                 </View>
+                               </View>
+                               {/* Tipo sanguíneo */}
+                               <View style={Estilo.dadosItem}>
+                                 <Text style={Estilo.dadosLabel}>Tipo sanguíneo:</Text>
+                                 <View style={Estilo.pickerWrapEdicao}>
+                                   <Picker
+                                     selectedValue={
+                                       pacientesEmEdicao[p.id]?.tipo_sanguineo ?? 
+                                       pacientesSelecionados[p.id].tipo_sanguineo ?? ""
+                                     }
+                                     onValueChange={(v) => atualizarCampoPaciente(p.id, 'tipo_sanguineo', v)}
+                                     style={Estilo.pickerEdicao}
+                                     dropdownIconColor="#015184"
+                                   >
+                                     <Picker.Item label="Selecione" value="" />
+                                     {SANGUES.map(s => (
+                                       <Picker.Item key={s} label={s} value={s} />
+                                     ))}
+                                   </Picker>
+                                 </View>
+                               </View>
+                               {/* Condições médicas */}
+                               <View style={Estilo.dadosItem}>
+                                 <Text style={Estilo.dadosLabel}>Condições médicas:</Text>
+                                 <TextInput
+                                   style={[Estilo.inputEdicao, { height: 70 }]}
+                                   placeholder="Diagnósticos..."
+                                   multiline
+                                   value={
+                                     pacientesEmEdicao[p.id]?.condicoes_medicas ?? 
+                                     pacientesSelecionados[p.id].condicoes_medicas ?? ""
+                                   }
+                                   onChangeText={(v) => atualizarCampoPaciente(p.id, 'condicoes_medicas', v)}
+                                 />
+                               </View>
+                               {/* Medicação */}
+                               <View style={Estilo.dadosItem}>
+                                 <Text style={Estilo.dadosLabel}>Medicação:</Text>
+                                 <TextInput
+                                   style={Estilo.inputEdicao}
+                                   placeholder="Medicamentos em uso"
+                                   value={
+                                     pacientesEmEdicao[p.id]?.medicacao ?? 
+                                     pacientesSelecionados[p.id].medicacao ?? ""
+                                   }
+                                   onChangeText={(v) => atualizarCampoPaciente(p.id, 'medicacao', v)}
+                                 />
+                               </View>
+                               {/* Contato de emergência */}
+                               <View style={Estilo.dadosItem}>
+                                 <Text style={Estilo.dadosLabel}>Contato de emergência:</Text>
+                                 <TextInput
+                                   style={Estilo.inputEdicao}
+                                   placeholder="Telefone(s) de emergência"
+                                   value={
+                                     pacientesEmEdicao[p.id]?.contato_emergencia ?? 
+                                     pacientesSelecionados[p.id].contato_emergencia ?? ""
+                                   }
+                                   onChangeText={(v) => atualizarCampoPaciente(p.id, 'contato_emergencia', v)}
+                                 />
+                               </View>
+                               {/* Unidades de saúde */}
+                               <View style={Estilo.dadosItem}>
+                                 <Text style={Estilo.dadosLabel}>Unidades de saúde:</Text>
+                                 <TextInput
+                                   style={Estilo.inputEdicao}
+                                   placeholder="Hospitais/clínicas frequentadas"
+                                   value={
+                                     pacientesEmEdicao[p.id]?.unidades_de_saude ?? 
+                                     pacientesSelecionados[p.id].unidades_de_saude ?? ""
+                                   }
+                                   onChangeText={(v) => atualizarCampoPaciente(p.id, 'unidades_de_saude', v)}
+                                 />
+                               </View>
+                               {/* Botão de Atualizar */}
+                               <TouchableOpacity
+                                 onPress={() => salvarPacienteVinculado(p.id)}
+                                 style={Estilo.botaoAtualizar}
+                                 disabled={salvandoPaciente}
+                               >
+                                 {salvandoPaciente ? (
+                                   <ActivityIndicator color="#FFF" />
+                                 ) : (
+                                   <Text style={Estilo.textoBotaoAtualizar}>
+                                     Atualizar dados do paciente
+                                   </Text>
+                                 )}
+                               </TouchableOpacity>
                               </>
                             )}
                           </View>
@@ -1090,7 +1310,6 @@ async function carregarDadosPaciente(pacienteId) {
           )}
         </ScrollView>
       </KeyboardAvoidingView>
-      {/*<Footer />*/}
     </>
   );
 }
@@ -1219,6 +1438,39 @@ const Estilo = StyleSheet.create({
     borderRadius: 6,
     borderWidth: 1,
     borderColor: "#E0E0E0",
+  },
+  inputEdicao: {
+    backgroundColor: "#FFF",
+    color: "#333",
+    borderRadius: 6,
+    padding: 10,
+    borderWidth: 1,
+    borderColor: "#8BAAC4",
+    fontSize: 14,
+  },
+  pickerWrapEdicao: {
+    backgroundColor: "#FFF",
+    borderRadius: 6,
+    overflow: "hidden",
+    borderWidth: 1,
+    borderColor: "#8BAAC4",
+  },
+  pickerEdicao: {
+    backgroundColor: "#FFF",
+    height: 48,
+    color: "#333",
+  },
+  botaoAtualizar: {
+    marginTop: 16,
+    backgroundColor: "#28a745",
+    borderRadius: 8,
+    paddingVertical: 12,
+    alignItems: "center",
+  },
+  textoBotaoAtualizar: {
+    color: "#FFF",
+    fontSize: 15,
+    fontWeight: "700",
   },
 });
 
