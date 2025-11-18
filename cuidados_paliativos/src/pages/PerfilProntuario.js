@@ -731,11 +731,11 @@ async function salvarPacienteVinculado(pacienteId) {
           contentContainerStyle={{ padding: 16, paddingBottom: 32, backgroundColor: "#FFF3E5" }}
           keyboardShouldPersistTaps="handled"
         >
-          <Text style={Estilo.titulo}>Perfil / Prontuário</Text>
+          <Text style={Estilo.titulo}>Prontuário</Text>
 
           {/* ID somente leitura */}
           <View style={Estilo.card}>
-            <Text style={Estilo.label}>Seu ID (somente leitura)</Text>
+            <Text style={Estilo.subtitulo}>Seu código</Text>
             <TextInput
               style={[Estilo.input, { opacity: 0.8 }]}
               editable={false}
@@ -1034,10 +1034,10 @@ async function salvarPacienteVinculado(pacienteId) {
               <View style={Estilo.card}>
                 <Text style={Estilo.subtitulo}>Vínculos com Pacientes</Text>
 
-                <Text style={Estilo.label}>Vincular por ID do Paciente</Text>
+                <Text style={Estilo.label}>Vincular por código do Paciente</Text>
                 <TextInput
                   style={Estilo.input}
-                  placeholder="Ex.: 12"
+                  placeholder="Digite o código de seu pacinte"
                   keyboardType="numeric"
                   value={pacienteIdDigitado}
                   onChangeText={setPacienteIdDigitado}
@@ -1047,15 +1047,15 @@ async function salvarPacienteVinculado(pacienteId) {
                 </TouchableOpacity>
 
                 <View style={{ marginTop: 16 }}>
-                  <Text style={Estilo.label}>Meus pacientes</Text>
+                  <Text style={Estilo.subtitulo}>Meus pacientes</Text>
                   {vinculos.length === 0 ? (
                     <Text style={{ color: "#333", marginTop: 8 }}>Nenhum vínculo ainda.</Text>
                   ) : (
                     vinculos.map((p) => (
                       <View key={p.id} style={Estilo.itemVinculo}>
                         <View style={{ flex: 1 }}>
-                        <Text style={{ fontWeight: "600", fontSize: 16, marginBottom: 4 }}>
-                          {p.nome ?? "(sem nome)"} - ID: {p.id}
+                        <Text style={{ fontWeight: "600", fontSize: 16 }}>
+                          {p.nome ?? "(sem nome)"} - Código: {p.id}
                         </Text>
                         <Text style={{ color: "#666", marginBottom: 8 }}>{p.email}</Text>
                         
@@ -1063,13 +1063,12 @@ async function salvarPacienteVinculado(pacienteId) {
                           onPress={() => carregarDadosPaciente(p.id)}
                           style={{
                             backgroundColor: "#015184",
-                            paddingVertical: 8,
-                            paddingHorizontal: 12,
-                            borderRadius: 8,
+                            borderRadius: 10,
+                            paddingVertical: 12,
                             alignItems: "center",
                           }}
                         >
-                          <Text style={{ color: "#FFF", fontWeight: "600" }}>
+                          <Text style={{ color: "#FFF", fontSize: 16, fontWeight: "700" }}>
                             {pacientesSelecionados[p.id] ? "Ocultar dados" : "Ver dados completos"}
                           </Text>
                         </TouchableOpacity>
@@ -1294,13 +1293,22 @@ async function salvarPacienteVinculado(pacienteId) {
                           </View>
                         )}
                       </View>
-                        <Text>{p.id} — {p.nome ?? "(sem nome)"} — {p.email}</Text>
+                        `{/*<Text>{p.id} — {p.nome ?? "(sem nome)"} — {p.email}</Text>*/}
+                        <Text style={{margin: 0, padding: 0}}>Deseja remover {p.nome ?? "(sem nome)"}?</Text>
                         <TouchableOpacity
                           onPress={() => desvincular(p.id)}
                           style={Estilo.btnRemover}
                         >
-                          <Text style={{ color: "#fff" }}>Remover</Text>
+                          <Text style={{ color: "#fff", fontSize: 16, fontWeight: 700 }}>Remover</Text>
                         </TouchableOpacity>
+                        <View style={{ 
+                          height: 2, 
+                          backgroundColor: '#8BAAC4',
+                          margin: 0,
+                          marginVertical: 20,
+                          marginHorizontal: 10,
+                          borderRadius: 1
+                        }} />
                       </View>
                     ))
                   )}
@@ -1367,7 +1375,6 @@ const Estilo = StyleSheet.create({
   pickerItem: {
     fontSize: 16,
   },
-
   botaoPrimario: {
     marginTop: 16,
     backgroundColor: "#015184",
@@ -1381,39 +1388,34 @@ const Estilo = StyleSheet.create({
     fontWeight: "700",
   },
   botaoSecundario: {
-    marginTop: 10,
-    backgroundColor: "#E0E0E0",
+    marginTop: 16,
+    backgroundColor: "#015184",
     borderRadius: 10,
-    paddingVertical: 10,
+    paddingVertical: 12,
     alignItems: "center",
   },
   textoBotaoSec: {
-    color: "#333",
+    color: "#FFF6E5",
     fontSize: 16,
-    fontWeight: "600",
+    fontWeight: "700",
   },
   itemVinculo: {
-    // flexDirection: "row",
-    // alignItems: "center",
-    // justifyContent: "space-between",
     backgroundColor: "#F4F4F4",
     borderRadius: 8,
     padding: 10,
-    marginTop: 8,
   },
   btnRemover: {
-    backgroundColor: "#C0392B",
-    paddingHorizontal: 10,
-    paddingVertical: 6,
-    borderRadius: 8,
+    marginTop: 10,
+    backgroundColor: "#a00000",
+    borderRadius: 10,
+    paddingVertical: 12,
+    alignItems: "center",
   },
   dadosPaciente: {
     marginTop: 12,
     backgroundColor: "#F0F4F8",
     borderRadius: 8,
     padding: 12,
-    borderLeftWidth: 4,
-    borderLeftColor: "#015184",
   },
   dadosTitulo: {
     fontSize: 16,
@@ -1462,14 +1464,14 @@ const Estilo = StyleSheet.create({
   },
   botaoAtualizar: {
     marginTop: 16,
-    backgroundColor: "#28a745",
-    borderRadius: 8,
+    backgroundColor: "#015184",
+    borderRadius: 10,
     paddingVertical: 12,
     alignItems: "center",
   },
   textoBotaoAtualizar: {
     color: "#FFF",
-    fontSize: 15,
+    fontSize: 16,
     fontWeight: "700",
   },
 });
