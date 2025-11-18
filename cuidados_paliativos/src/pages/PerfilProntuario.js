@@ -173,6 +173,8 @@ import {
   Alert,
 } from "react-native";
 import { Picker } from "@react-native-picker/picker";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { useNavigation } from "@react-navigation/native";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
 
@@ -182,6 +184,8 @@ export default function PerfilProntuario() {
   const UFS = ["AC","AL","AP","AM","BA","CE","DF","ES","GO","MA","MT","MS","MG","PA","PB","PR","PE","PI","RJ","RN","RS","RO","RR","SC","SP","SE","TO"];
   const SANGUES = ["A+","A-","B+","B-","AB+","AB-","O+","O-"];
   const GENEROS = ["Feminino","Masculino","Não-binário","Prefiro não informar","Outro"];
+
+  const navigation = useNavigation();
 
   const onlyDate = (v) => {
     if (!v) return "";
@@ -707,6 +711,32 @@ async function salvarPacienteVinculado(pacienteId) {
   }
 }
 
+// Função para fazer logout
+async function fazerLogout() {
+  try {
+    // Limpa localStorage
+    localStorage.removeItem("token");
+    localStorage.removeItem("userId");
+    localStorage.removeItem("userTipo");
+    localStorage.removeItem("userEmail");
+    
+    // Limpa AsyncStorage
+    await AsyncStorage.multiRemove([
+      "auth_token",
+      "auth_id",
+      "auth_role",
+      "auth_email",
+    ]);
+    
+    alert("Logout", "Você foi desconectado com sucesso!");
+    
+    // Navega para a tela de login
+    navigation.replace("Login");
+  } catch (e) {
+    alert("Erro", "Erro ao fazer logout: ", e.message);
+  }
+}
+
   if (loading) {
     return (
       <>
@@ -892,9 +922,17 @@ async function salvarPacienteVinculado(pacienteId) {
                   placeholder="Quais unidades de saúde você frequenta?"
                   onChangeText={(v) => setPaciente({ ...paciente, unidades_de_saude: v })}
                 />
+               
+                <TouchableOpacity
+                  onPress={salvarPaciente}
+                  style={Estilo.botaoPrimario}
+                  disabled={salvando}
+                >
+                  {salvando ? <ActivityIndicator color="#fff" /> : <Text style={Estilo.textoBotao}>Salvar</Text>}
+                </TouchableOpacity>
 
                 <View style={{ marginTop: 24 }}>
-                  <Text style={[Estilo.txt, { fontSize: 18, marginBottom: 8 }]}>
+                  <Text style={[Estilo.subtitulo, { fontSize: 18, marginBottom: 8 }]}>
                     Meus acompanhantes
                   </Text>
 
@@ -938,14 +976,14 @@ async function salvarPacienteVinculado(pacienteId) {
                     ))
                   )}
                 </View>
-
+              </View>
+              <View style={{backgroundColor: "#fff", borderRadius: 12, padding: 14, shadowColor: "#000", shadowOpacity: 0.06, shadowRadius: 6}}>
                 <TouchableOpacity
-                  onPress={salvarPaciente}
-                  style={Estilo.botaoPrimario}
-                  disabled={salvando}
-                >
-                  {salvando ? <ActivityIndicator color="#fff" /> : <Text style={Estilo.textoBotao}>Salvar</Text>}
-                </TouchableOpacity>
+                onPress={fazerLogout}
+                  style={Estilo.botaoLogout}
+               >
+                 <Text style={Estilo.textoBotaoLogout}>Sair da conta</Text>
+               </TouchableOpacity>
               </View>
             </>
           ) : (
@@ -1301,19 +1339,21 @@ async function salvarPacienteVinculado(pacienteId) {
                         >
                           <Text style={{ color: "#fff", fontSize: 16, fontWeight: 700 }}>Remover</Text>
                         </TouchableOpacity>
-                        <View style={{ 
-                          height: 2, 
-                          backgroundColor: '#8BAAC4',
-                          margin: 0,
-                          marginVertical: 20,
-                          marginHorizontal: 10,
-                          borderRadius: 1
-                        }} />
+                        <View style={{ height: 2, backgroundColor: '#8BAAC4', margin: 0, marginVertical: 20, marginHorizontal: 10, borderRadius: 1 }} />
                       </View>
                     ))
                   )}
                 </View>
               </View>
+              {/* Botão de Logout */}
+              <View style={{backgroundColor: "#fff", borderRadius: 12, padding: 14, shadowColor: "#000", shadowOpacity: 0.06, shadowRadius: 6}}>
+                <TouchableOpacity
+                onPress={fazerLogout}
+                  style={Estilo.botaoLogout}
+               >
+                 <Text style={Estilo.textoBotaoLogout}>Sair da conta</Text>
+               </TouchableOpacity>
+             </View>
             </>
           )}
         </ScrollView>
@@ -1471,6 +1511,21 @@ const Estilo = StyleSheet.create({
   },
   textoBotaoAtualizar: {
     color: "#FFF",
+    fontSize: 16,
+    fontWeight: "700",
+  },
+  botaoLogout: {
+    backgroundColor: "#ffbb00ff",
+    borderRadius: 10,
+    paddingVertical: 14,
+    alignItems: "center",
+    shadowColor: "#000",
+    shadowOpacity: 0.2,
+    shadowRadius: 3,
+    elevation: 4,
+  },
+  textoBotaoLogout: {
+    color: "#532C1D",
     fontSize: 16,
     fontWeight: "700",
   },
