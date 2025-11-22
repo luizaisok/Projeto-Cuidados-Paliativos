@@ -1,4 +1,4 @@
- // Protótipo da página de administrador c/ logout
+// Protótipo da página de administrador c/ logout
 import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
@@ -8,22 +8,14 @@ export default function AdminDashboard({ navigation }) {
     navigation.replace('Login');
   };
 
-  const irParaConteudos = () => {
-    navigation.navigate('GerenciarConteudos');
-  };
-
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Painel Administrativo</Text>
       <Text style={styles.subtitle}>Bem-vindo, Administrador!</Text>
       
+      {/* Área para o seu colega desenvolver */}
       <View style={styles.content}>
-        <TouchableOpacity 
-          style={styles.menuButton} 
-          onPress={irParaConteudos}
-        >
-          <Text style={styles.menuButtonText}>Gerenciar Conteúdos</Text>
-        </TouchableOpacity>
+        <Text style={styles.info}>Desenvolva suas funcionalidades aqui</Text>
       </View>
       
       <TouchableOpacity style={styles.logoutButton} onPress={handleLogout}>
@@ -54,22 +46,12 @@ const styles = StyleSheet.create({
   },
   content: {
     flex: 1,
-    width: '100%',
     justifyContent: 'center',
     alignItems: 'center'
   },
-  menuButton: {
-    backgroundColor: '#015184',
-    padding: 20,
-    borderRadius: 10,
-    width: '90%',
-    alignItems: 'center',
-    marginBottom: 15,
-  },
-  menuButtonText: {
+  info: {
     color: '#FDEDD3',
-    fontSize: 18,
-    fontWeight: 'bold'
+    fontSize: 16
   },
   logoutButton: {
     backgroundColor: '#015184',

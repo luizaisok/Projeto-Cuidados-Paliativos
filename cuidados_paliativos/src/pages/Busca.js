@@ -75,7 +75,6 @@ const Card = ({ dado, usuario, abrirModalEdicao, getConteudos }) => {
         <Text style={Estilo.footerDate}>{dado?.data}</Text>
       </View>
 
-      {/*
       {usuario.tipo === "adm" && (
         <View style={{ flexDirection: "row", gap: 10, marginTop: 10 }}>
           <TouchableOpacity onPress={() => abrirModalEdicao(dado)}>
@@ -98,7 +97,6 @@ const Card = ({ dado, usuario, abrirModalEdicao, getConteudos }) => {
           </TouchableOpacity>
         </View>
       )}
-      */}
     </View>
   );
 };

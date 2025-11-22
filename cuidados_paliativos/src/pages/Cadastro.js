@@ -44,7 +44,7 @@ export default function Cadastro(){
                 throw new Error(data?.message || "Erro ao cadastrar.");
             }
 
-            alert(`Cadastro realizado! Seu código: ${data.id}`);
+            alert(`Cadastro realizado! ID: ${data.id}`);
 
             setSenha("");
             setConfirmar("");

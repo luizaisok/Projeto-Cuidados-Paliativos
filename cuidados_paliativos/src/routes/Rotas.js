@@ -6,6 +6,7 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import HomePage from "../pages/HomePage";
 import Busca from "../pages/Busca";
 import PerfilProntuario from "../pages/PerfilProntuario";
+
 import SinalVerde from "../pages/SinalVerde";
 import SinalAmarelo from "../pages/SinalAmarelo";
 import SinalVermelho from "../pages/SinalVermelho";
@@ -15,9 +16,6 @@ import MenuSintomas from "../pages/MenuSintomas";
 import DefinicaoSintomas from "../pages/DefinicaoSintomas";
 import ConteudoDetalhe from "../pages/ConteudoDetalhe";
 import AdminDashboard from "../pages/AdminDashboard";
-import GerenciarConteudos from '../pages/GerenciarConteudos';
-import NovoConteudo from '../pages/NovoConteudo';
-import EditarConteudo from '../pages/EditarConteudo';
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
@@ -57,14 +55,14 @@ export default function Rotas() {
         {/* Auth */}
         <Stack.Screen name="Login" component={Login} />
         <Stack.Screen name="Cadastro" component={Cadastro} />
+
         <Stack.Screen name="AbasPrincipais" component={AbasPrincipais} />
         <Stack.Screen name="AdminDashboard" component={AdminDashboard} />
-        <Stack.Screen name="GerenciarConteudos" component={GerenciarConteudos} />
-        <Stack.Screen name="NovoConteudo" component={NovoConteudo} />
-        <Stack.Screen name="EditarConteudo" component={EditarConteudo} />
+
         <Stack.Screen name="SinalVerde" component={SinalVerde} />
         <Stack.Screen name="SinalAmarelo" component={SinalAmarelo} />
         <Stack.Screen name="SinalVermelho" component={SinalVermelho} />
+
         <Stack.Screen name="MenuSintomas" component={MenuSintomas} />
         <Stack.Screen name="DefinicaoSintomas" component={DefinicaoSintomas} />
         <Stack.Screen name="ConteudoDetalhe" component={ConteudoDetalhe} />
