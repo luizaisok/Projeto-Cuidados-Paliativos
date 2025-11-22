@@ -2,6 +2,7 @@ import { View, Text, StyleSheet, ScrollView, TouchableOpacity } from "react-nati
 import Header from "../components/Header";
 import { useRoute, useNavigation } from "@react-navigation/native";
 import { useEffect, useState } from "react";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export default function ConteudoDetalhe() {
   const route = useRoute();
@@ -9,8 +10,15 @@ export default function ConteudoDetalhe() {
   const { id } = route.params;
 
   const [conteudo, setConteudo] = useState(null);
+  const [userRole, setUserRole] = useState(null);
 
   useEffect(() => {
+    async function verificarUsuario() {
+      const role = await AsyncStorage.getItem("auth_role");
+      setUserRole(role);
+    }
+    verificarUsuario();
+
     async function carregar() {
       try {
         const response = await fetch(`http://localhost:3000/api/conteudos/${id}`);
@@ -22,6 +30,46 @@ export default function ConteudoDetalhe() {
     }
     carregar();
   }, [id]);
+
+  const excluirConteudo = async () => {
+    /* FUNCIONA NO ANDROID
+    try {
+      const token = await AsyncStorage.getItem("auth_token");
+      const response = await fetch(`http://localhost:3000/api/conteudos/${id}`, {
+        method: 'DELETE',
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      });
+
+      if (response.ok) {
+        alert('Conteúdo excluído com sucesso!');
+        navigation.navigate("AbasPrincipais", { screen: "Home" });
+      }
+    } catch (err) {
+      alert('Erro ao excluir conteúdo');
+    }
+    */
+    try {
+      const token = await AsyncStorage.getItem("auth_token");
+      const response = await fetch(`http://localhost:3000/api/conteudos/${id}`, {
+        method: 'DELETE',
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      });
+
+      if (response.ok) {
+        alert('Conteúdo excluído com sucesso!');
+        navigation.navigate("AbasPrincipais", { screen: "Home" });
+      } else {
+        alert('Erro ao excluir conteúdo');
+      }
+    } catch (err) {
+      alert('Erro ao excluir conteúdo');
+      console.error(err);
+    }
+  };
 
   if (!conteudo) {
     return (
@@ -50,6 +98,24 @@ export default function ConteudoDetalhe() {
         >
           <Text style={styles.txtBtn}>Sinto um ou mais dos sinais e sintomas</Text>
         </TouchableOpacity>
+
+        {userRole === 'administrador' && (
+          <View style={styles.adminActions}>
+            <TouchableOpacity
+              style={styles.btnEditar}
+              onPress={() => navigation.navigate('EditarConteudo', { id: conteudo.id })}
+            >
+              <Text style={styles.txtBtnAdmin}>Editar</Text>
+            </TouchableOpacity>
+            
+            <TouchableOpacity
+              style={styles.btnExcluir}
+              onPress={() => excluirConteudo()}
+            >
+              <Text style={styles.txtBtnAdmin}>Excluir</Text>
+            </TouchableOpacity>
+          </View>
+        )}
 
         <Text style={styles.subtitulo}>Sinais de Alerta:</Text>
         <Text style={styles.texto}>{conteudo.SinaisAlerta}</Text>
@@ -143,5 +209,30 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontWeight: "bold",
     textAlign: "center",
+  },
+  adminActions: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginTop: 20,
+    gap: 10,
+  },
+  btnEditar: {
+    flex: 1,
+    backgroundColor: "#4A90E2",
+    padding: 12,
+    borderRadius: 10,
+    alignItems: "center",
+  },
+  btnExcluir: {
+    flex: 1,
+    backgroundColor: "#E74C3C",
+    padding: 12,
+    borderRadius: 10,
+    alignItems: "center",
+  },
+  txtBtnAdmin: {
+    color: "#FFF",
+    fontWeight: "bold",
+    fontSize: 16,
   },
 });
