@@ -149,14 +149,24 @@ with open(os.path.join(data_path, 'sintomas.csv'), 'w', newline='', encoding='ut
     writer.writerow(['nome_sintoma'])
     
     sintomas = [
-        'Dor de cabeça',
-        'Náusea',
-        'Tontura',
+        'Constipação Intestinal',
         'Cansaço',
-        'Falta de apetite',
-        'Insônia',
+        'Fraqueza',
+        'Vômito',
+        'Tosse',
         'Falta de ar',
-        'Febre'
+        'Sonolência',
+        'Irritabilidade',
+        'Suor Excessivo',
+        'Dor de Cabeça',
+        'Dor no Corpo',
+        'Náusea',
+        'Diarreia',
+        'Congestão Nasal',
+        'Tontura',
+        'Insônia',
+        'Perda de Apetite',
+        'Calafrios'
     ]
     
     for sintoma in sintomas:
