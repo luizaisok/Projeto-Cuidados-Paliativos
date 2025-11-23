@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { StyleSheet, Text, View, ScrollView, ActivityIndicator, Platform } from "react-native";
+import { StyleSheet, Text, View, ScrollView, ActivityIndicator, Platform, TouchableOpacity, TextInput, Alert } from "react-native";
 import { useFonts, Comfortaa_400Regular, Comfortaa_700Bold } from "@expo-google-fonts/comfortaa";
 import { CartesianChart, Bar, useChartPressState } from "victory-native";
 import { Circle } from "@shopify/react-native-skia";
@@ -195,6 +195,138 @@ const MeuGraficoBarras = ({ titulo, data, corTemaMobile }) => {
   );
 };
 
+// Gerenciador de Sintomas
+const GerenciadorSintomas = ({ onAtualizar }) => {
+  const [expandido, setExpandido] = useState(false);
+  const [verTodos, setVerTodos] = useState(false);
+  const [sintomas, setSintomas] = useState([]);
+  const [novoSintoma, setNovoSintoma] = useState("");
+
+  // Carrega sintomas da API
+  const carregarSintomas = async () => {
+    try {
+      const res = await fetch("http://localhost:3000/api/sintomas");
+      const data = await res.json();
+      if (data.success) setSintomas(data.sintomas);
+    } catch (error) {
+      console.error("Erro ao carregar sintomas:", error);
+    }
+  };
+
+  // Carrega quando expande
+  useEffect(() => {
+    if (expandido) carregarSintomas();
+  }, [expandido]);
+
+  // Remove sintoma
+  const removerSintoma = async (id, nome) => {
+    const confirmar = Platform.OS === 'web' 
+      ? window.confirm(`Remover "${nome}"?`)
+      : await new Promise((resolve) => {
+          Alert.alert("Confirmar", `Remover "${nome}"?`, [
+            { text: "Cancelar", onPress: () => resolve(false) },
+            { text: "Remover", onPress: () => resolve(true) }
+          ]);
+        });
+
+    if (!confirmar) return;
+
+    try {
+      const res = await fetch(`http://localhost:3000/api/sintomas/${id}`, { method: 'DELETE' });
+      const data = await res.json();
+      
+      if (data.success) {
+        setSintomas(sintomas.filter(s => s.id !== id));
+        onAtualizar();
+      }
+    } catch (error) {
+      console.error("Erro ao remover:", error);
+    }
+  };
+
+  // Adiciona novo sintoma
+  const adicionarSintoma = async () => {
+    if (!novoSintoma.trim()) return;
+
+    try {
+      const res = await fetch("http://localhost:3000/api/sintomas", {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ nome_sintoma: novoSintoma.trim() }),
+      });
+
+      const data = await res.json();
+      
+      if (data.success) {
+        setNovoSintoma("");
+        carregarSintomas();
+        onAtualizar();
+      }
+    } catch (error) {
+      console.error("Erro ao adicionar:", error);
+    }
+  };
+
+  const sintomasVisiveis = verTodos ? sintomas : sintomas.slice(0, 3);
+
+  return (
+    <View style={Estilo.gerenciadorContainer}>
+      {/* Botão expandir/recolher */}
+      <TouchableOpacity style={Estilo.botaoExpandir} onPress={() => setExpandido(!expandido)}>
+        <Text style={Estilo.botaoExpandirTexto}>
+          {expandido ? "Fechar Gerenciamento de Sintomas" : "Gerenciar Sintomas"}
+        </Text>
+      </TouchableOpacity>
+
+      {/* Conteúdo expandido */}
+      {expandido && (
+        <View style={Estilo.painelExpandido}>
+          <Text style={Estilo.subtitulo}>Lista de Sintomas</Text>
+
+          {/* Lista de sintomas */}
+          {sintomasVisiveis.map((sintoma) => (
+            <View key={sintoma.id} style={Estilo.sintomaItem}>
+              <Text style={Estilo.sintomaNome}>{sintoma.nome_sintoma}</Text>
+              <TouchableOpacity
+                style={Estilo.botaoRemover}
+                onPress={() => removerSintoma(sintoma.id, sintoma.nome_sintoma)}
+              >
+                <Text style={Estilo.botaoRemoverTexto}>Remover</Text>
+              </TouchableOpacity>
+            </View>
+          ))}
+
+          {/* Botão "Ver mais" */}
+          {sintomas.length > 3 && (
+            <TouchableOpacity onPress={() => setVerTodos(!verTodos)}>
+              <Text style={Estilo.verMais}>
+                {verTodos ? "Ver menos" : "Ver mais"}
+              </Text>
+            </TouchableOpacity>
+          )}
+
+          {/* Formulário adicionar */}
+          <View style={Estilo.formularioAdicionar}>
+            <Text style={Estilo.subtitulo}>Adicionar Novo Sintoma</Text>
+            
+            <TextInput
+              style={Estilo.input}
+              placeholder="Nome do sintoma"
+              placeholderTextColor="#999"
+              value={novoSintoma}
+              onChangeText={setNovoSintoma}
+            />
+
+            <TouchableOpacity style={Estilo.botaoAdicionar} onPress={adicionarSintoma}>
+              <Text style={Estilo.botaoAdicionarTexto}>Adicionar Sintoma</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      )}
+    </View>
+  );
+};
+
 export default function HomeAdmin() {
   let [fontsLoaded] = useFonts({
     Comfortaa_400Regular,
@@ -210,39 +342,40 @@ export default function HomeAdmin() {
     return "http://192.168.1.15:3000"; 
   };
 
-  useEffect(() => {
-    const carregarTudo = async () => {
-      try {
-        const BASE_URL = getBaseUrl();
-        console.log("Conectando em:", BASE_URL);
-        
-        const controller = new AbortController();
-        const timeoutId = setTimeout(() => controller.abort(), 3000);
+  // Função para carregar dados da API
+  const carregarDados = async () => {
+    try {
+      const BASE_URL = getBaseUrl();
+      console.log("Conectando em:", BASE_URL);
+      
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 3000);
 
-        const [resRegistros, resSintomas] = await Promise.all([
-          fetch(`${BASE_URL}/api/registros`, { signal: controller.signal }),
-          fetch(`${BASE_URL}/api/sintomas`, { signal: controller.signal })
-        ]);
+      const [resRegistros, resSintomas] = await Promise.all([
+        fetch(`${BASE_URL}/api/registros`, { signal: controller.signal }),
+        fetch(`${BASE_URL}/api/sintomas`, { signal: controller.signal })
+      ]);
 
-        clearTimeout(timeoutId);
+      clearTimeout(timeoutId);
 
-        const jsonRegistros = await resRegistros.json();
-        const jsonSintomas = await resSintomas.json();
+      const jsonRegistros = await resRegistros.json();
+      const jsonSintomas = await resSintomas.json();
 
-        if (jsonRegistros.success && jsonSintomas.success) {
-          const dadosFinais = processarDados(jsonRegistros.registros, jsonSintomas.sintomas);
-          setMetricas(dadosFinais);
-        } else {
-          throw new Error("Falha na resposta da API");
-        }
-      } catch (error) {
-        console.warn("Erro ao carregar dados:", error);
-      } finally {
-        setLoading(false);
+      if (jsonRegistros.success && jsonSintomas.success) {
+        const dadosFinais = processarDados(jsonRegistros.registros, jsonSintomas.sintomas);
+        setMetricas(dadosFinais);
+      } else {
+        throw new Error("Falha na resposta da API");
       }
-    };
+    } catch (error) {
+      console.warn("Erro ao carregar dados:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
-    carregarTudo();
+  useEffect(() => {
+    carregarDados();
   }, []);
 
   if (!fontsLoaded || loading) {
@@ -292,6 +425,8 @@ export default function HomeAdmin() {
               data={metricas.dadosDesvioPadrao}
               corTemaMobile="#800080" // Roxo
             />
+
+            <GerenciadorSintomas onAtualizar={carregarDados} />
           </>
         ) : (
           <Text style={[Estilo.txt, Estilo.card, {textAlign: 'center'}]}>
@@ -378,5 +513,109 @@ const Estilo = StyleSheet.create({
     fontFamily: "Comfortaa_400Regular",
     fontSize: 12,
     color: "#666",
+  },
+   gerenciadorContainer: {
+    width: "90%",
+    alignSelf: "center",
+    marginTop: 10,
+    marginBottom: 30,
+    backgroundColor: "#fff",
+    borderRadius: 12,
+    overflow: "hidden",
+    shadowColor: "#000",
+    shadowOpacity: 0.06,
+    shadowRadius: 6,
+    elevation: 3,
+  },
+  botaoExpandir: {
+    padding: 16,
+    backgroundColor: "#015184",
+    alignItems: "center",
+  },
+  botaoExpandirTexto: {
+    fontFamily: "Comfortaa_700Bold",
+    color: "#FFF6E5",
+    fontSize: 16,
+  },
+  painelExpandido: {
+    padding: 14,
+  },
+  subtitulo: {
+    fontFamily: "Comfortaa_700Bold",
+    fontSize: 16,
+    color: "#112A6C",
+    marginBottom: 12,
+    marginTop: 8,
+  },
+  sintomaItem: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    paddingVertical: 12,
+    paddingHorizontal: 10,
+    borderBottomWidth: 1,
+    borderBottomColor: "#F0F0F0",
+    backgroundColor: "#F4F4F4",
+    borderRadius: 8,
+    marginBottom: 8,
+  },
+  sintomaNome: {
+    fontFamily: "Comfortaa_400Regular",
+    fontSize: 14,
+    color: "#532C1D",
+    flex: 1,
+  },
+  botaoRemover: {
+    backgroundColor: "#a00000",
+    paddingHorizontal: 12,
+    paddingVertical: 8,
+    borderRadius: 8,
+  },
+  botaoRemoverTexto: {
+    fontFamily: "Comfortaa_700Bold",
+    color: "#FFF6E5",
+    fontSize: 12,
+  },
+  verMais: {
+    fontFamily: "Comfortaa_700Bold",
+    color: "#015184",
+    textAlign: "center",
+    marginTop: 12,
+    textDecorationLine: "underline",
+    fontSize: 14,
+  },
+  formularioAdicionar: {
+    marginTop: 0,
+    paddingTop: 0,
+    borderTopWidth: 1,
+    borderTopColor: "#F0F0F0",
+  },
+  input: {
+    fontFamily: "Comfortaa_400Regular",
+    backgroundColor: "#F4F4F4",
+    borderRadius: 8,
+    paddingVertical: 12,
+    paddingHorizontal: 10,
+    marginBottom: 12,
+    fontSize: 14,
+    color: "#532C1D",
+    borderWidth: 1,
+    borderColor: "#F4F4F4",
+  },
+  botaoAdicionar: {
+    backgroundColor: "#8BAAC4",
+    padding: 14,marginTop: 5,
+    borderRadius: 10,
+    alignItems: "center",
+    shadowColor: "#000",
+    shadowOpacity: 0.2,
+    shadowRadius: 3,
+    elevation: 4,
+  },
+  botaoAdicionarTexto: {
+    fontFamily: "Comfortaa_700Bold",
+    color: "#FFF6E5",
+    fontSize: 16,
+    fontWeight: "700",
   },
 });
