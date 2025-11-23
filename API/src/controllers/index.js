@@ -289,7 +289,7 @@ app.put('/api/administrador/:id', async (req, res) => {
 });
 */
 
-// versão complicado do Matheus (funciona)
+// tive de modificar aqui para funcionar a integração da API
 app.put('/api/administrador/:id', async (req, res) => {
   try {
     const { id } = req.params;
