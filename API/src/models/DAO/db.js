@@ -20,11 +20,11 @@ const mysql = require('mysql2/promise');
 const pool = mysql.createPool({
   host: 'localhost',
   user: 'root',
-  password: '',
+  password: '1234',
   database: 'cuidados_paliativos_db',
 });
 
-console.log('[DB] carregado de', __filename, 'hasPassword=', !!('123456'));
+console.log('[DB] carregado de', __filename, 'hasPassword=', !!('1234'));
 
 pool.getConnection()
   .then((conn) => { console.log('Conexão com MySQL bem sucedida!'); conn.release(); })
