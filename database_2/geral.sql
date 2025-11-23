@@ -4,11 +4,11 @@ USE cuidados_paliativos_db;
 create table conteudo (
     id INT PRIMARY KEY AUTO_INCREMENT,
     titulo VARCHAR(150) NOT NULL,
-    descricao VARCHAR(150) NOT NULL,
-    texto VARCHAR(150) NOT NULL,
+    descricao VARCHAR(1000) NOT NULL,
+    texto VARCHAR(1000) NOT NULL,
     data_post DATE,
-    SinaisSintomas VARCHAR(150),
-    SinaisAlerta VARCHAR(150)
+    SinaisSintomas VARCHAR(1000),
+    SinaisAlerta VARCHAR(1000)
 )
 
 INSERT INTO conteudo (titulo, descricao, texto, data_post, sinaisSintomas, sinaisAlerta) VALUES

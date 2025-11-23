@@ -13,7 +13,6 @@ export default function ConteudoDetalhe() {
   useEffect(() => {
     async function carregar() {
       try {
-        // Se estiver no emulador Android, lembre-se de usar 10.0.2.2
         const response = await fetch(`http://192.168.0.31:3000/api/conteudos/${id}`);
         const data = await response.json();
         setConteudo(data);
@@ -36,7 +35,7 @@ export default function ConteudoDetalhe() {
   return (
     <>
       <Header />
-      <ScrollView style={styles.container} contentContainerStyle={{ paddingBottom: 40 }}>
+      <ScrollView style={styles.container} contentContainerStyle={{ paddingBottom: 40, flexGrow: 1 }}>
         
         <View style={styles.headerSection}>
           <Text style={styles.tituloPrincipal}>{conteudo.titulo}</Text>
@@ -89,7 +88,7 @@ export default function ConteudoDetalhe() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#F2E8D5", // Um bege um pouco mais suave
+    backgroundColor: "#F2E8D5",
   },
   loadingContainer: {
     flex: 1,
@@ -102,8 +101,6 @@ const styles = StyleSheet.create({
     color: "#112A6C",
     fontSize: 16,
   },
-  
-  // Cabeçalho da página
   headerSection: {
     paddingHorizontal: 20,
     marginTop: 25,
@@ -111,34 +108,31 @@ const styles = StyleSheet.create({
   },
   tituloPrincipal: {
     fontSize: 26,
-    fontWeight: "800", // Extra bold
+    fontWeight: "800",
     color: "#112A6C",
     textAlign: "left",
   },
   barraTitulo: {
     width: 60,
     height: 4,
-    backgroundColor: "#E78F47", // Detalhe laranja embaixo do título
+    backgroundColor: "#E78F47",
     marginTop: 8,
     borderRadius: 2,
   },
-
-  // Estilo Geral dos Cards
   card: {
     backgroundColor: "#FFF",
-    marginHorizontal: 20,
+    width: "90%", 
+    alignSelf: "center",
     marginBottom: 20,
-    padding: 20,
+    paddingHorizontal: 20,
+    paddingVertical: 25,
     borderRadius: 12,
-    // Sombra suave
     shadowColor: "#000",
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
     shadowRadius: 4,
-    elevation: 3, // Sombra no Android
+    elevation: 3,
   },
-  
-  // Bordas coloridas laterais para destacar urgência
   borderOrange: {
     borderLeftWidth: 5,
     borderLeftColor: "#E78F47",
@@ -147,8 +141,6 @@ const styles = StyleSheet.create({
     borderLeftWidth: 5,
     borderLeftColor: "#D94141",
   },
-
-  // Tipografia interna
   labelSecao: {
     fontSize: 18,
     fontWeight: "bold",
@@ -159,13 +151,12 @@ const styles = StyleSheet.create({
   },
   textoCorpo: {
     fontSize: 16,
-    lineHeight: 24,
+    lineHeight: 26,
     color: "#444",
-    textAlign: "justify", // Deixa o texto alinhadinho
+    textAlign: "left",
     marginBottom: 15,
+    width: '100%',
   },
-
-  // Botões de Ação
   btnLaranja: {
     backgroundColor: "#E78F47",
     paddingVertical: 14,
@@ -190,8 +181,6 @@ const styles = StyleSheet.create({
     fontSize: 15,
     textTransform: "uppercase",
   },
-
-  // Botão Voltar
   btnVoltar: {
     marginTop: 10,
     alignSelf: "center",
