@@ -5,6 +5,8 @@ import {
 import { useState, useEffect } from "react";
 import { useNavigation } from "@react-navigation/native";
 
+import AsyncStorage from "@react-native-async-storage/async-storage";
+
 import Header from "../components/Header";
 
 const BASE_URL = "http://localhost:3000/";
@@ -75,7 +77,7 @@ const Card = ({ dado, usuario, abrirModalEdicao, getConteudos }) => {
         <Text style={Estilo.footerDate}>{dado?.data}</Text>
       </View>
 
-      {usuario.tipo === "adm" && (
+      {usuario.tipo === "administrador" && (
         <View style={{ flexDirection: "row", gap: 10, marginTop: 10 }}>
           <TouchableOpacity onPress={() => abrirModalEdicao(dado)}>
             <Text style={{ color: "#112A6C", fontWeight: "bold" }}>Editar</Text>
@@ -107,7 +109,8 @@ export default function Busca() {
   const [atualizando, setAtualizando] = useState(false);
   const [pesquisa, setPesquisa] = useState("");
 
-  const [usuario, setUsuario] = useState({ tipo: "adm" });
+  const [usuario, setUsuario] = useState({ tipo: null, id: null });
+  const [carregandoUsuario, setCarregandoUsuario] = useState(true);
 
   const [modalVisivel, setModalVisivel] = useState(false);
   const [conteudoModal, setConteudoModal] = useState({
@@ -117,6 +120,32 @@ export default function Busca() {
     SinaisSintomas: "",
     SinaisAlerta: "",
   });
+
+  useEffect(() => {
+    buscarUsuarioLogado();
+  }, []);
+
+  const buscarUsuarioLogado = async () => {
+    try {
+      setCarregandoUsuario(true);
+      
+      // Busca do AsyncStorage (mobile) ou localStorage (web)
+      const tipo = (await AsyncStorage.getItem("auth_role")) || localStorage.getItem("userTipo");
+      const id = (await AsyncStorage.getItem("auth_id")) || localStorage.getItem("userId");
+      
+      console.log("[Busca] Usuário logado - Tipo:", tipo, "ID:", id);
+      
+      setUsuario({ 
+        tipo: tipo || null, 
+        id: id || null 
+      });
+    } catch (e) {
+      console.error("[Busca] Erro ao buscar usuário:", e);
+      setUsuario({ tipo: null, id: null });
+    } finally {
+      setCarregandoUsuario(false);
+    }
+  };
 
   useEffect(() => {
     getConteudos();
@@ -162,6 +191,18 @@ export default function Busca() {
     item.titulo.toLowerCase().includes(pesquisa.toLowerCase()) ||
     item.descricao.toLowerCase().includes(pesquisa.toLowerCase())
   );
+  
+  if (carregandoUsuario) {
+    return (
+      <>
+        <Header />
+        <View style={Estilo.container}>
+          <ActivityIndicator size="large" color="#112A6C" />
+          <Text style={{ marginTop: 10, color: "#112A6C" }}>Carregando...</Text>
+        </View>
+      </>
+    );
+  }
 
   return (
     <>
@@ -184,7 +225,7 @@ export default function Busca() {
           </TouchableOpacity>
         </View>
 
-        {usuario.tipo === "adm" && (
+        {usuario.tipo === "administrador" && (
           <TouchableOpacity onPress={() => setModalVisivel(true)} style={{ marginBottom: 20 }}>
             <Text style={{ color: "#112A6C", fontWeight: "bold" }}>Adicionar Conteúdo</Text>
           </TouchableOpacity>

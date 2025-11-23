@@ -14,7 +14,7 @@ app.use(express.json());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
 
-const {getAdministradores, insertAdministrador, editAdministrador, deleteAdministrador} = require("../models/DAO/AdministradorDAO");
+const {getAdministradores, getAdministradorByEmail, getAdministradorById, insertAdministrador, editAdministrador, deleteAdministrador} = require("../models/DAO/AdministradorDAO");
 const { getPacientes, getPacienteById, getPacienteByEmail, insertPaciente, editPaciente, deletePaciente } = require("../models/DAO/PacienteDAO");
 const { getAcompanhantes, getAcompanhanteById, getAcompanhanteByEmail, insertAcompanhante, editAcompanhante, deleteAcompanhante } = require("../models/DAO/AcompanhanteDAO");
 const { linkAcompanhantePaciente, unlinkAcompanhantePaciente, getPacientesDoAcompanhante, getAcompanhantesDoPaciente } = require("../models/DAO/VinculoDAO");
@@ -37,7 +37,16 @@ app.post('/api/auth/login', async (req, res) => {
       return res.status(400).json({ error: true, message: 'Informe email e senha.' });
     }
 
-    // Tenta paciente
+  // 1. Tenta administrador 1º
+  const administrador = await getAdministradorByEmail(email);
+  if (administrador && administrador.senha === senha) {
+    const id = administrador.id;
+    const payload = { sub: `administrador:${id}`, id, tipo: 'administrador', email };
+    const token = jwt.sign(payload, JWT_SECRET, { expiresIn: '7d' });
+    return res.status(200).json({ token, user: { id, tipo: 'administrador', email } });
+  }
+
+    // Tenta paciente 2º
     const paciente = await getPacienteByEmail(email);
     if (paciente && paciente.senha === senha) {
       const id = paciente.id_paciente ?? paciente.id;
@@ -49,7 +58,7 @@ app.post('/api/auth/login', async (req, res) => {
       return res.status(200).json({ token, user: { id, tipo: 'paciente', email } });
     }
 
-    // Tenta acompanhante
+    // Tenta acompanhante 3º
     const acompanhante = await getAcompanhanteByEmail(email);
     if (acompanhante && acompanhante.senha === senha) {
       const id = acompanhante.id;
@@ -267,6 +276,7 @@ app.put("/administrador", async (req, res) => {
 });
 
 // API para editar um administrador
+/*
 app.put('/api/administrador/:id', async (req, res) => {
   const { id } = req.params;
   const { nome, nome_social, email, senha, data_nascimento, genero, telefone, conselho_profissional, formacao, registro_profissional, especialidade } = req.body;
@@ -276,6 +286,76 @@ app.put('/api/administrador/:id', async (req, res) => {
   );
 
   res.json(result);
+});
+*/
+
+// tive de modificar aqui para funcionar a integração da API
+app.put('/api/administrador/:id', async (req, res) => {
+  try {
+    const { id } = req.params;
+    
+    // 1️⃣ Busca dados atuais do banco
+    const adminAtual = await getAdministradorById(id);
+    
+    if (!adminAtual) {
+      return res.status(404).json({ 
+        error: true, 
+        message: "Administrador não encontrado" 
+      });
+    }
+
+    // 2️⃣ Mescla dados: novo OU antigo (usando operador || para valores falsy)
+    const dados = {
+      nome: req.body.nome || adminAtual.nome,
+      nome_social: req.body.nome_social || adminAtual.nome_social,
+      email: req.body.email || adminAtual.email,
+      // Senha especial: só atualiza se vier preenchida
+      senha: req.body.senha || adminAtual.senha,
+      data_nascimento: req.body.data_nascimento || adminAtual.data_nascimento,
+      genero: req.body.genero || adminAtual.genero,
+      telefone: req.body.telefone || adminAtual.telefone,
+      conselho_profissional: req.body.conselho_profissional || adminAtual.conselho_profissional,
+      formacao: req.body.formacao || adminAtual.formacao,
+      registro_profissional: req.body.registro_profissional || adminAtual.registro_profissional,
+      especialidade: req.body.especialidade || adminAtual.especialidade,
+    };
+
+    // 3️⃣ Atualiza no banco
+    const sucesso = await editAdministrador(
+      id,
+      dados.nome,
+      dados.nome_social,
+      dados.email,
+      dados.senha,
+      dados.data_nascimento,
+      dados.genero,
+      dados.telefone,
+      dados.conselho_profissional,
+      dados.formacao,
+      dados.registro_profissional,
+      dados.especialidade
+    );
+
+    // 4️⃣ Retorna resultado
+    if (sucesso) {
+      return res.status(200).json({ 
+        error: false, 
+        message: "Administrador atualizado!" 
+      });
+    } else {
+      return res.status(400).json({ 
+        error: true, 
+        message: "Erro ao atualizar" 
+      });
+    }
+
+  } catch (error) {
+    console.error("Erro:", error);
+    return res.status(500).json({ 
+      error: true, 
+      message: "Erro no servidor" 
+    });
+  }
 });
 
 //Removendo Administrador (delete)

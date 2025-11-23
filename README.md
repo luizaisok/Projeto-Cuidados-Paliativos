@@ -304,6 +304,7 @@ E escolha a opção de abrir no emulador.
 
 ---
 
+<!--
 ## Entenda sobre o Banco de Dados
 
 Os dados foram **gerados artificialmente por IA (ChatGPT)**, que simulou um ambiente realista de pacientes em cuidados paliativos e seus cuidadores. Em seguida, foi desenvolvida uma automação em **Bash (.sh)** e **SQL (.sql)** para:
@@ -472,9 +473,8 @@ SELECT * FROM pacientes LIMIT 5;</code></pre>
   </tr>
 </table>
 
-
 ---
-
+-->
 
 <h2>Contribuições</h2>
 <p align="justify">Este projeto está aberto para contribuições via <i>issues</i>. Se você encontrou um <i>bug</i>, deseja sugerir uma melhoria ou tem dúvidas sobre o funcionamento, siga as instruções abaixo:</p>

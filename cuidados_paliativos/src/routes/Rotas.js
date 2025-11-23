@@ -15,6 +15,8 @@ import Login from "../pages/Login";
 import MenuSintomas from "../pages/MenuSintomas";
 import DefinicaoSintomas from "../pages/DefinicaoSintomas";
 import ConteudoDetalhe from "../pages/ConteudoDetalhe";
+import AdminDashboard from "../pages/AdminDashboard";
+import HomeAdmin from "../pages/HomeAdmin";
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
@@ -50,12 +52,14 @@ function AbasPrincipais() {
 export default function Rotas() {
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName="Login" screenOptions={{ headerShown: false }}>
+      <Stack.Navigator initialRouteName="HomeAdmin" screenOptions={{ headerShown: false }}>
         {/* Auth */}
         <Stack.Screen name="Login" component={Login} />
         <Stack.Screen name="Cadastro" component={Cadastro} />
 
         <Stack.Screen name="AbasPrincipais" component={AbasPrincipais} />
+        <Stack.Screen name="AdminDashboard" component={AdminDashboard} />
+        <Stack.Screen name="HomeAdmin" component={HomeAdmin} />
 
         <Stack.Screen name="SinalVerde" component={SinalVerde} />
         <Stack.Screen name="SinalAmarelo" component={SinalAmarelo} />
