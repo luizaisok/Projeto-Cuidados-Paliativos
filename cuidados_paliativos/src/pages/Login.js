@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import { View, StyleSheet, Image, Text, TextInput, TouchableOpacity, ActivityIndicator } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
@@ -50,15 +50,7 @@ export default function Login() {
          ["auth_email", data.user.email],
       ]);
 
-      //Validação pra que se o usuário já logou hoje, vai pra home direto e se não, vai pra tela de MenuSintoma e DEPOIS pra home
-      const hoje = new Date().toISOString().split("T")[0];
-      const ultimaData = await AsyncStorage.getItem("ultimaDataSintoma");
-
-      if (ultimaData === hoje) {
-        navigation.replace("AbasPrincipais", { screen: "Home" });
-      } else {
         navigation.replace("MenuSintomas");
-      }
 
     } catch (e) {
       alert(e.message || "Erro ao conectar.");
