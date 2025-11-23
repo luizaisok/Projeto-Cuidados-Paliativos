@@ -4,7 +4,7 @@ import { useNavigation } from "@react-navigation/native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import Header from "../components/Header";
 
-const BASE_URL = "http://localhost:3000/";
+const BASE_URL = "http://192.168.0.31:3000/";
 const AUTH_HEADER = { "Content-Type": "application/json" };
 
 // Formata a data para Dia/Mês/Ano

@@ -1,11 +1,11 @@
 import { useState } from "react";
 import { useNavigation, useRoute } from "@react-navigation/native";
-import { View, StyleSheet, Image, Text, TextInput, TouchableOpacity, ActivityIndicator, ScrollView } from "react-native";
+import { View, StyleSheet, Image, Text, TextInput, TouchableOpacity, ActivityIndicator, ScrollView, Platform} from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useFonts, Comfortaa_400Regular } from "@expo-google-fonts/comfortaa";
 import Header from "../components/Header";
 
-const API_BASE = "http://localhost:3000";
+const API_BASE = "http://192.168.0.31:3000";
 
 export default function Login() {
     let [fontsLoaded] = useFonts({
@@ -37,17 +37,18 @@ export default function Login() {
         throw new Error(data?.message || "Falha no login");
       }
 
-      // Salva token e infos básicas (para próximos CRUDs)
-      localStorage.setItem("token", data.token);
-      localStorage.setItem("userId", String(data.user.id));
-      localStorage.setItem("userTipo", data.user.tipo);
-      localStorage.setItem("userEmail", data.user.email);
+      if (Platform.OS === 'web') {
+        localStorage.setItem("token", data.token);
+        localStorage.setItem("userId", String(data.user.id));
+        localStorage.setItem("userTipo", data.user.tipo);
+        localStorage.setItem("userEmail", data.user.email);
+      }
 
       await AsyncStorage.multiSet([
-         ["auth_token", data.token],
-         ["auth_id", String(data.user.id)],
-         ["auth_role", data.user.tipo],
-         ["auth_email", data.user.email],
+          ["auth_token", data.token],
+          ["auth_id", String(data.user.id)],
+          ["auth_role", data.user.tipo],
+          ["auth_email", data.user.email],
       ]);
       
       // Redireciona baseado no tipo de usuário
@@ -144,14 +145,14 @@ const Estilo = StyleSheet.create({
     },
     titulo: {
         fontSize: 48,
-        fontWeight: 600,
+        fontWeight: "600",
         color: '#112A6C',
         marginBottom: 25,
         marginTop: 15
     },
     label: {
         fontSize: 20,
-        fontWeight: 500,
+        fontWeight: "500",
         color: '#532C1D',
         marginBottom: 5,
         fontWeight: 'bold'
