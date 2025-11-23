@@ -1,20 +1,11 @@
-import React, { useState, useEffect } from "react";
-import {
-  StyleSheet,
-  Text,
-  View,
-  ScrollView,
-  ActivityIndicator,
-  Platform,
-} from "react-native";
+import { useState, useEffect } from "react";
+import { StyleSheet, Text, View, ScrollView, ActivityIndicator, Platform } from "react-native";
 import { useFonts, Comfortaa_400Regular, Comfortaa_700Bold } from "@expo-google-fonts/comfortaa";
 import { CartesianChart, Bar, useChartPressState } from "victory-native";
 import { Circle } from "@shopify/react-native-skia";
 
 import Header from "../components/Header";
-import Footer from "../components/Footer";
 
-// Paleta de cores para gerar cores automáticas para novos sintomas
 const PALETA_CORES = [
   "#E4572E", // Laranja
   "#F3A712", // Amarelo
@@ -114,11 +105,8 @@ const processarDados = (registros, listaSintomas) => {
     return montarObjeto(id, desvio);
   });
 
-  // Se quiser manter Máxima e Mínima, pode descomentar abaixo, mas aqui focaremos nos pedidos
   return { dadosMedia, dadosModa, dadosMediana, dadosVariancia, dadosDesvioPadrao };
 };
-
-// --- Componentes Visuais ---
 
 const GraficoWeb = ({ data }) => {
   const maxVal = Math.max(...data.map(d => d.value), 1);
@@ -127,7 +115,6 @@ const GraficoWeb = ({ data }) => {
   return (
     <View style={{ height: alturaTotal, flexDirection: 'row', alignItems: 'flex-end', justifyContent: 'space-around', paddingHorizontal: 10 }}>
       {data.map((item, index) => {
-        // Proteção para não dividir por zero se maxVal for 0
         const alturaBarra = maxVal > 0 ? (item.value / maxVal) * alturaTotal : 0;
         
         return (
@@ -294,7 +281,6 @@ export default function HomeAdmin() {
               corTemaMobile="#29335C"
             />
 
-            {/* NOVOS GRÁFICOS ABAIXO */}
             <MeuGraficoBarras
               titulo="Variância da Intensidade"
               data={metricas.dadosVariancia}
@@ -314,7 +300,6 @@ export default function HomeAdmin() {
         )}
       </ScrollView>
       
-      <Footer />
     </View>
   );
 }
