@@ -28,7 +28,6 @@ const PALETA_CORES = [
   "#556270", // Cinza Azulado
 ];
 
-// Função que escolhe uma cor baseada no ID (sempre a mesma cor para o mesmo ID)
 const getCorPorID = (id) => {
   const index = id % PALETA_CORES.length;
   return PALETA_CORES[index];
@@ -37,18 +36,15 @@ const getCorPorID = (id) => {
 const COR_PADRAO = "#112A6C";
 
 const processarDados = (registros, listaSintomas) => {
-  // 1. Cria um dicionário para traduzir ID -> Nome rápido
   const mapaNomes = {};
   if (listaSintomas && Array.isArray(listaSintomas)) {
     listaSintomas.forEach((s) => {
-      // Ajuste conforme o nome da coluna no seu banco (id e nome_sintoma)
       mapaNomes[s.id] = s.nome_sintoma;
     });
   }
 
   const grupos = {};
 
-  // 2. Agrupa os registros por ID do sintoma
   registros.forEach((reg) => {
     const sId = Number(reg.sintoma_id);
     const int = Number(reg.intensidade);
@@ -59,15 +55,13 @@ const processarDados = (registros, listaSintomas) => {
 
   const ids = Object.keys(grupos).map(Number);
 
-  // Função auxiliar para montar o dado do gráfico
   const montarObjeto = (id, valorCalculado) => ({
-    // Se achar o nome na lista da API, usa ele. Se não, usa "ID X"
     label: mapaNomes[id] || `ID ${id}`,
     value: Number(valorCalculado),
     color: getCorPorID(id),
   });
 
-  // Média
+  // 1. Média
   const dadosMedia = ids.map((id) => {
     const valores = grupos[id];
     const soma = valores.reduce((a, b) => a + b, 0);
@@ -75,12 +69,12 @@ const processarDados = (registros, listaSintomas) => {
     return montarObjeto(id, media);
   });
 
-  // Moda (Frequência)
+  // 2. Moda / Frequência
   const dadosModa = ids.map((id) => {
     return montarObjeto(id, grupos[id].length);
   });
 
-  // Mediana
+  // 3. Mediana
   const dadosMediana = ids.map((id) => {
     const valores = [...grupos[id]].sort((a, b) => a - b);
     const mid = Math.floor(valores.length / 2);
@@ -92,7 +86,36 @@ const processarDados = (registros, listaSintomas) => {
     return montarObjeto(id, mediana);
   });
 
-  return { dadosMedia, dadosModa, dadosMediana };
+  // 4. Variância (NOVO) - Quão espalhados estão os dados
+  const dadosVariancia = ids.map((id) => {
+    const valores = grupos[id];
+    const n = valores.length;
+    // Passo 1: Calcular Média
+    const soma = valores.reduce((a, b) => a + b, 0);
+    const media = soma / n;
+    // Passo 2: Calcular Soma dos Quadrados das Diferenças
+    const somaDifQuad = valores.reduce((acc, val) => acc + Math.pow(val - media, 2), 0);
+    // Passo 3: Variância Populacional
+    const variancia = (somaDifQuad / n).toFixed(2);
+    
+    return montarObjeto(id, variancia);
+  });
+
+  // 5. Desvio Padrão (NOVO) - Raiz quadrada da variância
+  const dadosDesvioPadrao = ids.map((id) => {
+    const valores = grupos[id];
+    const n = valores.length;
+    const soma = valores.reduce((a, b) => a + b, 0);
+    const media = soma / n;
+    const somaDifQuad = valores.reduce((acc, val) => acc + Math.pow(val - media, 2), 0);
+    const variancia = somaDifQuad / n;
+    const desvio = Math.sqrt(variancia).toFixed(2);
+
+    return montarObjeto(id, desvio);
+  });
+
+  // Se quiser manter Máxima e Mínima, pode descomentar abaixo, mas aqui focaremos nos pedidos
+  return { dadosMedia, dadosModa, dadosMediana, dadosVariancia, dadosDesvioPadrao };
 };
 
 // --- Componentes Visuais ---
@@ -104,7 +127,8 @@ const GraficoWeb = ({ data }) => {
   return (
     <View style={{ height: alturaTotal, flexDirection: 'row', alignItems: 'flex-end', justifyContent: 'space-around', paddingHorizontal: 10 }}>
       {data.map((item, index) => {
-        const alturaBarra = (item.value / maxVal) * alturaTotal;
+        // Proteção para não dividir por zero se maxVal for 0
+        const alturaBarra = maxVal > 0 ? (item.value / maxVal) * alturaTotal : 0;
         
         return (
           <View key={index} style={{ alignItems: 'center', flex: 1 }}>
@@ -114,7 +138,7 @@ const GraficoWeb = ({ data }) => {
                backgroundColor: item.color, 
                borderTopLeftRadius: 6,
                borderTopRightRadius: 6,
-               minHeight: 4 
+               minHeight: item.value > 0 ? 4 : 0 
              }} />
           </View>
         );
@@ -208,7 +232,6 @@ export default function HomeAdmin() {
         const controller = new AbortController();
         const timeoutId = setTimeout(() => controller.abort(), 3000);
 
-        // Busca Registros E Sintomas ao mesmo tempo
         const [resRegistros, resSintomas] = await Promise.all([
           fetch(`${BASE_URL}/api/registros`, { signal: controller.signal }),
           fetch(`${BASE_URL}/api/sintomas`, { signal: controller.signal })
@@ -220,7 +243,6 @@ export default function HomeAdmin() {
         const jsonSintomas = await resSintomas.json();
 
         if (jsonRegistros.success && jsonSintomas.success) {
-          // Passamos as duas listas para processar
           const dadosFinais = processarDados(jsonRegistros.registros, jsonSintomas.sintomas);
           setMetricas(dadosFinais);
         } else {
@@ -270,6 +292,19 @@ export default function HomeAdmin() {
               titulo="Mediana Intensidade"
               data={metricas.dadosMediana}
               corTemaMobile="#29335C"
+            />
+
+            {/* NOVOS GRÁFICOS ABAIXO */}
+            <MeuGraficoBarras
+              titulo="Variância da Intensidade"
+              data={metricas.dadosVariancia}
+              corTemaMobile="#008080" // Verde Azulado
+            />
+
+            <MeuGraficoBarras
+              titulo="Desvio Padrão da Intensidade"
+              data={metricas.dadosDesvioPadrao}
+              corTemaMobile="#800080" // Roxo
             />
           </>
         ) : (

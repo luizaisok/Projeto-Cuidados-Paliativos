@@ -1,7 +1,9 @@
+import React, { useState, useEffect } from "react";
 import { Image } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import AsyncStorage from "@react-native-async-storage/async-storage"; 
 
 import HomePage from "../pages/HomePage";
 import Busca from "../pages/Busca";
@@ -22,6 +24,22 @@ const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
 
 function AbasPrincipais() {
+  const [isAdmin, setIsAdmin] = useState(false);
+
+  useEffect(() => {
+    const verificarAdmin = async () => {
+      try {
+        const tipo = await AsyncStorage.getItem("auth_role");
+        if (tipo === "administrador") {
+          setIsAdmin(true);
+        }
+      } catch (error) {
+        console.error("Erro ao verificar perfil:", error);
+      }
+    };
+    verificarAdmin();
+  }, []);
+
   return (
     <Tab.Navigator
       screenOptions={({ route }) => ({
@@ -42,7 +60,12 @@ function AbasPrincipais() {
         headerShown: false,
       })}
     >
-      <Tab.Screen name="Home" component={HomePage} />
+      {/* Se isAdmin for true, monta HomeAdmin, senão HomePage */}
+      <Tab.Screen 
+        name="Home" 
+        component={isAdmin ? HomeAdmin : HomePage} 
+      />
+      
       <Tab.Screen name="Busca" component={Busca} />
       <Tab.Screen name="Perfil" component={PerfilProntuario} />
     </Tab.Navigator>
@@ -52,12 +75,12 @@ function AbasPrincipais() {
 export default function Rotas() {
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName="HomeAdmin" screenOptions={{ headerShown: false }}>
-        {/* Auth */}
+      <Stack.Navigator initialRouteName="Login" screenOptions={{ headerShown: false }}>
         <Stack.Screen name="Login" component={Login} />
         <Stack.Screen name="Cadastro" component={Cadastro} />
 
         <Stack.Screen name="AbasPrincipais" component={AbasPrincipais} />
+        
         <Stack.Screen name="AdminDashboard" component={AdminDashboard} />
         <Stack.Screen name="HomeAdmin" component={HomeAdmin} />
 
