@@ -1,98 +1,111 @@
-import { FlatList, Image, StyleSheet, Text, TextInput, TouchableOpacity, View, ActivityIndicator, Modal, Button, Alert } from "react-native";
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
+import { FlatList, Image, StyleSheet, Text, TextInput, TouchableOpacity, View, Modal, ScrollView } from "react-native";
 import { useNavigation } from "@react-navigation/native";
-
 import AsyncStorage from "@react-native-async-storage/async-storage";
-
 import Header from "../components/Header";
 
 const BASE_URL = "http://localhost:3000/";
 const AUTH_HEADER = { "Content-Type": "application/json" };
 
-// Funções de API
-const createConteudo = async (conteudo) => {
+// Formata a data para Dia/Mês/Ano
+const formatarData = (data) => {
+  if (!data) return "";
   try {
-    const res = await fetch(`${BASE_URL}api/conteudos`, {
+    const [ano, mes, dia] = data.toString().split('T')[0].split('-');
+    return `${dia}/${mes}/${ano}`;
+  } catch { return data; }
+};
+
+// -=-=-=-=-=-=-=-=-=-=- API
+
+const getConteudos = async () => {
+  try {
+    const response = await fetch(`${BASE_URL}api/conteudos`);
+    const json = await response.json();
+    return json.conteudos || [];
+  } catch (error) {
+    console.log("Erro ao buscar:", error);
+    return [];
+  }
+};
+
+const createConteudo = async (dados) => {
+  try {
+    const response = await fetch(`${BASE_URL}api/conteudos`, {
       method: "POST",
       headers: AUTH_HEADER,
-      body: JSON.stringify(conteudo),
+      body: JSON.stringify(dados),
     });
-    if (!res.ok) throw new Error(await res.text());
-    return true;
+    return response.ok;
   } catch (error) {
-    console.error("Erro ao criar conteúdo: ", error);
+    console.log("Erro ao criar:", error);
     return false;
   }
 };
 
-const updateConteudo = async (id, conteudo) => {
+const updateConteudo = async (id, dados) => {
   try {
-    const res = await fetch(`${BASE_URL}api/conteudos/${id}`, {
+    const response = await fetch(`${BASE_URL}api/conteudos/${id}`, {
       method: "PUT",
       headers: AUTH_HEADER,
-      body: JSON.stringify(conteudo),
+      body: JSON.stringify(dados),
     });
-    if (!res.ok) throw new Error(await res.text());
-    return true;
+    return response.ok;
   } catch (error) {
-    console.error("Erro ao editar conteúdo: ", error);
+    console.log("Erro ao atualizar:", error);
     return false;
   }
 };
 
 const deleteConteudo = async (id) => {
   try {
-    const res = await fetch(`${BASE_URL}api/conteudos/${id}`, {
+    const response = await fetch(`${BASE_URL}api/conteudos/${id}`, {
       method: "DELETE",
       headers: AUTH_HEADER,
     });
-    if (!res.ok) throw new Error(await res.text());
-    return true;
+    return response.ok;
   } catch (error) {
-    console.error("Erro ao deletar conteúdo: ", error);
+    console.log("Erro ao deletar:", error);
     return false;
   }
 };
 
-const Card = ({ dado, usuario, abrirModalEdicao, getConteudos }) => {
+const Card = ({ dado, usuario, abrirModal, atualizarLista }) => {
   const navigation = useNavigation();
+
+  const apagar = async () => {
+    const id = dado.id || dado._id;
+    
+    const sucesso = await deleteConteudo(id);
+    if (sucesso) {
+      atualizarLista(); // Recarrega a lista se deu certo
+    } else {
+      alert("Erro ao excluir!");
+    }
+  };
 
   return (
     <View style={Estilo.containerCard}>
       <Text style={Estilo.cardTitulo}>{dado?.titulo}</Text>
-      <View style={Estilo.cardDivisor}></View>
-      <Text style={Estilo.cardDescricao}>{dado?.descricao}</Text>
+      <View style={Estilo.cardDivisor} />
+      <Text style={Estilo.cardDescricao} numberOfLines={3}>{dado?.descricao}</Text>
 
       <View style={Estilo.footerCard}>
-        <TouchableOpacity 
-          style={Estilo.footerButton}
-          onPress={() => navigation.navigate("ConteudoDetalhe", { id: dado.id })}
-        >
+        <TouchableOpacity style={Estilo.footerButton} onPress={() => navigation.navigate("ConteudoDetalhe", { id: dado.id || dado._id })}>
           <Text style={Estilo.footerText}>Ler mais</Text>
-          <Image source={require('../assets/img/seta.png')} style={{width: 16, height: 16}}/>
+          <Image source={require('../assets/img/seta.png')} style={{ width: 16, height: 16 }} />
         </TouchableOpacity>
-        <Text style={Estilo.footerDate}>{dado?.data}</Text>
+        
+        <Text style={Estilo.footerDate}>{formatarData(dado?.data_post || dado?.data)}</Text>
       </View>
 
       {usuario.tipo === "administrador" && (
-        <View style={{ flexDirection: "row", gap: 10, marginTop: 10 }}>
-          <TouchableOpacity onPress={() => abrirModalEdicao(dado)}>
-            <Text style={{ color: "#112A6C", fontWeight: "bold" }}>Editar</Text>
+        <View style={Estilo.adminActions}>
+          <TouchableOpacity onPress={() => abrirModal(dado)}>
+            <Text style={Estilo.textActionEdit}>Editar</Text>
           </TouchableOpacity>
-          <TouchableOpacity onPress={async () => {
-            Alert.alert(
-              "Confirmar exclusão",
-              "Deseja realmente excluir?",
-              [
-                { text: "Cancelar", style: "cancel" },
-                { text: "Excluir", style: "destructive", onPress: async () => {
-                    const sucesso = await deleteConteudo(dado.id);
-                    if (sucesso) getConteudos();
-                } }
-              ]
-            );
-          }}>
-            <Text style={{ color: "#D94141", fontWeight: "bold" }}>Excluir</Text>
+          <TouchableOpacity onPress={apagar}>
+            <Text style={Estilo.textActionDelete}>Excluir</Text>
           </TouchableOpacity>
         </View>
       )}
@@ -100,180 +113,122 @@ const Card = ({ dado, usuario, abrirModalEdicao, getConteudos }) => {
   );
 };
 
-// Página principal
 export default function Busca() {
   const [conteudos, setConteudos] = useState([]);
-  const [atualizando, setAtualizando] = useState(false);
   const [pesquisa, setPesquisa] = useState("");
-
-  const [usuario, setUsuario] = useState({ tipo: null, id: null });
-  const [carregandoUsuario, setCarregandoUsuario] = useState(true);
-
+  const [usuario, setUsuario] = useState({ tipo: null });
   const [modalVisivel, setModalVisivel] = useState(false);
-  const [conteudoModal, setConteudoModal] = useState({
-    id: null,
-    titulo: "",
-    descricao: "",
-    SinaisSintomas: "",
-    SinaisAlerta: "",
-  });
+  
+  // Estado único para os dados do formulário
+  const [form, setForm] = useState({ id: null, titulo: "", descricao: "", SinaisSintomas: "", SinaisAlerta: "" });
 
-  useEffect(() => {
-    buscarUsuarioLogado();
-  }, []);
+  useEffect(() => { carregarTudo(); }, []);
 
-  const buscarUsuarioLogado = async () => {
-    try {
-      setCarregandoUsuario(true);
-      
-      // Busca do AsyncStorage (mobile) ou localStorage (web)
-      const tipo = (await AsyncStorage.getItem("auth_role")) || localStorage.getItem("userTipo");
-      const id = (await AsyncStorage.getItem("auth_id")) || localStorage.getItem("userId");
-      
-      console.log("[Busca] Usuário logado - Tipo:", tipo, "ID:", id);
-      
-      setUsuario({ 
-        tipo: tipo || null, 
-        id: id || null 
-      });
-    } catch (e) {
-      console.error("[Busca] Erro ao buscar usuário:", e);
-      setUsuario({ tipo: null, id: null });
-    } finally {
-      setCarregandoUsuario(false);
+  const carregarTudo = async () => {
+    // 1. Identifica o usuário
+    const tipo = localStorage?.getItem("userTipo") || await AsyncStorage.getItem("auth_role");
+    setUsuario({ tipo });
+
+    // 2. Busca os dados
+    const lista = await getConteudos();
+    setConteudos(lista);
+  };
+
+  const salvar = async () => {
+    // 1. Prepara os dados (Backend exige data e texto)
+    const dadosParaEnviar = { 
+      ...form, 
+      texto: form.descricao, 
+      data_post: new Date().toISOString().split('T')[0] 
+    };
+    
+    const id = form.id || form._id;
+    let sucesso = false;
+
+    // 2. Decide qual função chamar
+    if (id) {
+      sucesso = await updateConteudo(id, dadosParaEnviar);
+    } else {
+      sucesso = await createConteudo(dadosParaEnviar);
+    }
+
+    // 3. Finaliza
+    if (sucesso) {
+      setModalVisivel(false);
+      carregarTudo();
+    } else {
+      alert("Erro ao salvar!");
     }
   };
 
-  useEffect(() => {
-    getConteudos();
-  }, []);
-
-  const getConteudos = async () => {
-    try {
-      setAtualizando(true);
-      const response = await fetch(`${BASE_URL}api/conteudos`);
-      if (!response.ok) throw new Error(`Erro HTTP: ${response.status}`);
-      const json = await response.json();
-      setConteudos(json.conteudos);
-    } catch (error) {
-      console.error("Erro ao realizar requisição GET: ", error);
-    } finally {
-      setAtualizando(false);
+  const abrirModal = (dados = {}) => {
+    // Se recebeu dados, preenche o form (Edição). Se não, limpa (Criação).
+    if (dados.id || dados._id) {
+      setForm(dados);
+    } else {
+      setForm({ id: null, titulo: "", descricao: "", SinaisSintomas: "", SinaisAlerta: "" });
     }
-  };
-
-  const abrirModalEdicao = (dado) => {
-    setConteudoModal(dado);
     setModalVisivel(true);
   };
 
-  const handleSalvar = async () => {
-    let sucesso = false;
-    if (conteudoModal.id) {
-      sucesso = await updateConteudo(conteudoModal.id, conteudoModal);
-    } else {
-      sucesso = await createConteudo(conteudoModal);
-    }
-
-    if (sucesso) {
-      setModalVisivel(false);
-      setConteudoModal({ id: null, titulo: "", descricao: "", SinaisSintomas: "", SinaisAlerta: "" });
-      getConteudos();
-    } else {
-      alert("Erro ao salvar conteúdo");
-    }
-  };
-
-  const conteudosFiltrados = conteudos.filter((item) =>
-    item.titulo.toLowerCase().includes(pesquisa.toLowerCase()) ||
-    item.descricao.toLowerCase().includes(pesquisa.toLowerCase())
+  // Filtro de busca na memória
+  const listaFiltrada = conteudos.filter(item => 
+    item.titulo?.toLowerCase().includes(pesquisa.toLowerCase())
   );
-  
-  if (carregandoUsuario) {
-    return (
-      <>
-        <Header />
-        <View style={Estilo.container}>
-          <ActivityIndicator size="large" color="#112A6C" />
-          <Text style={{ marginTop: 10, color: "#112A6C" }}>Carregando...</Text>
-        </View>
-      </>
-    );
-  }
 
   return (
     <>
       <Header />
-
       <View style={Estilo.container}>
-
         <View style={Estilo.inputContainer}>
-          <TextInput
-            placeholder="Procurar por tema"
-            style={Estilo.input}
-            value={pesquisa}
-            onChangeText={(texto) => setPesquisa(texto)}
-          />
-          <TouchableOpacity onPress={() => console.log('Buscando...', pesquisa)}>
-            <Image
-              source={require('../assets/img/lupa.png')}
-              style={Estilo.iconeLupa}
-            />
+          <TextInput placeholder="Buscar por tema..." style={Estilo.input} value={pesquisa} onChangeText={setPesquisa} />
+          <TouchableOpacity onPress={carregarTudo}>
+            <Image source={require('../assets/img/lupa.png')} style={Estilo.iconeLupa} />
           </TouchableOpacity>
         </View>
 
         {usuario.tipo === "administrador" && (
-          <TouchableOpacity onPress={() => setModalVisivel(true)} style={{ marginBottom: 20 }}>
-            <Text style={{ color: "#112A6C", fontWeight: "bold" }}>Adicionar Conteúdo</Text>
+          <TouchableOpacity onPress={() => abrirModal()} style={Estilo.btnAdd}>
+            <Text style={Estilo.btnAddText}>+ Novo Conteúdo</Text>
           </TouchableOpacity>
         )}
 
-        {atualizando ? (
-          <ActivityIndicator />
-        ) : (
-          <FlatList
-            data={conteudosFiltrados}
-            keyExtractor={(item) => item.id.toString()}
-            renderItem={({ item }) => (
-              <Card dado={item} usuario={usuario} abrirModalEdicao={abrirModalEdicao} getConteudos={getConteudos} />
-            )}
-            ListEmptyComponent={<Text>Não foram postados conteúdos.</Text>}
-          />
-        )}
+        <FlatList
+          data={listaFiltrada}
+          keyExtractor={item => (item.id || item._id).toString()}
+          renderItem={({ item }) => (
+            <Card dado={item} usuario={usuario} abrirModal={abrirModal} atualizarLista={carregarTudo} />
+          )}
+        />
 
-        {/* Modal */}
-        <Modal visible={modalVisivel} animationType="slide">
-          <View style={{ padding: 20, flex: 1 }}>
-            <TextInput
-              placeholder="Título"
-              value={conteudoModal.titulo}
-              onChangeText={(t) => setConteudoModal({ ...conteudoModal, titulo: t })}
-              style={{ marginBottom: 10, borderBottomWidth: 1, borderColor: "#ccc" }}
-            />
-            <TextInput
-              placeholder="Descrição"
-              value={conteudoModal.descricao}
-              onChangeText={(t) => setConteudoModal({ ...conteudoModal, descricao: t })}
-              style={{ marginBottom: 10, borderBottomWidth: 1, borderColor: "#ccc" }}
-            />
-            <TextInput
-              placeholder="Sinais e Sintomas"
-              value={conteudoModal.SinaisSintomas}
-              onChangeText={(t) => setConteudoModal({ ...conteudoModal, SinaisSintomas: t })}
-              style={{ marginBottom: 10, borderBottomWidth: 1, borderColor: "#ccc" }}
-            />
-            <TextInput
-              placeholder="Sinais de Alerta"
-              value={conteudoModal.SinaisAlerta}
-              onChangeText={(t) => setConteudoModal({ ...conteudoModal, SinaisAlerta: t })}
-              style={{ marginBottom: 20, borderBottomWidth: 1, borderColor: "#ccc" }}
-            />
+        <Modal visible={modalVisivel} animationType="fade" transparent onRequestClose={() => setModalVisivel(false)}>
+          <View style={Estilo.modalOverlay}>
+            <View style={Estilo.modalContent}>
+              <ScrollView>
+                <Text style={Estilo.label}>Título</Text>
+                <TextInput style={Estilo.modalInput} value={form.titulo} onChangeText={t => setForm({ ...form, titulo: t })} />
 
-            <Button title="Salvar" onPress={handleSalvar} />
-            <Button title="Cancelar" onPress={() => setModalVisivel(false)} color="#D94141" />
+                <Text style={Estilo.label}>Descrição</Text>
+                <TextInput style={Estilo.modalInput} value={form.descricao} onChangeText={t => setForm({ ...form, descricao: t })} multiline />
+
+                <Text style={Estilo.label}>Sinais e Sintomas</Text>
+                <TextInput style={Estilo.modalInput} value={form.SinaisSintomas} onChangeText={t => setForm({ ...form, SinaisSintomas: t })} multiline />
+
+                <Text style={Estilo.label}>Sinais de Alerta</Text>
+                <TextInput style={Estilo.modalInput} value={form.SinaisAlerta} onChangeText={t => setForm({ ...form, SinaisAlerta: t })} multiline />
+              </ScrollView>
+              
+              <View style={Estilo.modalButtons}>
+                <TouchableOpacity style={[Estilo.btnModal, Estilo.btnCancel]} onPress={() => setModalVisivel(false)}>
+                  <Text style={Estilo.btnTextCancel}>Cancelar</Text>
+                </TouchableOpacity>
+                <TouchableOpacity style={[Estilo.btnModal, Estilo.btnSave]} onPress={salvar}>
+                  <Text style={Estilo.btnTextSave}>Salvar</Text>
+                </TouchableOpacity>
+              </View>
+            </View>
           </View>
         </Modal>
-
       </View>
     </>
   );
@@ -283,71 +238,157 @@ const Estilo = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#E8DAC0',
+    width: '100%',
     paddingTop: 20,
-    alignItems: 'center',
-    width: '100%'
   },
   inputContainer: {
     flexDirection: 'row',
-    alignItems: 'center',
     backgroundColor: '#FFF',
-    borderRadius: 10,
-    paddingHorizontal: 10,
-    marginVertical: 40,
-    width: '80%'
+    borderRadius: 25,
+    paddingHorizontal: 15,
+    marginVertical: 20,
+    width: '90%',
+    alignSelf: 'center',
+    height: 50,
+    elevation: 2,
+    alignItems: 'center',
   },
   input: {
     flex: 1,
-    color: '#5A90BF',
-    padding: 10
+    color: '#112A6C',
+    padding: 10,
+    fontSize: 16,
   },
   iconeLupa: {
-    width: 24,
-    height: 24
+    width: 22,
+    height: 22,
+    tintColor: '#112A6C',
+  },
+  btnAdd: {
+    backgroundColor: '#112A6C',
+    paddingVertical: 12,
+    paddingHorizontal: 20,
+    borderRadius: 8,
+    alignSelf: 'center',
+    marginBottom: 20,
+  },
+  btnAddText: {
+    color: '#FFF',
+    fontWeight: 'bold',
   },
   containerCard: {
     width: '90%',
     alignSelf: 'center',
-    marginBottom: 40,
+    marginBottom: 20,
     backgroundColor: '#FFF',
-    padding: 16,
-    borderRadius: 10,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.2,
-    shadowRadius: 3,
+    padding: 20,
+    borderRadius: 15,
     elevation: 3,
   },
   cardTitulo: {
-    fontSize: 20,
+    fontSize: 18,
+    fontWeight: 'bold',
     color: '#112A6C',
   },
   cardDivisor: {
-    width: '100%',
     height: 1,
-    backgroundColor: '#112A6C',
-    marginVertical: 8
+    backgroundColor: '#E8DAC0',
+    marginVertical: 10,
   },
   cardDescricao: {
-    fontSize: 16,
-    color: '#112A6C'
+    fontSize: 14,
+    color: '#333',
   },
   footerCard: {
-    flex: 1,
     flexDirection: 'row',
     justifyContent: 'space-between',
+    marginTop: 15,
     alignItems: 'center',
-    marginTop: 10
   },
   footerButton: {
     flexDirection: 'row',
     gap: 5,
-    alignItems: 'center'
+    backgroundColor: '#F0F0F0',
+    padding: 8,
+    borderRadius: 5,
+    alignItems: 'center',
   },
   footerText: {
-    color: '#112A6C'
+    color: '#112A6C',
+    fontWeight: '600',
+    fontSize: 12,
   },
   footerDate: {
-    color: '#112A6C'
+    color: '#888',
+    fontSize: 12,
+  },
+  adminActions: {
+    flexDirection: "row",
+    justifyContent: "flex-end",
+    gap: 15,
+    marginTop: 15,
+    borderTopWidth: 1,
+    borderTopColor: '#EEE',
+    paddingTop: 10,
+  },
+  textActionEdit: {
+    color: "#112A6C",
+    fontWeight: "bold",
+  },
+  textActionDelete: {
+    color: "#D94141",
+    fontWeight: "bold",
+  },
+  modalOverlay: {
+    flex: 1,
+    backgroundColor: 'rgba(0,0,0,0.5)',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  modalContent: {
+    width: '90%',
+    backgroundColor: '#FFF',
+    borderRadius: 15,
+    padding: 20,
+    maxHeight: '85%',
+  },
+  label: {
+    color: '#112A6C',
+    fontWeight: '600',
+    marginTop: 10,
+  },
+  modalInput: {
+    borderWidth: 1,
+    borderColor: '#CCC',
+    borderRadius: 8,
+    padding: 10,
+    backgroundColor: '#FAFAFA',
+    marginBottom: 5,
+  },
+  modalButtons: {
+    flexDirection: 'row',
+    marginTop: 20,
+    gap: 10,
+  },
+  btnModal: {
+    flex: 1,
+    padding: 12,
+    borderRadius: 8,
+    alignItems: 'center',
+  },
+  btnCancel: {
+    borderColor: '#D94141',
+    borderWidth: 1,
+  },
+  btnSave: {
+    backgroundColor: '#112A6C',
+  },
+  btnTextCancel: {
+    color: '#D94141',
+    fontWeight: 'bold',
+  },
+  btnTextSave: {
+    color: '#FFF',
+    fontWeight: 'bold',
   }
 });
