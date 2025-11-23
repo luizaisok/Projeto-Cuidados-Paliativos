@@ -1,7 +1,4 @@
-import { 
-  FlatList, Image, StyleSheet, Text, TextInput, 
-  TouchableOpacity, View, ActivityIndicator, Modal, Button, Alert 
-} from "react-native";
+import { FlatList, Image, StyleSheet, Text, TextInput, TouchableOpacity, View, ActivityIndicator, Modal, Button, Alert } from "react-native";
 import { useState, useEffect } from "react";
 import { useNavigation } from "@react-navigation/native";
 
