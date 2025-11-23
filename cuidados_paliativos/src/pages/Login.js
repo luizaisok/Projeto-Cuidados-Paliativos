@@ -49,22 +49,22 @@ export default function Login() {
          ["auth_role", data.user.tipo],
          ["auth_email", data.user.email],
       ]);
-
-    // Redireciona baseado no tipo de usuário
-    if (data.user.tipo === 'administrador') {
-      // Admin vai direto para o dashboard
-      navigation.replace('AdminDashboard');
-    } else {
-      // Paciente/Acompanhante: verifica se já preencheu sintomas hoje
-      const hoje = new Date().toISOString().split("T")[0];
-      const ultimaData = await AsyncStorage.getItem("ultimaDataSintoma");
-      if (ultimaData === hoje || data.user.tipo === "acompanhante") {
-        navigation.replace("AbasPrincipais", { screen: "Home" });
+      
+      // Redireciona baseado no tipo de usuário
+      if (data.user.tipo === 'administrador') {
+        // + Admin vai direto para HomePage (AbasPrincipais)
+        // - navigation.replace('AdminDashboard'); // REMOVER ESTA LINHA
+        navigation.replace("AbasPrincipais", { screen: "Home" }); // ADICIONAR
       } else {
-        navigation.replace("MenuSintomas");
+        // Paciente/Acompanhante: verifica se já preencheu sintomas hoje
+        const hoje = new Date().toISOString().split("T")[0];
+        const ultimaData = await AsyncStorage.getItem("ultimaDataSintoma");
+        if (ultimaData === hoje || data.user.tipo === "acompanhante") {
+          navigation.replace("AbasPrincipais", { screen: "Home" });
+        } else {
+          navigation.replace("MenuSintomas");
+        }
       }
-    }
-    
 
     } catch (e) {
       alert(e.message || "Erro ao conectar.");
