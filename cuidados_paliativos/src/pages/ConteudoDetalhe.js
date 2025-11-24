@@ -13,7 +13,7 @@ export default function ConteudoDetalhe() {
   useEffect(() => {
     async function carregar() {
       try {
-        const response = await fetch(`http://192.168.0.31:3000/api/conteudos/${id}`);
+        const response = await fetch(`http://localhost:3000/api/conteudos/${id}`);
         const data = await response.json();
         setConteudo(data);
       } catch (err) {

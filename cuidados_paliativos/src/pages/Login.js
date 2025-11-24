@@ -5,7 +5,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useFonts, Comfortaa_400Regular } from "@expo-google-fonts/comfortaa";
 import Header from "../components/Header";
 
-const API_BASE = "http://192.168.0.31:3000";
+const API_BASE = "http://localhost:3000";
 
 export default function Login() {
     let [fontsLoaded] = useFonts({
@@ -58,9 +58,9 @@ export default function Login() {
         navigation.replace("AbasPrincipais", { screen: "Home" }); // ADICIONAR
       } else {
         // Paciente/Acompanhante: verifica se já preencheu sintomas hoje
-        const hoje = new Date().toISOString().split("T")[0];
-        const ultimaData = await AsyncStorage.getItem("ultimaDataSintoma");
-        if (ultimaData === hoje || data.user.tipo === "acompanhante") {
+        // const hoje = new Date().toISOString().split("T")[0];
+        // const ultimaData = await AsyncStorage.getItem("ultimaDataSintoma");
+        if (data.user.tipo === "acompanhante") {
           navigation.replace("AbasPrincipais", { screen: "Home" });
         } else {
           navigation.replace("MenuSintomas");
