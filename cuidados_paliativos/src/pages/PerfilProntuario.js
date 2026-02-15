@@ -2252,7 +2252,7 @@ const Estilo = StyleSheet.create({
   },
   botaoPrimario: {
     marginTop: 16,
-    backgroundColor: "#015184",
+    backgroundColor: "#c4c776",
     borderRadius: 10,
     paddingVertical: 12,
     alignItems: "center",
