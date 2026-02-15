@@ -30,7 +30,7 @@ export default function SinalAmarelo() {
 
         <TouchableOpacity 
           style={Estilo.button}
-          onPress={() => navigation.navigate("AbasPrincipais", { screen: "Home" })}
+          onPress={() => navigation.navigate("AbasPrincipais", { screen: "Home", params: { alerta: "amarelo" } })}
         >
           <Text style={Estilo.textButton}>Voltar ao início</Text>
         </TouchableOpacity>

@@ -25,7 +25,7 @@ export default function SinalVerde() {
 
         <TouchableOpacity 
           style={Estilo.button}
-          onPress={() => navigation.navigate("AbasPrincipais", { screen: "Home" })}
+          onPress={() => navigation.navigate("AbasPrincipais", { screen: "Home", params: { alerta: "verde" } })}
         >
           <Text style={Estilo.textButton}>Voltar ao início</Text>
         </TouchableOpacity>

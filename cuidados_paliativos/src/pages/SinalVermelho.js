@@ -30,7 +30,7 @@ export default function SinalVermelho() {
 
         <TouchableOpacity 
           style={Estilo.button}
-          onPress={() => navigation.navigate("AbasPrincipais", { screen: "Home" })}
+          onPress={() => navigation.navigate("AbasPrincipais", { screen: "Home", params: { alerta: "vermelho" } })}
         >
           <Text style={Estilo.textButton}>Voltar ao início</Text>
         </TouchableOpacity>

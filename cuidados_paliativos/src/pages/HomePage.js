@@ -1,8 +1,8 @@
 import { StyleSheet, View, Text, TouchableOpacity, Image } from "react-native";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useFonts, Comfortaa_400Regular } from "@expo-google-fonts/comfortaa";
-import { useNavigation } from "@react-navigation/native";
+import { useNavigation, useRoute, useFocusEffect } from "@react-navigation/native";
 import Header from "../components/Header/index";
 
 const API_BASE = "http://localhost:3000";
@@ -49,6 +49,22 @@ export default ({user = "Usuário"}) => {
 
     const navigation = useNavigation();
 
+    const route = useRoute();
+    const [nivelAlerta, setNivelAlerta] = useState(null);
+
+    const cores = {
+        padrao: "#FFF3E5",
+        vermelho: "#F79F9A",
+        amarelo: "#F1D359",
+        verde: "#A6C27A"
+    };
+
+    useEffect(() => {
+        if (route.params?.alerta) {
+            setNivelAlerta(route.params.alerta);
+        }
+    }, [route.params]);
+
     const handleProntuario = () => {
         console.log("Precisa implementar navegação para prontuário");
     };
@@ -74,7 +90,13 @@ export default ({user = "Usuário"}) => {
     });
     
     return(
-        <View style={Estilo.container}>
+        <View
+            style={[
+                Estilo.container,
+                { backgroundColor: cores[nivelAlerta] || cores.padrao }
+            ]}
+        >
+
             <Header style={Estilo.header}/>
 
             <View style={Estilo.bodySection}>
@@ -135,10 +157,18 @@ export default ({user = "Usuário"}) => {
     );
 };
 
+/*
+Cor padrão: #FFF3E5
+
+CORES PARA OS SINAIS DE ALERTA:
+- Vermelho: #f79f9a
+- Amarelo: #f1d359
+- Verde: #a6c27a
+*/
+
 const Estilo = StyleSheet.create({
     container: {
         flex: 1, 
-        backgroundColor: "#FFF3E5",
     },
 
     header: {
